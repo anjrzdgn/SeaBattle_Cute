@@ -185,7 +185,7 @@ bool InfoDio::CheckPass(QString password, QString username)
         ui->label->setText("weak password");
         return false;
     }
-    ui->label->setText("salam");
+    // ui->label->setText("salam");
     return true;
 }
 
@@ -238,43 +238,53 @@ void InfoDio::on_pushButton_clicked()
 
     if(ui->user->text()!="" && ui->email->text()!="" && ui->name->text()!="" && ui->pass->text()!="" && ui->name_2->text()!="" ){
 
-        QString username1=ui->user->text();
-        QString pass1=ui->pass->text();
-        QString name1=ui->name->text();
-        QString lname1=ui->name_2->text();
-        QString email1=ui->email->text();
+        QString username=ui->user->text();
+        QString password=ui->pass->text();
+        QString name=ui->name->text();
+        QString lastname=ui->name_2->text();
+        QString email=ui->email->text();
+        QString level;
 
-        // QString age1=ui->email_2->text();
+
+        CheckUser(username);
+        CheckPass(password,username);
+        checkEmail(email);
+        CheckPasswordComplexity(password);
+        isValidName(name);
+        isValidName(lastname);
 
 
-        //Convert password to hash
-        QByteArray hash = QCryptographicHash::hash(pass1.toUtf8(), QCryptographicHash::Sha256);
+        if(CheckUser(username)&& CheckPass(password,username)&& checkEmail(email)&&CheckPasswordComplexity(password)&&isValidName(name)&&isValidName(lastname))
+        {
+            QSqlDatabase myd = QSqlDatabase::addDatabase("QSQLITE");
+            myd.setDatabaseName("E:/qt1/LogIn/LogIn/information.db");
 
-        QString HPass = hash.toHex();
 
-                //write in file
-            //     QFile file("example.txt");
+            if(myd.open()){
+                qDebug()<<"connected..";
+                QSqlQuery qry;
+                qry.prepare("INSERT INTO info (name, username, password ,email,lastname,level) VALUES (:name, :username, :password ,:email,:lastname,:level)");
+                qry.bindValue(":name", name);
+                qry.bindValue(":username", username);
+                qry.bindValue(":password", password);
+                qry.bindValue(":lastname", lastname);
+                qry.bindValue(":email", email);
+                qry.bindValue(":level", level);
 
-            //     if (!file.open(QFile::Append | QFile::Text)) {
-            //         return;
-            //     }
-
-            //     QTextStream stream(&file);
-
-            //     stream <<"USername: "<<username1 << "\n";
-            //     stream <<"password: "<< HPass << "\n";
-            //     stream <<"Name: "<< name1 << "\n";
-            //     // stream <<"Name: "<< name1 << "\n";
-
-            //     stream <<"Email: "<< email1 << "\n";
-
-            //     stream << "\n";
-
-            //     file.close();
-
-            //     close();
+                if (qry.exec()) {
+                    qDebug() << "Data inserted successfully";
+                } else {
+                    qDebug() << "Error: " << qry.lastError().text();
+                }
+            } else {
+                qDebug()<<"Error: " << myd.lastError().text();
             }
+
+
+            close();
         }
+    }
+}
 
 
 
