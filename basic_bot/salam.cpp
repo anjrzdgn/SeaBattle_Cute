@@ -7,8 +7,6 @@
 using namespace std;
 
 
-
-
 string direction;
 string exactDirection = "Default";
 int shootSuccses = 0;
