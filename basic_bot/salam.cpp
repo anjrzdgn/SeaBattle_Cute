@@ -10,7 +10,6 @@ string direction;
 string exactDirection = "Default";
 int shootSuccses = 0;
 bool fallShip = false;
-
 int firstShot[1][2];
 
 void printMap(char _table[10][10]){
@@ -35,7 +34,6 @@ void attackAgain(char _table[10][10], int X, int Y)
         _table[X][Y] = 'B';
         shootSuccses++; 
 
-
         if(X == firstShot[0][0])
         {
             direction = "horizontal";
@@ -43,7 +41,40 @@ void attackAgain(char _table[10][10], int X, int Y)
             if(Y - firstShot[0][1] > 0)
             {
                 if(exactDirection == "Right")
-                {
+                {       
+                    if(Y == 9)
+                    {
+                        if(_table[X][Y - 2] == 'B')
+                        {
+                            if (_table[X][Y - 3] == 'B')
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X][Y - 1] = 'F';
+                                _table[X][Y - 2] = 'F';
+                                _table[X][Y - 3] = 'F';
+                                fallShip = true;
+                                return;
+                            }
+                     
+                            else
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X][Y - 1] = 'F';
+                                _table[X][Y - 2] = 'F';
+                                fallShip = true;
+                                return;
+                            }                        
+                        }
+                    
+                        else
+                        {
+                            _table[X][Y] = 'F';
+                            _table[X][Y - 1] = 'F';
+                            fallShip = true;
+                            return;
+                        }
+                    }
+
                     //table 2 space fall
                     if((_table[X][Y + 1] != 'S' && _table[X][Y - 2] != 'B' && Y >= 2)
                         || (Y < 2 && _table[X][Y + 1] != 'S'))
@@ -119,6 +150,39 @@ void attackAgain(char _table[10][10], int X, int Y)
 
                 else if(exactDirection == "Default")
                 {
+                    if(Y == 9)
+                    {
+                        if(_table[X][Y - 2] == 'B')
+                        {
+                            if (_table[X][Y - 3] == 'B')
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X][Y - 1] = 'F';
+                                _table[X][Y - 2] = 'F';
+                                _table[X][Y - 3] = 'F';
+                                fallShip = true;
+                                return;
+                            }
+                            
+                            else
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X][Y - 1] = 'F';
+                                _table[X][Y - 2] = 'F';
+                                fallShip = true;
+                                return;
+                            }                        
+                        }
+                     
+                        else
+                        {
+                            _table[X][Y] = 'F';
+                            _table[X][Y - 1] = 'F';
+                            fallShip = true;
+                            return;
+                        }
+                    }
+
                     //check ship 2 space
                     if((_table[X][Y + 1] != 'S' && _table[X][Y - 2] != 'S' && (Y <= 8 || Y >= 2)) 
                         
@@ -205,6 +269,40 @@ void attackAgain(char _table[10][10], int X, int Y)
 
                 if(exactDirection == "Left")
                 {
+
+                    if(Y == 0)
+                    {
+                        if(_table[X][Y + 2] == 'B')
+                        {
+                            if(_table[X][Y + 3] == 'B')
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X][Y + 1] = 'F';
+                                _table[X][Y + 2] = 'F';
+                                _table[X][Y + 3] = 'F';
+                                fallShip = true;
+                                return;
+                            }
+                            
+                            else
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X][Y + 1] = 'F';
+                                _table[X][Y + 2] = 'F';
+                                fallShip = true;
+                                return;                            
+                            }
+                        }
+                    
+                        else
+                        {
+                            _table[X][Y] = 'F';
+                            _table[X][Y + 1] = 'F';
+                            fallShip = true;
+                            return;
+                        }
+                    }
+
                     //table 2 space fall
                     if((_table[X][Y - 1] != 'S' && _table[X][Y + 2] != 'B' && Y >= 1 && Y <= 7) 
                         || (Y == 0 && _table[X][Y + 2] != 'B') || (Y == 8 && _table[X][Y - 1] != 'S'))
@@ -309,6 +407,40 @@ void attackAgain(char _table[10][10], int X, int Y)
 
                 else if(exactDirection == "Default")
                 {
+
+                    if(Y == 0)
+                    {
+                        if(_table[X][Y + 2] == 'B')
+                        {
+                            if(_table[X][Y + 3] == 'B')
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X][Y + 1] = 'F';
+                                _table[X][Y + 2] = 'F';
+                                _table[X][Y + 3] = 'F';
+                                fallShip = true;
+                                return;
+                            }
+                            
+                            else
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X][Y + 1] = 'F';
+                                _table[X][Y + 2] = 'F';
+                                fallShip = true;
+                                return;                            
+                            }
+                        }
+                    
+                        else
+                        {
+                            _table[X][Y] = 'F';
+                            _table[X][Y + 1] = 'F';
+                            fallShip = true;
+                            return;
+                        }
+                    }
+
                     //check ship 2 space
                     if(_table[X][Y - 1] != 'S' && _table[X][Y + 2] != 'S' && (Y >= 1 || Y <= 7)
                         || (Y == 0 && _table[X][Y + 2] != 'S') || (Y == 8 && _table[X][Y - 1] != 'S'))
@@ -374,10 +506,6 @@ void attackAgain(char _table[10][10], int X, int Y)
                 }                
             }
 
-            else
-            {
-             //   attackAgain(_table, X, Y - 1);
-            }
         }
 
         else if(Y == firstShot[0][1])
@@ -388,6 +516,40 @@ void attackAgain(char _table[10][10], int X, int Y)
             {
                 if(exactDirection == "Down")
                 {
+
+                    if(X == 9)
+                    {
+                        if(_table[X - 2][Y] == 'B')
+                        {
+                            if(_table[X - 3][Y] == 'B')
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X - 1][Y] = 'F';
+                                _table[X - 2][Y] = 'F';
+                                _table[X - 3][Y] = 'F';
+                                fallShip = true;
+                                return;                                
+                            }
+
+                            else 
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X - 1][Y] = 'F';
+                                _table[X - 2][Y] = 'F';
+                                fallShip = true;
+                                return;        
+                            }
+                        }
+                   
+                        else 
+                        {
+                            _table[X][Y] = 'F';
+                            _table[X - 1][Y] = 'F';
+                            fallShip = true;
+                            return;
+                        }
+                    }
+
                     //table 2 space fall
                     if((_table[X + 1][Y] != 'S' && _table[X - 2][Y] != 'B' && X <= 8 && X >= 2)
                       || (X == 1 && _table[X + 1][Y] != 'S') || (X == 9 && _table[X - 2][Y] != 'B'))
@@ -470,6 +632,40 @@ void attackAgain(char _table[10][10], int X, int Y)
 
                 else if(exactDirection == "Default")
                 {
+
+                    if(X == 9)
+                    {
+                        if(_table[X - 2][Y] == 'B')
+                        {
+                            if(_table[X - 3][Y] == 'B')
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X - 1][Y] = 'F';
+                                _table[X - 2][Y] = 'F';
+                                _table[X - 3][Y] = 'F';
+                                fallShip = true;
+                                return;                                
+                            }
+
+                            else 
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X - 1][Y] = 'F';
+                                _table[X - 2][Y] = 'F';
+                                fallShip = true;
+                                return;        
+                            }
+                        }
+                   
+                        else 
+                        {
+                            _table[X][Y] = 'F';
+                            _table[X - 1][Y] = 'F';
+                            fallShip = true;
+                            return;
+                        }
+                    }
+            
                      //check ship 2 space
                     if((_table[X + 1][Y] != 'S' && _table[X - 2][Y] == 'E' && X >= 2 && X <= 8)
                         || ((X == 1) && _table[X + 1][Y] != 'S') || X == 9 && _table[X - 2][Y] != 'B' || _table[X - 2][Y] != 'S')
@@ -503,18 +699,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                         fallShip = false;
                         return;
                     }
-                    // else if(X == 9)
-                    // {
-                    //     if((_table[X - 2][Y] == 'S' || _table[X - 3][Y] == 'S'))
-                    //     {
-                    //         exactDirection = "UP";
-                    //         fallShip = false;
-                    //         return;                        
-                    //     }
-                    //     else if(_table[X - 2][Y] == 'S')
-                    // }
-
-
+    
                     //have 4 space
                     else if(_table[X + 1][Y] == 'S' && X <= 8)
                     {
@@ -550,29 +735,65 @@ void attackAgain(char _table[10][10], int X, int Y)
             {
                 if(exactDirection == "UP")
                 {
+                    if(X == 0)
+                    {
+                        if(_table[X + 2][Y] == 'B')
+                        {
+                            if(_table[X + 3][Y] == 'B')
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X + 1][Y] = 'F';
+                                _table[X + 2][Y] = 'F'; 
+                                _table[X + 3][Y] = 'F';                                 
+                                fallShip = true;
+                                return;
+                            }
+                       
+                            else
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X + 1][Y] = 'F';
+                                _table[X + 2][Y] = 'F'; 
+                                fallShip = true;
+                                return;
+                            }
+                        }
+                      
+                        else 
+                        {
+                            _table[X][Y] = 'F';
+                            _table[X + 1][Y] = 'F';
+                            fallShip = true;
+                            return;
+                        }
+                    }
+
                     //table 2 space fall
-                    if(_table[X - 1][Y] != 'S' && _table[X + 2][Y] != 'B')
+                    if(_table[X - 1][Y] != 'S' && _table[X + 2][Y] != 'B' && X >= 1 && X <= 7 ||
+                       (X == 8 && _table[X - 1][Y] != 'S'))
                     {
                         _table[X][Y] = 'F';
                         _table[X + 1][Y] = 'F';
                         fallShip = true;
+                        return;
                     }
                   
                     //absoultly have 3 space maby 4 space
-                    else if(_table[X - 1][Y] != 'S' && _table[X + 2][Y] == 'B')
+                    else if(_table[X - 1][Y] != 'S' && _table[X + 2][Y] == 'B' && X >= 1 && X <= 7)
                     {
                         //have 4 space
-                        if(_table[X + 3][Y] == 'B')
+                        if(_table[X + 3][Y] == 'B' && X <= 6)
                         {
                             _table[X + 3][Y] = 'F';
                             _table[X + 2][Y] = 'F';
                             _table[X + 1][Y] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            return;
                         }
 
                         //have 3 space
-                        else
+                        else if(_table[X + 2][Y] == 'B' && X <= 7)
                         {
                             _table[X + 2][Y] = 'F';
                             _table[X + 1][Y] = 'F';
@@ -583,7 +804,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                     }
 
                     //absoultly have 3 space maby 4 space
-                    else if(_table[X - 1][Y] == 'S')
+                    else if(_table[X - 1][Y] == 'S' && X >= 1)
                     {
                         _table[X - 1][Y] = 'B';
                         
@@ -623,8 +844,41 @@ void attackAgain(char _table[10][10], int X, int Y)
                 else if(exactDirection == "Default")
                 {
 
+                    if(X == 0)
+                    {
+                        if(_table[X + 2][Y] == 'B')
+                        {
+                            if(_table[X + 3][Y] == 'B')
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X + 1][Y] = 'F';
+                                _table[X + 2][Y] = 'F';
+                                _table[X + 3][Y] = 'F';
+                                fallShip = true;
+                                return;                                
+                            }
+
+                            else
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X + 1][Y] = 'F';
+                                _table[X + 2][Y] = 'F';
+                                fallShip = true;
+                                return;              
+                            }
+                        }
+
+                        else 
+                        {
+                            _table[X][Y] = 'F';
+                            _table[X + 1][Y] = 'F';
+                            fallShip = true;
+                            return;
+                        }   
+                    }
+
                     //check ship 2 space
-                    if(_table[X - 1][Y] == 'E' && _table[X + 2][Y] == 'E')
+                    if(_table[X - 1][Y] == 'E' && _table[X + 2][Y] == 'E' && X >= 1 && X <= 7)
                     {
                         //ship had 2 spaces but now fall
                         _table[X][Y] = 'F';
@@ -635,7 +889,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                     }
 
                     //absoultly have 3 space
-                    else if(_table[X - 1][Y] == 'S' && _table[X - 2][Y] == 'E' && _table[X + 2][Y] == 'E')
+                    else if(_table[X - 1][Y] == 'S' && _table[X - 2][Y] == 'E' && _table[X + 2][Y] == 'E' && X >= 2 && X <= 7)
                     {
                         _table[X - 1][Y] = 'F';
                         _table[X + 1][Y] = 'F';
@@ -645,7 +899,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                     }
 
                     //maby ship have 3 or 4 spaces and change direction
-                    else if(_table[X - 1][Y] == 'E')
+                    else if(_table[X - 1][Y] == 'E' && X >= 1)
                     {
                         _table[X - 1][Y] = 'W';
                         exactDirection = "Down";
@@ -654,10 +908,10 @@ void attackAgain(char _table[10][10], int X, int Y)
                     }
 
                     //have 4 space
-                    else if(_table[X - 1][Y] == 'S')
+                    else if(_table[X - 1][Y] == 'S' && X >= 1)
                     {
                         //absoultly have 4 apace
-                        if(_table[X - 2][Y] == 'S')
+                        if(_table[X - 2][Y] == 'S' && X >= 2)
                         {
                             _table[X - 2][Y] ='F';
                             _table[X - 1][Y] = 'F';
@@ -666,8 +920,8 @@ void attackAgain(char _table[10][10], int X, int Y)
                             fallShip = true;
                         }
 
-                        //absoultly have 4 spacce but should change direction 
-                        else if(_table[X - 2][Y] == 'E' && _table[X + 2][Y] == 'S')
+                        //absoultly have 4 spacce but should change direction  
+                        else if(_table[X - 2][Y] == 'E' && _table[X + 2][Y] == 'S' && X >= 2 && X <= 7)
                         {
                             _table[X - 1][Y] = 'B';
                             _table[X- 2][Y] = 'W';
@@ -683,53 +937,106 @@ void attackAgain(char _table[10][10], int X, int Y)
                 }
             }
 
-            else
-            {
-
-            }
         }
 
-        else
-        {
-            direction = "vertical";
-        }
     }
 
+    
     else if(_table[X][Y] == 'E')
     {
         _table[X][Y] = 'W';
 
         if(X == firstShot[0][0] && Y - firstShot[0][1] > 0)
         {
-            if(_table[X][Y - 2] == 'W' && Y >= 2)
+
+            if(X == 0)
             {
-                if(_table[X - 1][Y - 1] == 'W' && X >= 1 && Y >= 1)
+                
+                if(_table[X][Y - 2] == 'W')
+                {
+                    exactDirection = "Down";
+                }
+      
+                else
+                {
+                    exactDirection = "Left";
+                }
+             
+                return;
+            }
+
+            else if(X == 9)
+            {
+                if(_table[X][Y - 2] == 'W')
+                {
+                    exactDirection = "Up";
+                }
+              
+                else 
+                {
+                    exactDirection = "Left";
+                    return;
+                }
+
+                return;
+            }
+
+            if(_table[X][Y - 2] == 'W')
+            {
+                if(_table[X - 1][Y - 1] == 'W')
                 {
                     if(_table[X + 1][Y - 1] != 'W')
                     {
                         exactDirection = "Down";
                     }
                 }
-                else if((_table[X - 1][Y - 1] != 'W' && X >= 1 && Y >= 1) || X == 0 || Y == 0)
+             
+                else
                 {
-                    if(X == 0 && Y ==0)
-                    {
-                        exactDirection = "Down";
-
-                    }
-                    else 
-                        exactDirection = "Up";
+                    exactDirection = "Up";
                 }
             }
-
-            else if(_table[X][Y - 2] != 'W' && Y >= 2)
+        
+            else
             {
                 exactDirection = "Left";
             }
-        }
 
+        }
+      
         else if(X == firstShot[0][0] && Y - firstShot[0][1] < 0)
         {
+      
+            if(X == 0)
+            {
+                if(_table[X][Y + 2] == 'W')
+                {
+                    exactDirection = "Down";
+                }
+         
+                else 
+                {
+                    exactDirection = "Right";
+                }
+        
+                return;
+            }
+   
+            else if(X == 9)
+            {
+                if(_table[X][Y + 2] == 'W')
+                {
+                    exactDirection = "Up";
+                }
+              
+                else 
+                {
+                    exactDirection = "Right";
+                }
+             
+                return;
+            }
+
             if(_table[X][Y + 2] == 'W')
             {
                 if(_table[X - 1][Y + 1] == 'W')
@@ -748,9 +1055,41 @@ void attackAgain(char _table[10][10], int X, int Y)
                 exactDirection = "Right";
             }
         }
-     
+        
         else if(Y == firstShot[0][1] && X - firstShot[0][0] > 0)
         {
+            if(Y == 0)
+            {
+                if(_table[X - 2][Y] == 'W')
+                {
+                    exactDirection = "Right";
+                }
+            
+                else 
+                {
+                    exactDirection = "Up";
+                }
+
+                return;
+            }
+
+
+            else if(Y == 9)
+            {
+                if(_table[X - 2][Y] == 'W')
+                {
+                    exactDirection = "Left";
+                }
+       
+                else
+                {
+                    exactDirection = "Up";
+                }
+       
+                return;
+            }
+
+
             if(_table[X - 2][Y] == 'W')
             {
                 if(_table[X - 1][Y - 1] == 'W')
@@ -772,6 +1111,35 @@ void attackAgain(char _table[10][10], int X, int Y)
 
         else if(Y == firstShot[0][1] && X - firstShot[0][0] < 0)
         {
+
+            if(Y == 0)
+            {
+                if(_table[X + 1][Y+ 1] == 'W')
+                {
+                    exactDirection = "Right";
+                }
+                
+                else 
+                {
+                    exactDirection = "Down";
+                }
+                return;
+            }
+
+            else if(Y == 9)
+            {
+                if(_table[X + 1][Y - 1] == 'W')
+                {
+                    exactDirection = "Left";
+                }
+             
+                else
+                {
+                    exactDirection = "Down";
+                }
+                return;
+            }
+
             if(_table[X - 2][Y] == 'W')
             {
                 if(_table[X - 1][Y - 1] == 'W')
@@ -883,15 +1251,19 @@ void simpleAttack(char _table[10][10]){
 
                 //check space of ship
                 if(_table [randX][randY + 1] == 'E' && _table [randX][randY - 1] == 'E' &&
-                _table [randX + 1][randY] == 'E' && _table [randX - 1][randY] == 'E')
+                _table [randX + 1][randY] == 'E' && _table [randX - 1][randY] == 'E' && randX >= 1
+                && randX <= 8 && randY >= 1 && randY <= 8)
+                
                 {
                     _table[randX][randY] = 'F';
                     fallShip = true;
                     count++;    
-                    
-                    //print board og game
                     continue;
                 }
+                
+
+
+
 
                 else
                 {
@@ -972,3 +1344,4 @@ int main()
 
     return 0;
 }
+
