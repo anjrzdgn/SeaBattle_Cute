@@ -11,26 +11,127 @@
 #include <QDropEvent>
 #include <QDebug>
 
+
+class SHIP {
+public:
+    virtual QPixmap getPixmap() = 0;
+    virtual int getWidth() = 0;
+    virtual int getHeight() = 0;
+    virtual QPoint getPosition() = 0; // new function
+};
+
+class Ship1X1 : public SHIP {
+private:
+    QPoint position;
+public:
+    Ship1X1(QPoint pos) : position(pos) {}
+    QPixmap getPixmap() { return QPixmap("E:/qt1/drg/1^1ship.png"); }
+    int getWidth() { return 70; }
+    int getHeight() { return 70; }
+    QPoint getPosition() { return position; }
+};
+
+class Ship1X2 : public SHIP {
+private:
+    QPoint position;
+public:
+    Ship1X2(QPoint pos) : position(pos) {}
+    QPixmap getPixmap() { return QPixmap("E:/qt1/drg/2^1ship.png"); }
+    int getWidth() { return 140; }
+    int getHeight() { return 70; }
+    QPoint getPosition() { return position; }
+};
+
+class Ship1X3 : public SHIP {
+private:
+    QPoint position;
+public:
+    Ship1X3(QPoint pos) : position(pos) {}
+    QPixmap getPixmap() { return QPixmap("E:/qt1/drg/3^1ship.png"); }
+    int getWidth() { return 210; }
+    int getHeight() { return 70; }
+    QPoint getPosition() { return position; }
+};
+
+class Ship1X4 : public SHIP {
+private:
+    QPoint position;
+public:
+    Ship1X4(QPoint pos) : position(pos) {}
+    QPixmap getPixmap() { return QPixmap("E:/qt1/drg/4^1ship.png"); }
+    int getWidth() { return 280; }
+    int getHeight() { return 70; }
+    QPoint getPosition() { return position; }
+};
+
+
+class ClickableLabel : public QLabel {
+    Q_OBJECT
+
+public:
+    ClickableLabel(QWidget *parent = nullptr) : QLabel(parent) {}
+
+signals:
+    void clicked();
+
+protected:
+    void mousePressEvent(QMouseEvent *event) override {
+        emit clicked();
+        QLabel::mousePressEvent(event);
+    }
+};
+
 class DragWidget : public QFrame {
     Q_OBJECT
 
 public:
     QLabel *backgroundLabel1 = new QLabel(this);
     QLabel *backgroundLabel = new QLabel(this);
+    ClickableLabel *houseIcon1 = new ClickableLabel(this);
 
     DragWidget(QWidget *parent = nullptr)
         : QFrame(parent)
     {
 
+
+
         // setMinimumSize(1900, 1080);
         // setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
         // setAcceptDrops(true);
+
+        std::vector<SHIP*> ships;
+
+        ships.push_back(new Ship1X1(QPoint(1000, 210)));
+        ships.push_back(new Ship1X1(QPoint(1090, 210)));
+        ships.push_back(new Ship1X1(QPoint(1180, 210)));
+        ships.push_back(new Ship1X1(QPoint(1270, 210)));
+
+        ships.push_back(new Ship1X2(QPoint(1000, 310)));
+        ships.push_back(new Ship1X2(QPoint(1150, 310)));
+        ships.push_back(new Ship1X2(QPoint(1300, 310)));
+
+        ships.push_back(new Ship1X3(QPoint(1000, 410)));
+        ships.push_back(new Ship1X3(QPoint(1230, 410)));
+
+        ships.push_back(new Ship1X4(QPoint(1000, 510)));
+
+
+
+
+
+        for (int i = 0; i < ships.size(); i++) {
+            QLabel *label = new QLabel(this);
+            label->setPixmap(ships[i]->getPixmap());
+            label->setGeometry(ships[i]->getPosition().x(), ships[i]->getPosition().y(), ships[i]->getWidth(), ships[i]->getHeight());
+            label->show();
+            label->setAttribute(Qt::WA_DeleteOnClose);
+        }
 
         // QLabel *backgroundLabel1 = new QLabel(this);
         QPixmap images("E:/qt1/drg/er.png");
         backgroundLabel1->setPixmap(images);
         backgroundLabel1->setScaledContents(true);
-        backgroundLabel1->setGeometry(0, 0, 1920, 1080); // Set the geometry of the background label to cover the entire window
+        backgroundLabel1->setGeometry(0, 0, 1600, 900); // Set the geometry of the background label to cover the entire window
         backgroundLabel1->lower(); // Send the background label to the back
         backgroundLabel1->setAcceptDrops(false); // Set to not accept drag and drop events
 
@@ -46,8 +147,8 @@ public:
         backgroundLabel->setPixmap(image);
         backgroundLabel->setScaledContents(true);
         backgroundLabel->setAlignment(Qt::AlignRight);
-        // backgroundLabel->setGeometry(width() , 0, width() / 2, height());
-        backgroundLabel->setGeometry(30, 50, 700, 700);
+        // backgroundLabel->setGeometry(width(), 0, width() / 2, height());
+        backgroundLabel->setGeometry(70, 90, 700, 700);
         backgroundLabel->setAcceptDrops(false);
 
         setMinimumSize(200, 200);
@@ -58,30 +159,102 @@ public:
         setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
         setAcceptDrops(true);
 
-        QLabel *boatIcon = new QLabel(this);
-        boatIcon->setPixmap(QPixmap("E:/qt1/drg/1^1ship.png"));
-        // boatIcon->move(1000, 10);
-        boatIcon->show();
-        boatIcon->setAttribute(Qt::WA_DeleteOnClose);
-        boatIcon->setGeometry(1000,10, 70, 70);
+        // QLabel *Ship11 = new QLabel(this);
+        // Ship11->setPixmap(QPixmap("E:/qt1/drg/1^1ship.png"));
+        // // Ship11->move(1000, 10);
+        // Ship11->show();
+        // Ship11->setAttribute(Qt::WA_DeleteOnClose);
+        // Ship11->setGeometry(1000,210, 70, 70);
 
-        QLabel *carIcon = new QLabel(this);
-        carIcon->setPixmap(QPixmap("E:/qt1/drg/1^1ship.png"));
-        // carIcon->move(1000, 110);
-        carIcon->show();
-        carIcon->setAttribute(Qt::WA_DeleteOnClose);
-        carIcon->setGeometry(1000,110, 70, 70);
 
-        QLabel *houseIcon = new QLabel(this);
-        houseIcon->setPixmap(QPixmap("E:/qt1/drg/1^1ship.png"));
-        // houseIcon->move(1000, 210);
-        houseIcon->show();
-        houseIcon->setAttribute(Qt::WA_DeleteOnClose);
-        houseIcon->setGeometry(1000,210, 70, 70);
+        // QLabel *Ship12 = new QLabel(this);
+        // Ship12->setPixmap(QPixmap("E:/qt1/drg/1^1ship.png"));
+        // // Ship12->move(1000, 10);
+        // Ship12->show();
+        // Ship12->setAttribute(Qt::WA_DeleteOnClose);
+        // Ship12->setGeometry(1090,210, 70, 70);
 
+        // QLabel *Ship13 = new QLabel(this);
+        // Ship13->setPixmap(QPixmap("E:/qt1/drg/1^1ship.png"));
+        // // Ship13->move(1000, 10);
+        // Ship13->show();
+        // Ship13->setAttribute(Qt::WA_DeleteOnClose);
+        // Ship13->setGeometry(1180,210, 70, 70);
+
+        // QLabel *Ship14 = new QLabel(this);
+        // Ship14->setPixmap(QPixmap("E:/qt1/drg/1^1ship.png"));
+        // // Ship14->move(1000, 10);
+        // Ship14->show();
+        // Ship14->setAttribute(Qt::WA_DeleteOnClose);
+        // Ship14->setGeometry(1270,210, 70, 70);
+
+        // QLabel *Ship21 = new QLabel(this);
+        // Ship21->setPixmap(QPixmap("E:/qt1/drg/2^1ship.png"));
+        // // Ship21->move(1000, 110);
+        // Ship21->show();
+        // Ship21->setAttribute(Qt::WA_DeleteOnClose);
+        // Ship21->setGeometry(1000,310, 140, 70);
+
+        // QLabel *Ship22 = new QLabel(this);
+        // Ship22->setPixmap(QPixmap("E:/qt1/drg/2^1ship.png"));
+        // // Ship21->move(1000, 110);
+        // Ship22->show();
+        // Ship22->setAttribute(Qt::WA_DeleteOnClose);
+        // Ship22->setGeometry(1150,310, 140, 70);
+
+        // QLabel *Ship23 = new QLabel(this);
+        // Ship23->setPixmap(QPixmap("E:/qt1/drg/2^1ship.png"));
+        // // Ship21->move(1000, 110);
+        // Ship23->show();
+        // Ship23->setAttribute(Qt::WA_DeleteOnClose);
+        // Ship23->setGeometry(1300,310, 140, 70);
+
+        // QLabel *Ship31 = new QLabel(this);
+        // Ship31->setPixmap(QPixmap("E:/qt1/drg/3^1ship.png"));
+        // // Ship31->move(1000, 210);
+        // Ship31->show();
+        // Ship31->setAttribute(Qt::WA_DeleteOnClose);
+        // Ship31->setGeometry(1000,410, 210, 70);
+
+        // QLabel *Ship32 = new QLabel(this);
+        // Ship32->setPixmap(QPixmap("E:/qt1/drg/3^1ship.png"));
+        // // Ship31->move(1000, 210);
+        // Ship32->show();
+        // Ship32->setAttribute(Qt::WA_DeleteOnClose);
+        // Ship32->setGeometry(1230,410, 210, 70);
+
+        // QLabel *Ship41 = new QLabel(this);
+        // Ship41->setPixmap(QPixmap("E:/qt1/drg/4^1ship.png"));
+        // // houseIcon->move(1000, 210);
+        // Ship41->show();
+        // Ship41->setAttribute(Qt::WA_DeleteOnClose);
+        // Ship41->setGeometry(1000,510, 280, 70);
+
+
+        // // QLabel *houseIcon1 = new QLabel(this);
+        // houseIcon1->setPixmap(QPixmap("E:/qt1/drg/3^1ship.png"));
+        // // houseIcon->move(1000, 210);
+        // houseIcon1->show();
+        // houseIcon1->setAttribute(Qt::WA_DeleteOnClose);
+        // houseIcon1->setGeometry(1000,310, 210, 70);
+
+        QTransform transform;
+        transform.rotate(90); // Rotate by 45 degrees
+        houseIcon1->setGeometry(1000,310, 70, 210);
+
+        QPixmap pixmap = houseIcon1->pixmap();
+        QPixmap transformedPixmap = pixmap.transformed(transform);
+        houseIcon1->setPixmap(transformedPixmap);
+
+        connect(houseIcon1, &ClickableLabel::clicked, this, &DragWidget::rotateHouseIcon);
+        // connect(houseIcon, &ClickableLabel::clicked, this, &DragWidget::rotateHouseIcon);
 
     }
 
+    // protected:
+    //     void mousePressEvent(QMouseEvent *event) override
+    //     {
+    //         QLabel *child = static_cast<QLabel*>(childAt(event->position().to
 protected:
     void mousePressEvent(QMouseEvent *event) override
     {
@@ -145,12 +318,14 @@ protected:
                 int x = event->position().toPoint().x();
                 int y = event->position().toPoint().y();
 
-                if (x >= 30 && x <= 730 && y >= 50 && y <= 750) {
-                    int column = (x - 30) / 70;
-                    int row = (y - 50) / 70;
+                if (x >= 70 && x <= 770 && y >= 90 && y <= 790) {
+                    int column = (x - 70) / 70;
+                    int row = (y - 90) / 70;
 
-                    int xPos=30+column*70;
-                    int yPos=50+row*70;
+                    int xPos=70+column*70;
+                    int yPos=90+row*70;
+
+                    qDebug()<<xPos<<" "<<yPos;
 
                     child->move(xPos, yPos);
                 } else {
@@ -196,6 +371,25 @@ protected:
     //     }
     // }
 
+public slots:
+    void rotateHouseIcon() {
+
+        // if(houseIcon1->geometry()==QRect(1000, 310, 210, 70))
+        QTransform transform;
+        transform.rotate(90); // Rotate by 90 degrees
+
+        if (houseIcon1->geometry() == QRect(1000, 310, 210, 70)) {
+            // Label is horizontal, rotate to vertical
+            houseIcon1->setGeometry(1000, 310, 70, 210);
+        } else if (houseIcon1->geometry() == QRect(1000, 310, 70, 210)) {
+            // Label is vertical, rotate to horizontal
+            houseIcon1->setGeometry(1000, 310, 210, 70);
+        }
+
+        QPixmap pixmap = houseIcon1->pixmap();
+        QPixmap transformedPixmap = pixmap.transformed(transform);
+        houseIcon1->setPixmap(transformedPixmap);
+    }
 };
 
 // int main(int argc, char *argv[])
