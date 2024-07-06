@@ -1200,22 +1200,24 @@ void choseDirection(char _table[10][10], int randX, int randY){
             return;
         }
 
-        do {
-            x = (rand() % 3) - 1;
-            y = (rand() % 3) - 1;
-            
-        } while(abs(x) == abs(y));
-        
-        x = x + randX;
-        y = y + randY;
-        
-        if(x < 0 || x > 9 || y < 0 || y > 9)
+        if(fallShip == false && shootSuccses == 0)
         {
-            continue;
-        }
-        
-        attackAgain(_table, x, y);   
+            do {
+                x = (rand() % 3) - 1;
+                y = (rand() % 3) - 1;
+                
+            } while(abs(x) == abs(y));
             
+            x = x + randX;
+            y = y + randY;
+            
+            if(x < 0 || x > 9 || y < 0 || y > 9)
+            {
+                continue;
+            }
+            
+            attackAgain(_table, x, y);   
+        }    
         if(fallShip == true)
         {
             shootSuccses = 0;
@@ -1225,6 +1227,48 @@ void choseDirection(char _table[10][10], int randX, int randY){
         }
     }
 }   
+
+bool checksalam(int x, int y, char _table[10][10])
+{
+    if(x == 0 && y == 0)
+    {
+        if(_table[0][1] != 'S' && _table[1][0] != 'S')
+        {
+            _table[0][0] = 'F';
+            return true;
+        }
+
+    }
+
+    else if(x == 0 && y == 9)
+    {
+        if(_table[0][8] != 'S' && _table[1][9] != 'S')
+        {
+            _table[0][9] = 'F';            
+            return true;
+        }
+    }
+
+    else if(x == 9 && y == 0)
+    {
+        if(_table[8][0] != 'S' && _table[9][1] != 'S')
+        {
+            _table[9][0] = 'F';            
+            return true;
+        }
+    }  
+
+    else if(x == 9 && y == 9)
+    {
+        if(_table[9][8] != 'S' && _table[8][9] != 'S')
+        {
+            _table[9][9] = 'F';            
+            return true;
+        }
+    }
+
+    return false;
+}
 
 void simpleAttack(char _table[10][10]){
     
@@ -1239,6 +1283,12 @@ void simpleAttack(char _table[10][10]){
         int randX = rand() % 10;
         int randY = rand() % 10;
  
+        if(checksalam(randX, randY, _table))
+        {
+            printMap(_table);
+            continue;
+        }
+
             if(_table[randX][randY] == 'S')
             {
                 firstShot[0][0] = randX;
@@ -1344,4 +1394,3 @@ int main()
 
     return 0;
 }
-
