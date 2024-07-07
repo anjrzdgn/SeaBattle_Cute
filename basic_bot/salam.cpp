@@ -10,6 +10,7 @@ string direction;
 string exactDirection = "Default";
 int shootSuccses = 0;
 bool fallShip = false;
+bool changedirect = false;
 int firstShot[1][2];
 int count = 0;
 
@@ -30,7 +31,6 @@ void printMap(char _table[10][10]){
 
 void attackAgain(char _table[10][10], int X, int Y)
 {
-    
     if(_table[X][Y] == 'S')
     {
         _table[X][Y] = 'B';
@@ -42,8 +42,14 @@ void attackAgain(char _table[10][10], int X, int Y)
             
             if(Y - firstShot[0][1] > 0)
             {
+
                 if(exactDirection == "Right")
                 {       
+
+                         
+
+
+
                     if(Y == 9)
                     {
                         if(_table[X][Y - 2] == 'B')
@@ -81,7 +87,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                     }
 
                     //table 2 space fall
-                    if((_table[X][Y + 1] != 'S' && _table[X][Y - 2] != 'B' && Y >= 2)
+                    if((_table[X][Y + 1] != 'S' && (_table[X][Y - 2] != 'B' || _table[X][Y - 2] != 'S')&& Y >= 2)
                         || (Y < 2 && _table[X][Y + 1] != 'S'))
                     {
                         _table[X][Y] = 'F';
@@ -153,6 +159,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             printMap(_table);
                             return;
                         }
+
                     }
                 }
 
@@ -273,6 +280,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                     }
 
                 }
+
             }
             
             if(Y - firstShot[0][1] < 0)
@@ -765,7 +773,7 @@ void attackAgain(char _table[10][10], int X, int Y)
             
             else if(X - firstShot[0][0] < 0)
             {
-                if(exactDirection == "UP")
+                if(exactDirection == "Up")
                 {
                     if(X == 0)
                     {
@@ -999,6 +1007,7 @@ void attackAgain(char _table[10][10], int X, int Y)
         {
             if(X == 0)
             {
+
                 if(Y == 1)
                 {
                     exactDirection = "Down";
@@ -1017,7 +1026,7 @@ void attackAgain(char _table[10][10], int X, int Y)
              
                 return;
             }
-
+            
             else if(X == 9)
             {
       
@@ -1112,6 +1121,7 @@ void attackAgain(char _table[10][10], int X, int Y)
         
         else if(Y == firstShot[0][1] && X - firstShot[0][0] > 0)
         {
+
             if(Y == 0)
             {
                 if(_table[X - 2][Y] == 'W')
@@ -1161,6 +1171,8 @@ void attackAgain(char _table[10][10], int X, int Y)
             {
                 exactDirection = "Up";
             }
+
+
         }
 
         else if(Y == firstShot[0][1] && X - firstShot[0][0] < 0)
@@ -1168,28 +1180,28 @@ void attackAgain(char _table[10][10], int X, int Y)
 
             if(Y == 0)
             {
-                if(_table[X + 1][Y+ 1] != 'W')
+                if(_table[X + 1][Y + 1] == 'W')
                 {
-                    exactDirection = "Right";
+                    exactDirection = "Down";
                 }
                 
                 else 
                 {
-                    exactDirection = "Down";
+                    exactDirection = "Right";
                 }
                 return;
             }
 
             else if(Y == 9)
             {
-                if(_table[X + 1][Y - 1] != 'W')
+                if(_table[X + 1][Y - 1] == 'W')
                 {
-                    exactDirection = "Left";
+                    exactDirection = "Down";
                 }
              
                 else
                 {
-                    exactDirection = "Down";
+                    exactDirection = "Left";
                 }
                 return;
             }
@@ -1212,10 +1224,13 @@ void attackAgain(char _table[10][10], int X, int Y)
                 exactDirection = "Down";
             }
 
-        }        
-        
+        }                
+     
         return ;
+    
     }
+
+
 }
 
 void choseDirection(char _table[10][10], int randX, int randY){
@@ -1235,6 +1250,12 @@ void choseDirection(char _table[10][10], int randX, int randY){
 
             else if(exactDirection == "Right")
             {
+                if(_table[randX][randY + 1])
+                {
+
+                }
+
+
                 attackAgain(_table, randX,randY + 1);
             }
 
@@ -1251,10 +1272,10 @@ void choseDirection(char _table[10][10], int randX, int randY){
         
         if(fallShip == true)
         {
-            count++;
             shootSuccses = 0;
             fallShip = false;
             exactDirection = "Default";
+            count++;
             return;
         }
 
@@ -1276,12 +1297,13 @@ void choseDirection(char _table[10][10], int randX, int randY){
             
             attackAgain(_table, x, y);   
         }    
+        
         if(fallShip == true)
         {
-            count++;
             shootSuccses = 0;
             fallShip = false;
             exactDirection = "Default";
+            count++;
             return;
         }
     }
@@ -1334,7 +1356,7 @@ void simpleAttack(char _table[10][10]){
     int yMax;
     int numberOfShook = 0;
 
-    while(count <= 11)
+    while(count <= 10)
     {
         srand(time(0));
         int randX = rand() % 10;
@@ -1357,21 +1379,18 @@ void simpleAttack(char _table[10][10]){
                 shootSuccses++;
 
                 //check space of ship
-                if(_table [randX][randY + 1] == 'E' && _table [randX][randY - 1] == 'E' &&
-                _table [randX + 1][randY] == 'E' && _table [randX - 1][randY] == 'E' && randX >= 1
+                if(_table [randX][randY + 1] != 'S' && _table [randX][randY - 1] != 'S' &&
+                _table [randX + 1][randY] != 'S' && _table [randX - 1][randY] != 'S' && randX >= 1
                 && randX <= 8 && randY >= 1 && randY <= 8)
                 
                 {
                     _table[randX][randY] = 'F';
                     fallShip = true;
                     count++;    
+                    printMap(_table);
                     continue;
                 }
                 
-
-
-
-
                 else
                 {
                     printMap(_table);
@@ -1417,38 +1436,38 @@ int main()
 
 
     table[0][0] = 'S';
-    table[5][1] = 'S';
-    table[9][3] = 'S';
-    table[7][2] = 'S';
-    table[0][5] = 'S';
-    table[0][6] = 'S';
+    table[1][6] = 'S';
+    table[1][8] = 'S';
+    table[1][9] = 'S';
     table[2][1] = 'S';
     table[2][2] = 'S';
-    table[2][3] = 'S';
     table[2][4] = 'S';
-    table[3][6] = 'S';
-    table[3][7] = 'S';
-    table[3][8] = 'S';
-    table[4][4] = 'S';
-    table[5][1] = 'S';
+    table[3][9] = 'S';
+    table[4][9] = 'S';
+    table[5][9] = 'S';
+    table[6][9] = 'S';
+    table[4][7] = 'S';
+    table[4][5] = 'S';
+    table[5][5] = 'S';
+    table[6][0] = 'S';
     table[6][1] = 'S';
+    table[6][2] = 'S';
     table[6][3] = 'S';
-    table[6][4] = 'S';
-    table[9][0] = 'S';
-    table[6][7] = 'S';
-    table[7][7] = 'S';
+    table[9][2] = 'S';
     table[9][3] = 'S';
     table[9][4] = 'S';
-    table[9][7] = 'S';
-    table[9][8] = 'S';
 
-    table[8][1] = 'S';
-    table[8][2] = 'S';
-    table[8][3] = 'S';
-
+    for(int i = 0; i < 10; i++)
+    {
+        for(int j = 0; j < 10; j++)
+        {
+            cout << table[i][j] << "  ";
+        }
+        cout << endl;
+    }
+    cout << endl << endl;
 
     simpleAttack(table);
-
 
     return 0;
 }
