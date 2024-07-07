@@ -4,14 +4,6 @@
 #include <ctime>
 #include <vector>
 
-
-
-
-
-
-
-
-
 using namespace std;
 
 string direction;
@@ -19,11 +11,11 @@ string exactDirection = "Default";
 int shootSuccses = 0;
 bool fallShip = false;
 int firstShot[1][2];
+int count = 0;
 
 void printMap(char _table[10][10]){
 
-    system("cls");
-    //_sleep(20);
+    // _sleep(20000);
     for(int i = 0; i < 10; i++)
     {
         for(int j = 0; j < 10; j++)
@@ -32,6 +24,8 @@ void printMap(char _table[10][10]){
         }
         cout << endl;
     }
+    cout << endl << endl;
+
 }
 
 void attackAgain(char _table[10][10], int X, int Y)
@@ -61,6 +55,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X][Y - 2] = 'F';
                                 _table[X][Y - 3] = 'F';
                                 fallShip = true;
+                                printMap(_table);
                                 return;
                             }
                      
@@ -70,6 +65,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X][Y - 1] = 'F';
                                 _table[X][Y - 2] = 'F';
                                 fallShip = true;
+                                printMap(_table);         
                                 return;
                             }                        
                         }
@@ -79,6 +75,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y] = 'F';
                             _table[X][Y - 1] = 'F';
                             fallShip = true;
+                            printMap(_table);
                             return;
                         }
                     }
@@ -131,6 +128,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y + 1] = 'F';
                             _table[X][Y - 1] = 'F';
                             _table[X][Y] = 'F';
+                            printMap(_table);
                             fallShip = true;
                         }
 
@@ -141,6 +139,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y + 1] = 'F';
                             _table[X][Y - 1] = 'F';
                             _table[X][Y] = 'F';
+                            printMap(_table);
                             fallShip =  true;
                         }
 
@@ -151,6 +150,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y + 1] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            printMap(_table);
                             return;
                         }
                     }
@@ -169,6 +169,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X][Y - 2] = 'F';
                                 _table[X][Y - 3] = 'F';
                                 fallShip = true;
+                                printMap(_table);
                                 return;
                             }
                             
@@ -178,6 +179,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X][Y - 1] = 'F';
                                 _table[X][Y - 2] = 'F';
                                 fallShip = true;
+                                printMap(_table);
                                 return;
                             }                        
                         }
@@ -187,6 +189,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y] = 'F';
                             _table[X][Y - 1] = 'F';
                             fallShip = true;
+                            printMap(_table);
                             return;
                         }
                     }
@@ -289,6 +292,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X][Y + 2] = 'F';
                                 _table[X][Y + 3] = 'F';
                                 fallShip = true;
+                                printMap(_table);
                                 return;
                             }
                             
@@ -298,6 +302,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X][Y + 1] = 'F';
                                 _table[X][Y + 2] = 'F';
                                 fallShip = true;
+                                printMap(_table);
                                 return;                            
                             }
                         }
@@ -307,6 +312,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y] = 'F';
                             _table[X][Y + 1] = 'F';
                             fallShip = true;
+                            printMap(_table);
                             return;
                         }
                     }
@@ -387,6 +393,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y - 1] = 'F';
                             _table[X][Y + 1] = 'F';
                             _table[X][Y] = 'F';
+                            printMap(_table);
                             fallShip = true;
                         }
                         
@@ -397,6 +404,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y - 1] = 'F';
                             _table[X][Y + 1] = 'F';
                             _table[X][Y] = 'F';
+                            printMap(_table);
                             fallShip =  true;
                         }
 
@@ -407,6 +415,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y - 1] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            printMap(_table);
                             return;
                         }
                     }
@@ -426,6 +435,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X][Y + 1] = 'F';
                                 _table[X][Y + 2] = 'F';
                                 _table[X][Y + 3] = 'F';
+                                printMap(_table);
                                 fallShip = true;
                                 return;
                             }
@@ -436,6 +446,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X][Y + 1] = 'F';
                                 _table[X][Y + 2] = 'F';
                                 fallShip = true;
+                                printMap(_table);
                                 return;                            
                             }
                         }
@@ -445,6 +456,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y] = 'F';
                             _table[X][Y + 1] = 'F';
                             fallShip = true;
+                            printMap(_table);
                             return;
                         }
                     }
@@ -471,6 +483,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                         _table[X][Y] = 'F';
                         fallShip = true;
                         shootSuccses++;
+                        printMap(_table);
                     }
 
                     //maby ship have 3 or 4 spaces and change direction
@@ -482,6 +495,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                         }
                         exactDirection = "Right";
                         fallShip = false;
+                        printMap(_table);
                         return;                    
                     }
 
@@ -495,6 +509,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y - 1] = 'F';
                             _table[X][Y + 1] = 'F';
                             _table[X][Y] = 'F';
+                            printMap(_table);
                             fallShip = true;
                         }
 
@@ -536,6 +551,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X - 2][Y] = 'F';
                                 _table[X - 3][Y] = 'F';
                                 fallShip = true;
+                                printMap(_table);
                                 return;                                
                             }
 
@@ -545,6 +561,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X - 1][Y] = 'F';
                                 _table[X - 2][Y] = 'F';
                                 fallShip = true;
+                                printMap(_table);
                                 return;        
                             }
                         }
@@ -554,6 +571,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y] = 'F';
                             _table[X - 1][Y] = 'F';
                             fallShip = true;
+                            printMap(_table);
                             return;
                         }
                     }
@@ -652,6 +670,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X - 2][Y] = 'F';
                                 _table[X - 3][Y] = 'F';
                                 fallShip = true;
+                                printMap(_table);
                                 return;                                
                             }
 
@@ -661,6 +680,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X - 1][Y] = 'F';
                                 _table[X - 2][Y] = 'F';
                                 fallShip = true;
+                                printMap(_table);
                                 return;        
                             }
                         }
@@ -670,6 +690,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y] = 'F';
                             _table[X - 1][Y] = 'F';
                             fallShip = true;
+                            printMap(_table);
                             return;
                         }
                     }
@@ -697,6 +718,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                         _table[X][Y] = 'F';
                         fallShip = true;
                         shootSuccses++;
+                        printMap(_table);
                     }
 
                     //maby ship have 3 or 4 spaces and change direction
@@ -705,7 +727,9 @@ void attackAgain(char _table[10][10], int X, int Y)
                         _table[X + 1][Y] = 'W';
                         exactDirection = "UP";
                         fallShip = false;
+                        printMap(_table);
                         return;
+                    
                     }
     
                     //have 4 space
@@ -754,6 +778,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X + 2][Y] = 'F'; 
                                 _table[X + 3][Y] = 'F';                                 
                                 fallShip = true;
+                                printMap(_table);
                                 return;
                             }
                        
@@ -763,6 +788,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X + 1][Y] = 'F';
                                 _table[X + 2][Y] = 'F'; 
                                 fallShip = true;
+                                printMap(_table);
                                 return;
                             }
                         }
@@ -772,6 +798,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y] = 'F';
                             _table[X + 1][Y] = 'F';
                             fallShip = true;
+                            printMap(_table);
                             return;
                         }
                     }
@@ -783,6 +810,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                         _table[X][Y] = 'F';
                         _table[X + 1][Y] = 'F';
                         fallShip = true;
+                        printMap(_table);
                         return;
                     }
                   
@@ -797,6 +825,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X + 1][Y] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            printMap(_table);
                             return;
                         }
 
@@ -806,6 +835,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X + 2][Y] = 'F';
                             _table[X + 1][Y] = 'F';
                             _table[X][Y] = 'F';
+                            printMap(_table);
                             fallShip = true;
                         }
 
@@ -822,6 +852,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X - 1][Y] = 'F';
                             _table[X + 1][Y] = 'F';
                             _table[X][Y] = 'F';
+                           printMap(_table);
                             fallShip = true;
 
                         }
@@ -833,6 +864,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X - 1][Y] = 'F';
                             _table[X + 1][Y] = 'F';
                             _table[X][Y] = 'F';
+                            printMap(_table);
                             fallShip =  true;
                         }
 
@@ -843,6 +875,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X - 1][Y] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                         printMap(_table);
                             return;
                         }
                     }
@@ -863,6 +896,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X + 2][Y] = 'F';
                                 _table[X + 3][Y] = 'F';
                                 fallShip = true;
+                             printMap(_table);
                                 return;                                
                             }
 
@@ -872,6 +906,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X + 1][Y] = 'F';
                                 _table[X + 2][Y] = 'F';
                                 fallShip = true;
+                               printMap(_table);
                                 return;              
                             }
                         }
@@ -881,6 +916,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y] = 'F';
                             _table[X + 1][Y] = 'F';
                             fallShip = true;
+                            printMap(_table);
                             return;
                         }   
                     }
@@ -892,6 +928,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                         _table[X][Y] = 'F';
                         _table[X + 1][Y] = 'F';
                         fallShip = true;
+                        printMap(_table);
                         //atack again random
                         return;
                     }
@@ -904,6 +941,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                         _table[X][Y] = 'F';
                         fallShip = true;
                         shootSuccses++;
+                        printMap(_table);
                     }
 
                     //maby ship have 3 or 4 spaces and change direction
@@ -912,6 +950,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                         _table[X - 1][Y] = 'W';
                         exactDirection = "Down";
                         fallShip = false;
+                       printMap(_table);
                         return;
                     }
 
@@ -926,6 +965,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X + 1][Y] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            printMap(_table);
                         }
 
                         //absoultly have 4 spacce but should change direction  
@@ -936,7 +976,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             exactDirection = "Down";            
                             fallShip = false;      
                             shootSuccses++;
-                            
+                            printMap(_table);
                             return;                  
                         } 
 
@@ -953,18 +993,23 @@ void attackAgain(char _table[10][10], int X, int Y)
     else if(_table[X][Y] == 'E')
     {
         _table[X][Y] = 'W';
+        printMap(_table);
 
         if(X == firstShot[0][0] && Y - firstShot[0][1] > 0)
         {
-
             if(X == 0)
             {
-                
+                if(Y == 1)
+                {
+                    exactDirection = "Down";
+                    return;
+                }
+
                 if(_table[X][Y - 2] == 'W')
                 {
                     exactDirection = "Down";
                 }
-      
+             
                 else
                 {
                     exactDirection = "Left";
@@ -975,6 +1020,7 @@ void attackAgain(char _table[10][10], int X, int Y)
 
             else if(X == 9)
             {
+      
                 if(_table[X][Y - 2] == 'W')
                 {
                     exactDirection = "Up";
@@ -1122,7 +1168,7 @@ void attackAgain(char _table[10][10], int X, int Y)
 
             if(Y == 0)
             {
-                if(_table[X + 1][Y+ 1] == 'W')
+                if(_table[X + 1][Y+ 1] != 'W')
                 {
                     exactDirection = "Right";
                 }
@@ -1136,7 +1182,7 @@ void attackAgain(char _table[10][10], int X, int Y)
 
             else if(Y == 9)
             {
-                if(_table[X + 1][Y - 1] == 'W')
+                if(_table[X + 1][Y - 1] != 'W')
                 {
                     exactDirection = "Left";
                 }
@@ -1148,16 +1194,16 @@ void attackAgain(char _table[10][10], int X, int Y)
                 return;
             }
 
-            if(_table[X - 2][Y] == 'W')
+            if(_table[X + 2][Y] == 'W')
             {
-                if(_table[X - 1][Y - 1] == 'W')
+                if(_table[X + 1][Y + 1] == 'W')
                 {
-                    exactDirection = "Right";
+                    exactDirection = "Left";
                 }
      
                 else
                 {
-                    exactDirection= "Left";
+                    exactDirection= "Right";
                 }
             }
   
@@ -1174,11 +1220,14 @@ void attackAgain(char _table[10][10], int X, int Y)
 
 void choseDirection(char _table[10][10], int randX, int randY){
     int x, y;
+    int z = 0;
 
     while(true)
     {
+
         if(fallShip == false && shootSuccses != 0 && exactDirection != "Default")
         {
+            z = 1;
             if(exactDirection == "Left")
             {
                 attackAgain(_table, randX,randY - 1);
@@ -1202,13 +1251,14 @@ void choseDirection(char _table[10][10], int randX, int randY){
         
         if(fallShip == true)
         {
+            count++;
             shootSuccses = 0;
             fallShip = false;
             exactDirection = "Default";
             return;
         }
 
-        if(fallShip == false && shootSuccses == 0)
+        if(fallShip == false && z != 1)
         {
             do {
                 x = (rand() % 3) - 1;
@@ -1228,6 +1278,7 @@ void choseDirection(char _table[10][10], int randX, int randY){
         }    
         if(fallShip == true)
         {
+            count++;
             shootSuccses = 0;
             fallShip = false;
             exactDirection = "Default";
@@ -1245,7 +1296,6 @@ bool checksalam(int x, int y, char _table[10][10])
             _table[0][0] = 'F';
             return true;
         }
-
     }
 
     else if(x == 0 && y == 9)
@@ -1282,10 +1332,9 @@ void simpleAttack(char _table[10][10]){
     
     int xMax;
     int yMax;
-    int count = 0;
     int numberOfShook = 0;
 
-    while(true)
+    while(count <= 11)
     {
         srand(time(0));
         int randX = rand() % 10;
@@ -1325,6 +1374,7 @@ void simpleAttack(char _table[10][10]){
 
                 else
                 {
+                    printMap(_table);
                     choseDirection(_table, randX, randY);
                 }
 
@@ -1366,12 +1416,12 @@ int main()
     }
 
 
-    table[4][2] = 'S';
-    table[5][2] = 'S';
-    table[6][2] = 'S';
+    table[0][0] = 'S';
+    table[5][1] = 'S';
+    table[9][3] = 'S';
     table[7][2] = 'S';
-    table[0][1] = 'S';
-    table[0][8] = 'S';
+    table[0][5] = 'S';
+    table[0][6] = 'S';
     table[2][1] = 'S';
     table[2][2] = 'S';
     table[2][3] = 'S';
@@ -1384,7 +1434,7 @@ int main()
     table[6][1] = 'S';
     table[6][3] = 'S';
     table[6][4] = 'S';
-    table[6][5] = 'S';
+    table[9][0] = 'S';
     table[6][7] = 'S';
     table[7][7] = 'S';
     table[9][3] = 'S';
