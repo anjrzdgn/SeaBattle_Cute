@@ -4,6 +4,14 @@
 #include <ctime>
 #include <vector>
 
+
+
+
+
+
+
+
+
 using namespace std;
 
 string direction;
