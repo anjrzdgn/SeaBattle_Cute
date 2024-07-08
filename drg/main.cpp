@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QDrag>
+#include <utility>
 #include <QMimeData>
 #include <QDataStream>
 #include <QByteArray>
@@ -9,14 +10,21 @@
 #include <QPoint>
 #include <QMouseEvent>
 #include <QDropEvent>
+#include <QPushButton>>
 #include <QDebug>
+#include <QSize>
 
 
 class Ship {
 public:
     QLabel *label;
+    QChar st='h';
+    int xpos;
+    int ypos;
+    int w;
+    int h;
 
-    Ship(QLabel *label, QString pixmap, int x, int y, int width, int height) {
+    Ship(QLabel *label, QString pixmap, int x, int y, int width, int height) : xpos(x), ypos(y), w(width), h(height) {
         QPixmap f(pixmap);
         label->setPixmap(f);
         label->setGeometry(x, y, width, height);
@@ -29,6 +37,49 @@ public:
 
     void getGeo() {
         label->geometry();
+    }
+
+    void rotate(){
+
+        QTransform transform;
+        if(this->st == 'h'){
+            this->st = 'v';
+            transform.rotate(90); // Rotate by 90 degrees
+        } else if(this->st == 'v'){
+            this->st = 'h';
+            transform.rotate(270); // Rotate by 270 degrees
+        }
+
+        QRect rect = label->geometry();
+        int xp = rect.x();
+        int yp = rect.y();
+        int width = rect.width();
+        int height = rect.height();
+
+        if (this->label->geometry() == QRect(xp, yp, 120, 60)) {
+            // Label is horizontal, rotate to vertical
+            label->setGeometry(xp, yp, 60, 120);
+        } else if (label->geometry() == QRect(xp, yp, 60, 120)) {
+            // Label is vertical, rotate to horizontal
+            label->setGeometry(xp, yp, 120, 60);
+        }else if (label->geometry() == QRect(xp, yp, 60, 180)) {
+            // Label is vertical, rotate to horizontal
+            label->setGeometry(xp, yp, 210, 60);
+        }else if (label->geometry() == QRect(xp, yp, 180, 60)) {
+            // Label is vertical, rotate to horizontal
+            label->setGeometry(xp, yp, 60, 180);
+        }else if (label->geometry() == QRect(xp, yp, 60, 240)) {
+            // Label is vertical, rotate to horizontal
+            label->setGeometry(xp, yp, 240, 60);
+        }else if (label->geometry() == QRect(xp, yp, 240, 60)) {
+            // Label is vertical, rotate to horizontal
+            label->setGeometry(xp, yp, 60, 240);
+        }
+
+        QPixmap pixmap = label->pixmap();
+        QPixmap transformedPixmap = pixmap.transformed(transform);
+        label->setPixmap(transformedPixmap);
+
     }
 };
 class SHIP {
@@ -159,109 +210,75 @@ public:
     QLabel *backgroundLabel1 = new QLabel(this);
     QLabel *backgroundLabel = new QLabel(this);
     ClickableLabel *houseIcon1 = new ClickableLabel(this);
-    std::vector<std::pair<QLabel*, SHIP*>> ships;
+    std::vector<std::pair< Ship*,QLabel*>> ships;
 
     DragWidget(QWidget *parent = nullptr)
         : QFrame(parent)
     {
 
+        QLabel *labelA = new QLabel(this);
+        Ship A(labelA, "C:/SeaBattle_Cute_private/drg/src/1Xship copy.png", 1010, 230, 60, 60);
+        ships.push_back(std::make_pair(&A,labelA));
+
+        QLabel *labelB = new QLabel(this);
+        Ship B(labelB, "C:/SeaBattle_Cute_private/drg/src/1Xship copy.png", 1106, 230, 60, 60);
+        ships.push_back(std::make_pair(&B,labelB));
+
+        QLabel *labelC = new QLabel(this);
+        Ship C(labelC, "C:/SeaBattle_Cute_private/drg/src/1Xship copy.png", 1202, 230, 60, 60);
+        ships.push_back(std::make_pair(&C,labelC));
+
+        QLabel *labelD = new QLabel(this);
+        Ship D(labelD, "C:/SeaBattle_Cute_private/drg/src/1Xship copy.png", 1298, 230, 60, 60);
+        ships.push_back(std::make_pair(&D,labelD));
+
+        QLabel *labelE = new QLabel(this);
+        Ship E(labelE, "C:/SeaBattle_Cute_private/drg/src/2Xship copy.png", 1010, 326, 120, 60);
+        ships.push_back(std::make_pair(&E,labelE));
+
+        QLabel *labelF = new QLabel(this);
+        Ship F(labelF, "C:/SeaBattle_Cute_private/drg/src/2Xship copy.png", 1154, 326, 120, 60);
+        ships.push_back(std::make_pair(&F,labelF));
+
+        QLabel *labelG = new QLabel(this);
+        Ship G(labelG, "C:/SeaBattle_Cute_private/drg/src/2Xship copy.png", 1298, 326, 120, 60);
+        ships.push_back(std::make_pair(&G,labelG));
+
+        QLabel *labelH = new QLabel(this);
+        Ship H(labelH, "C:/SeaBattle_Cute_private/drg/src/3Xship copy.png", 1010, 422, 180, 60);
+        ships.push_back(std::make_pair(&H,labelH));
+
+        QLabel *labelI = new QLabel(this);
+        Ship I(labelI, "C:/SeaBattle_Cute_private/drg/src/3Xship copy.png", 1202, 422, 180, 60);
+        ships.push_back(std::make_pair(&I,labelI));
+
+        QLabel *labelJ = new QLabel(this);
+        Ship J(labelJ, "C:/SeaBattle_Cute_private/drg/src/4Xship copy.png", 1010, 518, 240, 60);
+        ships.push_back(std::make_pair(&J,labelJ));
 
 
-        // setMinimumSize(1900, 1080);
-        // setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
-        // setAcceptDrops(true);
+        QPushButton* restore = new QPushButton(this);
+        restore->setGeometry(815, 665, 50, 50);
+        restore->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+        restore->setCursor(Qt::PointingHandCursor);
+        connect(restore, &QPushButton::clicked, QCoreApplication::quit);
 
-        std::vector<SHIP*> ships;
+        QPushButton* next = new QPushButton(this);
+        next->setGeometry(1070, 665, 180, 50);
+        next->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+        next->setCursor(Qt::PointingHandCursor);
+        connect(next, &QPushButton::clicked, QCoreApplication::quit);
 
-
-
-        // ships.push_back(new Ship1X1(QPoint(1000, 210)));
-        // ships.push_back(new Ship1X1(QPoint(1090, 210)));
-        // ships.push_back(new Ship1X1(QPoint(1180, 210)));
-        // ships.push_back(new Ship1X1(QPoint(1270, 210)));
-
-        // ships.push_back(new Ship1X2(QPoint(1000, 310)));
-        // ships.push_back(new Ship1X2(QPoint(1150, 310)));
-        // ships.push_back(new Ship1X2(QPoint(1300, 310)));
-
-        // ships.push_back(new Ship1X3(QPoint(1000, 410)));
-        // ships.push_back(new Ship1X3(QPoint(1230, 410)));
-
-        // ships.push_back(new Ship1X4(QPoint(1000, 510)));
-
-
-        // QLabel *labelA = new QLabel(this);
-        // Ship A(labelA, "C:/SeaBattle_Cute_private/src/1Xship copy.png", 100, 100, 70, 70);
-
-        // QLabel *labelB = new QLabel(this);
-        // Ship B(labelB, "C:/SeaBattle_Cute_private/src/2Xship copy.png", 200, 200, 140, 70);
-
-        // QLabel *labelC = new QLabel(this);
-        // Ship C(labelC, "C:/SeaBattle_Cute_private/src/3Xship copy.png", 300, 300, 210, 70);
-
-
-
-
-        SHIP* a = new Ship1X1(QPoint(1000, 210),1);
-        ships.push_back(a);
-
-        SHIP* b = new Ship1X1(QPoint(1090, 210),2);
-        ships.push_back(b);
-
-        SHIP* c = new Ship1X1(QPoint(1180, 210),3);
-        ships.push_back(c);
-
-        SHIP* d = new Ship1X1(QPoint(1270, 210),4);
-        ships.push_back(d);
-
-        SHIP* e = new Ship1X2(QPoint(1000, 310),5);
-        ships.push_back(e);
-
-        SHIP* f = new Ship1X2(QPoint(1150, 310),6);
-        ships.push_back(f);
-
-        SHIP* g = new Ship1X2(QPoint(1300, 310),7);
-        ships.push_back(g);
-
-        SHIP* h = new Ship1X3(QPoint(1000, 410),8);
-        ships.push_back(h);
-
-        SHIP* i = new Ship1X3(QPoint(1230, 410),9);
-        ships.push_back(i);
-
-        SHIP* j = new Ship1X4(QPoint(1000, 510),10);
-        ships.push_back(j);
-
-
-
-
-
-        for (int i = 0; i < ships.size(); i++) {
-            QLabel *label = new QLabel(this);
-            label->setPixmap(ships[i]->getPixmap());
-            label->setGeometry(ships[i]->getPosition().x(), ships[i]->getPosition().y(), ships[i]->getWidth(), ships[i]->getHeight());
-            label->show();
-            label->geometry().x();
-            label->setAttribute(Qt::WA_DeleteOnClose);
-        }
-
-        QPixmap image("C:/SeaBattle_Cute_private/src/arrangement page copy.png");
-        // QLabel *backgroundLabel = new QLabel(this);
-        backgroundLabel->setPixmap(image);
-        backgroundLabel->setScaledContents(true);
-        backgroundLabel->setAlignment(Qt::AlignRight);
-        // backgroundLabel->setGeometry(width(), 0, width() / 2, height());
-        backgroundLabel->setGeometry(0, 0, 1536, 864);
-        backgroundLabel->setAcceptDrops(false);
+        QPixmap images("C:/SeaBattle_Cute_private/src_graphic/made/arrangement page copy.png");
+        backgroundLabel1->setPixmap(images);
+        backgroundLabel1->setScaledContents(true);
+        backgroundLabel1->setGeometry(0, 0, 1536, 864); // Set the geometry of the background label to cover the entire window
+        backgroundLabel1->lower(); // Send the background label to the back
+        backgroundLabel1->setAcceptDrops(false); // Set to not accept drag and drop events
 
         setMinimumSize(200, 200);
         setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
         setAcceptDrops(true);
-
-        setMinimumSize(200, 200);
-        setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
-        setAcceptDrops(true);
-
 
         QTransform transform;
         transform.rotate(90); // Rotate by 45 degrees
@@ -276,10 +293,7 @@ public:
 
     }
 
-    // protected:
-    //     void mousePressEvent(QMouseEvent *event) override
-    //     {
-    //         QLabel *child = static_cast<QLabel*>(childAt(event->position().to
+
 protected:
     void mousePressEvent(QMouseEvent *event) override
     {
@@ -312,182 +326,8 @@ protected:
             event->acceptProposedAction();
     }
 
-    // void dropEvent(QDropEvent *event) override
-    // {
-    //     if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
-    //         QByteArray itemData = event->mimeData()->data("application/x-dnditemdata");
-    //         QDataStream dataStream(&itemData, QIODevice::ReadOnly);
-    //         QPoint offset;
-    //         dataStream >> offset;
-
-    //         QLabel *child = static_cast<QLabel*>(childAt(offset));
-    //         if (child) {
-    //             child->move(event->position().toPoint());
-    //             child->show();
-    //         }
-
-    //         event->acceptProposedAction();
-    //     }
-    // }
-
-    // void dropEvent(QDropEvent *event) override
-    // {
-    //     if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
-    //         QByteArray itemData = event->mimeData()->data("application/x-dnditemdata");
-    //         QDataStream dataStream(&itemData, QIODevice::ReadOnly);
-    //         QPoint offset;
-    //         dataStream >> offset;
-
-    //         QLabel *child = static_cast<QLabel*>(childAt(offset));
-    //         if (child) {
-    //             int x = event->position().toPoint().x();
-    //             int y = event->position().toPoint().y();
-
-    //             if (x >= 70 && x <= 770 && y >= 90 && y <= 790) {
-    //                 int column = (x - 70) / 70;
-    //                 int row = (y - 90) / 70;
-
-    //                     int xPos=70+column*70;
-    //                     int yPos=90+row*70;
-
-    //                     qDebug()<<xPos<<" "<<yPos;
-
-    //                 child->move(xPos, yPos);
-    //             } else {
-    //                 child->move(offset); // move the label back to its original position
-    //             }
-    //             child->show();
-    //         }
-
-    //         event->acceptProposedAction();
-    //     }
-    // }
 
     Board board; // create an instance of the Board class
-
-    // void dropEvent(QDropEvent *event) override
-    // {
-    //     if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
-    //         QByteArray itemData = event->mimeData()->data("application/x-dnditemdata");
-    //         QDataStream dataStream(&itemData, QIODevice::ReadOnly);
-    //         QPoint offset;
-    //         dataStream >> offset;
-
-    //         QLabel *child = static_cast<QLabel*>(childAt(offset));
-    //         if (child) {
-    //             int x = event->position().toPoint().x();
-    //             int y = event->position().toPoint().y();
-
-    //             if (x >= 70 && x <= 770 && y >= 90 && y <= 790) {
-    //                 int column = (x - 70) / 70;
-    //                 int row = (y - 90) / 70;
-
-    //                 int xPos=70+column*70;
-    //                 int yPos=90+row*70;
-
-    //                 QPoint position(xPos, yPos);
-
-    //                 // Get the SHIP object associated with the QLabel
-    //                 SHIP* ship = nullptr;
-    //                 for (SHIP* s : ships) {
-    //                     if (*s->getPixmap().toImage() == *child->pixmap().toImage()) {
-    //                         ship = s;
-    //                         break;
-    //                     }
-    //                 }
-
-    //                 if (ship && !board.isValidPosition(ship, position)) {
-    //                     child->move(offset); // move the label back to its original position
-    //                     return;
-    //                 }
-
-    //                 child->move(xPos, yPos);
-    //             } else {
-    //                 child->move(offset); // move the label back to its original position
-    //             }
-    //             child->show();
-    //         }
-
-    //         event->acceptProposedAction();
-    //     }
-    // }
-
-
-
-    // void dropEvent(QDropEvent *event) override
-    // {
-    //     if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
-    //         QByteArray itemData = event->mimeData()->data("application/x-dnditemdata");
-    //         QDataStream dataStream(&itemData, QIODevice::ReadOnly);
-    //         QPoint offset;
-    //         dataStream >> offset;
-
-    //         QLabel *child = static_cast<QLabel*>(childAt(offset));
-    //         if (child) {
-    //             int x = event->position().toPoint().x();
-    //             int y = event->position().toPoint().y();
-
-    //             if (x >= 70 && x <= 770 && y >= 90 && y <= 790) {
-    //                 int column = (x - 70) / 70;
-    //                 int row = (y - 90) / 70;
-
-    //                 int xPos=70+column*70;
-    //                 int yPos=90+row*70;
-
-    //                 QPoint position(xPos, yPos);
-
-    //                 // Get the SHIP object associated with the QLabel
-    //                 SHIP* ship = nullptr;
-    //                 for (auto& pair : ships) {
-    //                     if (pair.first == child) {
-    //                         ship = pair.second;
-    //                         break;
-    //                     }
-    //                 }
-
-    //                 if (ship && !board.isValidPosition(ship, position)) {
-    //                     child->move(offset); // move the label back to its original position
-    //                     return;
-    //                 }
-
-    //                 child->move(xPos, yPos);
-
-    //                 if (ship != nullptr) {
-    //                     int shipId = ship->getId();
-    //                     if (dynamic_cast<Ship1X1*>(ship)) {
-    //                         qDebug() << "Ship1X1 with id" << shipId << "dropped";
-    //                     } else if (dynamic_cast<Ship1X2*>(ship)) {
-    //                         qDebug() << "Ship1X2 with id" << shipId << "dropped";
-    //                     } else if (dynamic_cast<Ship1X3*>(ship)) {
-    //                         qDebug() << "Ship1X3 with id" << shipId << "dropped";
-    //                     } else if (dynamic_cast<Ship1X4*>(ship)) {
-    //                         qDebug() << "Ship1X4 with id" << shipId << "dropped";
-    //                     } else {
-    //                         qDebug() << "not found!";
-    //                     }
-    //                 } else {
-    //                     child->move(offset); // move the label back to its original position
-    //                 }
-    //                 child->show();
-
-    //                 // Place the ship on the board
-    //                 if (ship != nullptr) {
-    //                     board.placeShip(ship, position);
-    //                 }
-    //             } else {
-    //                 child->move(offset); // move the label back to its original position
-    //             }
-    //             child->show();
-    //         }
-
-    //         event->acceptProposedAction();
-    //     }
-    // }
-
-
-
-
-
 
 
     void dropEvent(QDropEvent *event) override
@@ -503,38 +343,46 @@ protected:
                 int x = event->position().toPoint().x();
                 int y = event->position().toPoint().y();
 
-                if (x >= 50 && x <= 550 && y >= 90 && y <= 790) {
-                    int column = (x - 50) / 50;
-                    int row = (y - 90) / 50;
+                if (x >= 260*0.8 && x <= 860*0.8 && y >= 230*0.8 && y <= 834*0.8) {
+                    int column = (x - 200) / 48;
+                    int row = (y - 190) / 48;
 
-                    int xPos=50+column*50;
-                    int yPos=90+row*50;
+                    int xPos = 200  + column * 48;
+                    int yPos = 190 - 7 + row * 48;
 
                     QPoint position(xPos, yPos);
 
-                    // Get the SHIP object associated with the QLabel
-                    SHIP* ship = nullptr;
+                    Ship* ship = nullptr;
+                    // int ws;
                     for (auto& pair : ships) {
-                        if (pair.first == child) {
-                            ship = pair.second;
+                        if (pair.second == child) {
+                            ship = pair.first;
+                            // size = pair.first->label->size();
+                            // ws = size.width();
                             break;
                         }
                     }
 
-                    child->move(xPos, yPos);
+                    // if (ws == 32765 && column > 6) {
+                    //     child->move(offset);
+                    // }
+                    // else if (ws == 0 && column > 7) {
+                    //     child->move(offset);
+                    // }
+                    // else if (ws == 718 && column > 8) {
+                    //     child->move(offset);
+                    // }
+                    // else
+                    // {
+                        child->move(xPos, yPos);
+                    // }
 
-                    if (ship != nullptr) {
-                        if (dynamic_cast<Ship1X1*>(ship)) {
-                            qDebug() << "Ship1X1 dropped";
-                        } else if (dynamic_cast<Ship1X2*>(ship)) {
-                            qDebug() << "Ship1X2 dropped";
-                        } else if (dynamic_cast<Ship1X3*>(ship)) {
-                            qDebug() << "Ship1X3 dropped";
-                        } else if (dynamic_cast<Ship1X4*>(ship)) {
-                            qDebug() << "Ship1X4 dropped";
-                        }
+
+                    if (ship) {
+
+                            qDebug() << "dropped at position" << position << " " << column << " " << row ; //<< " " << ws;
                     } else {
-                        qDebug() << "Unknown ship type";
+                        qDebug() << "Unknown label";
                     }
                 } else {
                     child->move(offset); // move the label back to its original position
@@ -545,56 +393,10 @@ protected:
             event->acceptProposedAction();
         }
     }
-    // void dropEvent(QDropEvent *event) override
-    // {
-    //     if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
-    //         QByteArray itemData = event->mimeData()->data("application/x-dnditemdata");
-    //         QDataStream dataStream(&itemData, QIODevice::ReadOnly);
-    //         QPoint offset;
-    //         dataStream >> offset;
 
-    //         QLabel *child = static_cast<QLabel*>(childAt(offset));
-    //         if (child) {
-    //             int x = event->position().toPoint().x();
-    //             int y = event->position().toPoint().y();
-
-    //             if (x >= 70 && x <= 770 && y >= 90 && y <= 790) {
-    //                 int column = (x - 70) / 70;
-    //                 int row = (y - 90) / 70;
-
-    //                 int xPos=70+column*70;
-    //                 int yPos=90+row*70;
-
-    //                 QPoint position(xPos, yPos);
-
-    //                 // Get the SHIP object associated with the QLabel
-    //                 SHIP* ship = nullptr;
-    //                 for (auto& pair : ships) {
-    //                     if (pair.first == child) {
-    //                         ship = pair.second;
-    //                         break;
-    //                     }
-    //                 }
-
-    //                 if (ship && !board.isValidPosition(ship, position)) {
-    //                     child->move(offset); // move the label back to its original position
-    //                     return;
-    //                 }
-
-    //                 child->move(xPos, yPos);
-    //             } else {
-    //                 child->move(offset); // move the label back to its original position
-    //             }
-    //             child->show();
-    //         }
-
-    //         event->acceptProposedAction();
-    //     }
-    // }
 public slots:
     void rotateHouseIcon() {
 
-        // if(houseIcon1->geometry()==QRect(1000, 310, 210, 70))
         QTransform transform;
         transform.rotate(90); // Rotate by 90 degrees
 
@@ -620,13 +422,8 @@ int main(int argc, char *argv[])
     DragWidget window;
     window.setGeometry(0, 0, 1536, 864); // Set window size
 
-    // QLabel *backgroundImageLabel = new QLabel(&window);
-    // QPixmap backgroundImage("E:/qt1/drg/pic.png"); // Load your image
-    // backgroundImageLabel->setPixmap(backgroundImage);
-    // backgroundImageLabel->setScaledContents(true);
-    // backgroundImageLabel->setGeometry(0, 0, 1920, 1080); // Set the geometry of the background label to cover the entire window
-
     window.show();
+
 
     return app.exec();
 }
