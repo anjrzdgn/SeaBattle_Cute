@@ -15,6 +15,7 @@
 class Ship {
 public:
     QLabel *label;
+    QChar st='h';
 
     Ship(QLabel *label, QString pixmap, int x, int y, int width, int height) {
         QPixmap f(pixmap);
@@ -29,6 +30,49 @@ public:
 
     void getGeo() {
         label->geometry();
+    }
+
+    void rotate(){
+
+        QTransform transform;
+        if(this->st == 'h'){
+            this->st = 'v';
+            transform.rotate(90); // Rotate by 90 degrees
+        } else if(this->st == 'v'){
+            this->st = 'h';
+            transform.rotate(270); // Rotate by 270 degrees
+        }
+
+        QRect rect = label->geometry();
+        int xp = rect.x();
+        int yp = rect.y();
+        int width = rect.width();
+        int height = rect.height();
+
+        if (this->label->geometry() == QRect(xp, yp, 140, 70)) {
+            // Label is horizontal, rotate to vertical
+            label->setGeometry(xp, yp, 70, 140);
+        } else if (label->geometry() == QRect(xp, yp, 70, 140)) {
+            // Label is vertical, rotate to horizontal
+            label->setGeometry(xp, yp, 140, 70);
+        }else if (label->geometry() == QRect(xp, yp, 70, 210)) {
+            // Label is vertical, rotate to horizontal
+            label->setGeometry(xp, yp, 210, 70);
+        }else if (label->geometry() == QRect(xp, yp, 210, 70)) {
+            // Label is vertical, rotate to horizontal
+            label->setGeometry(xp, yp, 70, 210);
+        }else if (label->geometry() == QRect(xp, yp, 70, 280)) {
+            // Label is vertical, rotate to horizontal
+            label->setGeometry(xp, yp, 280, 70);
+        }else if (label->geometry() == QRect(xp, yp, 280, 70)) {
+            // Label is vertical, rotate to horizontal
+            label->setGeometry(xp, yp, 70, 280);
+        }
+
+        QPixmap pixmap = label->pixmap();
+        QPixmap transformedPixmap = pixmap.transformed(transform);
+        label->setPixmap(transformedPixmap);
+
     }
 };
 class SHIP {
@@ -161,6 +205,9 @@ public:
     ClickableLabel *houseIcon1 = new ClickableLabel(this);
     std::vector<std::pair<QLabel*, SHIP*>> ships;
 
+    // QLabel *labelh = new QLabel(this);
+    // Ship h(labelh, "E:/qt1/drg/3^1ship.png", 300, 300, 210, 70);
+
     DragWidget(QWidget *parent = nullptr)
         : QFrame(parent)
     {
@@ -189,15 +236,45 @@ public:
 
         // ships.push_back(new Ship1X4(QPoint(1000, 510)));
 
-
         QLabel *labelA = new QLabel(this);
-        Ship A(labelA, "E:/qt1/drg/1^1ship.png", 100, 100, 70, 70);
+        Ship A(labelA, "E:/qt1/drg/1^1ship2.png", 1000, 210, 50, 50);
+        // ships.push_back(&A);
 
         QLabel *labelB = new QLabel(this);
-        Ship B(labelB, "E:/qt1/drg/2^1ship.png", 200, 200, 140, 70);
+        Ship B(labelB, "E:/qt1/drg/1^1ship.png", 1090, 210, 70, 70);
+        // ships.push_back(&B);
 
         QLabel *labelC = new QLabel(this);
-        Ship C(labelC, "E:/qt1/drg/3^1ship.png", 300, 300, 210, 70);
+        Ship C(labelC, "E:/qt1/drg/1^1ship.png", 1180, 210, 70, 70);
+        // ships.push_back(&C);
+
+        QLabel *labelD = new QLabel(this);
+        Ship D(labelD, "E:/qt1/drg/1^1ship.png", 1270, 210, 70, 70);
+        // ships.push_back(&D);
+
+        QLabel *labelE = new QLabel(this);
+        Ship E(labelE, "E:/qt1/drg/2^1ship.png", 1000, 310, 70, 140);
+        // ships.push_back(&E);
+
+        QLabel *labelF = new QLabel(this);
+        Ship F(labelF, "E:/qt1/drg/2^1ship.png", 1150, 310, 70, 140);
+        // ships.push_back(&F);
+
+        QLabel *labelG = new QLabel(this);
+        Ship G(labelG, "E:/qt1/drg/2^1ship.png", 1300, 310, 70, 140);
+        // ships.push_back(&G);
+
+        QLabel *labelH = new QLabel(this);
+        Ship H(labelH, "E:/qt1/drg/3^1ship.png", 1000, 410, 70, 210);
+        // ships.push_back(&H);
+
+        QLabel *labelI = new QLabel(this);
+        Ship I(labelI, "E:/qt1/drg/3^1ship.png", 1230, 410, 70, 210);
+        // ships.push_back(&I);
+
+        QLabel *labelJ = new QLabel(this);
+        Ship J(labelJ, "E:/qt1/drg/4^1ship.png", 1000, 510, 70, 280);
+        // ships.push_back(&J);
 
 
 
@@ -236,14 +313,14 @@ public:
 
 
 
-        for (int i = 0; i < ships.size(); i++) {
-            QLabel *label = new QLabel(this);
-            label->setPixmap(ships[i]->getPixmap());
-            label->setGeometry(ships[i]->getPosition().x(), ships[i]->getPosition().y(), ships[i]->getWidth(), ships[i]->getHeight());
-            label->show();
-            label->geometry().x();
-            label->setAttribute(Qt::WA_DeleteOnClose);
-        }
+        // for (int i = 0; i < ships.size(); i++) {
+        //     QLabel *label = new QLabel(this);
+        //     label->setPixmap(ships[i]->getPixmap());
+        //     label->setGeometry(ships[i]->getPosition().x(), ships[i]->getPosition().y(), ships[i]->getWidth(), ships[i]->getHeight());
+        //     label->show();
+        //     label->geometry().x();
+        //     label->setAttribute(Qt::WA_DeleteOnClose);
+        // }
 
         // QLabel *backgroundLabel1 = new QLabel(this);
         QPixmap images("E:/qt1/drg/er.png");
@@ -253,7 +330,7 @@ public:
         backgroundLabel1->lower(); // Send the background label to the back
         backgroundLabel1->setAcceptDrops(false); // Set to not accept drag and drop events
 
-
+        //245 234
         setMinimumSize(200, 200);
         setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
         setAcceptDrops(true);
@@ -644,13 +721,20 @@ int main(int argc, char *argv[])
     DragWidget window;
     window.setGeometry(0, 0, 1920, 1080); // Set window size
 
-    // QLabel *backgroundImageLabel = new QLabel(&window);
+    // QLabel *labelt = new QLabel(&window);
+    // Ship t(labelt, "E:/qt1/drg/3^1ship.png", 300, 300, 210, 70);
+
+
+
+
+    // QLabel *backgroundImageLab,el = new QLabel(&window);
     // QPixmap backgroundImage("E:/qt1/drg/pic.png"); // Load your image
     // backgroundImageLabel->setPixmap(backgroundImage);
     // backgroundImageLabel->setScaledContents(true);
     // backgroundImageLabel->setGeometry(0, 0, 1920, 1080); // Set the geometry of the background label to cover the entire window
 
     window.show();
+
 
     return app.exec();
 }
