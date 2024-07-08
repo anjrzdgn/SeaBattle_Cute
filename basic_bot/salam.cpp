@@ -16,7 +16,6 @@ int count = 0;
 
 void printMap(char _table[10][10]){
 
-    // _sleep(20000);
     for(int i = 0; i < 10; i++)
     {
         for(int j = 0; j < 10; j++)
@@ -45,11 +44,6 @@ void attackAgain(char _table[10][10], int X, int Y)
 
                 if(exactDirection == "Right")
                 {       
-
-                         
-
-
-
                     if(Y == 9)
                     {
                         if(_table[X][Y - 2] == 'B')
@@ -1237,7 +1231,7 @@ void choseDirection(char _table[10][10], int randX, int randY){
     int x, y;
     int z = 0;
 
-    while(true)
+    while(count <= 10)
     {
 
         if(fallShip == false && shootSuccses != 0 && exactDirection != "Default")
@@ -1250,12 +1244,6 @@ void choseDirection(char _table[10][10], int randX, int randY){
 
             else if(exactDirection == "Right")
             {
-                if(_table[randX][randY + 1])
-                {
-
-                }
-
-
                 attackAgain(_table, randX,randY + 1);
             }
 
@@ -1313,7 +1301,9 @@ bool checksalam(int x, int y, char _table[10][10])
 {
     if(x == 0 && y == 0)
     {
-        if(_table[0][1] != 'S' && _table[1][0] != 'S')
+        if((_table[0][1] != 'S' || _table[0][1] != 'B')  
+        &&(_table[1][0] != 'S' || _table[1][0] != 'B'))
+        
         {
             _table[0][0] = 'F';
             return true;
@@ -1322,7 +1312,9 @@ bool checksalam(int x, int y, char _table[10][10])
 
     else if(x == 0 && y == 9)
     {
-        if(_table[0][8] != 'S' && _table[1][9] != 'S')
+        if((_table[0][8] != 'S' || _table[0][8] != 'B')  
+        && (_table[1][9] != 'S' || _table[1][9] != 'S'))
+        
         {
             _table[0][9] = 'F';            
             return true;
@@ -1331,7 +1323,9 @@ bool checksalam(int x, int y, char _table[10][10])
 
     else if(x == 9 && y == 0)
     {
-        if(_table[8][0] != 'S' && _table[9][1] != 'S')
+        if((_table[8][0] != 'S' || _table[8][0] != 'B') 
+        && (_table[9][1] != 'S' || _table[9][1] != 'B'))
+        
         {
             _table[9][0] = 'F';            
             return true;
@@ -1340,7 +1334,9 @@ bool checksalam(int x, int y, char _table[10][10])
 
     else if(x == 9 && y == 9)
     {
-        if(_table[9][8] != 'S' && _table[8][9] != 'S')
+        if((_table[9][8] != 'S' || _table[9][8] != 'B') 
+        && (_table[8][9] != 'S' || _table[8][9] != 'B'))
+       
         {
             _table[9][9] = 'F';            
             return true;
@@ -1350,7 +1346,7 @@ bool checksalam(int x, int y, char _table[10][10])
     return false;
 }
 
-void simpleAttack(char _table[10][10]){
+void simpleAttack(char _table[10][10]) {
     
     int xMax;
     int yMax;
@@ -1411,7 +1407,6 @@ void simpleAttack(char _table[10][10]){
             }        
             
         
-       
         printMap(_table);
         
         // if all of the  ships of bot should be fall
@@ -1465,7 +1460,8 @@ int main()
         }
         cout << endl;
     }
-    cout << endl << endl;
+  
+   cout << endl << endl;
 
     simpleAttack(table);
 
