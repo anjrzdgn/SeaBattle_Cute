@@ -12,7 +12,25 @@
 #include <QDebug>
 
 
+class Ship {
+public:
+    QLabel *label;
 
+    Ship(QLabel *label, QString pixmap, int x, int y, int width, int height) {
+        QPixmap f(pixmap);
+        label->setPixmap(f);
+        label->setGeometry(x, y, width, height);
+        label->show();
+    }
+
+    void show() {
+        label->show();
+    }
+
+    void getGeo() {
+        label->geometry();
+    }
+};
 class SHIP {
 public:
     SHIP(int id) : id(id) {} // Add an id constructor parameter
@@ -172,6 +190,18 @@ public:
         // ships.push_back(new Ship1X4(QPoint(1000, 510)));
 
 
+        QLabel *labelA = new QLabel(this);
+        Ship A(labelA, "E:/qt1/drg/1^1ship.png", 100, 100, 70, 70);
+
+        QLabel *labelB = new QLabel(this);
+        Ship B(labelB, "E:/qt1/drg/2^1ship.png", 200, 200, 140, 70);
+
+        QLabel *labelC = new QLabel(this);
+        Ship C(labelC, "E:/qt1/drg/3^1ship.png", 300, 300, 210, 70);
+
+
+
+
         SHIP* a = new Ship1X1(QPoint(1000, 210),1);
         ships.push_back(a);
 
@@ -211,6 +241,7 @@ public:
             label->setPixmap(ships[i]->getPixmap());
             label->setGeometry(ships[i]->getPosition().x(), ships[i]->getPosition().y(), ships[i]->getWidth(), ships[i]->getHeight());
             label->show();
+            label->geometry().x();
             label->setAttribute(Qt::WA_DeleteOnClose);
         }
 
