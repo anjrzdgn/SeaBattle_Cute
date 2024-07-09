@@ -11,8 +11,23 @@ string direction;
 string exactDirection = "Default";
 int shootSuccses = 0;
 bool fallShip = false;
-
 int firstShot[1][2];
+int count = 0;
+
+void printMap(char _table[10][10]){
+
+    // _sleep(20000);
+    for(int i = 0; i < 10; i++)
+    {
+        for(int j = 0; j < 10; j++)
+        {
+            cout << _table[i][j] << "  "; 
+        }
+        cout << endl;
+    }
+    cout << endl << endl;
+
+}
 
 void attackAgain(char _table[10][10], int X, int Y)
 {
@@ -22,7 +37,6 @@ void attackAgain(char _table[10][10], int X, int Y)
         _table[X][Y] = 'B';
         shootSuccses++; 
 
-
         if(X == firstShot[0][0])
         {
             direction = "horizontal";
@@ -30,25 +44,65 @@ void attackAgain(char _table[10][10], int X, int Y)
             if(Y - firstShot[0][1] > 0)
             {
                 if(exactDirection == "Right")
-                {
+                {       
+                    if(Y == 9)
+                    {
+                        if(_table[X][Y - 2] == 'B')
+                        {
+                            if (_table[X][Y - 3] == 'B')
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X][Y - 1] = 'F';
+                                _table[X][Y - 2] = 'F';
+                                _table[X][Y - 3] = 'F';
+                                fallShip = true;
+                                printMap(_table);
+                                return;
+                            }
+                     
+                            else
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X][Y - 1] = 'F';
+                                _table[X][Y - 2] = 'F';
+                                fallShip = true;
+                                printMap(_table);         
+                                return;
+                            }                        
+                        }
+                    
+                        else
+                        {
+                            _table[X][Y] = 'F';
+                            _table[X][Y - 1] = 'F';
+                            fallShip = true;
+                            printMap(_table);
+                            return;
+                        }
+                    }
+
                     //table 2 space fall
-                    if(_table[X][Y + 1] != 'S' && _table[X][Y - 2] != 'B')
+                    if((_table[X][Y + 1] != 'S' && _table[X][Y - 2] != 'B' && Y >= 2)
+                        || (Y < 2 && _table[X][Y + 1] != 'S'))
                     {
                         _table[X][Y] = 'F';
                         _table[X][Y - 1] = 'F';
+                        printMap(_table);
                         fallShip = true;
                     }
                 
                     //absoultly have 3 space maby 4 space
-                    else if(_table[X][Y + 1] != 'S' && _table[X][Y - 2] == 'B')
+                    else if((_table[X][Y + 1] != 'S' && _table[X][Y - 2] == 'B' && Y <= 8) ||
+                                (Y == 9 && _table[X][Y - 2] == 'B'))
                     {
                         //have 4 space
-                        if(_table[X][Y - 3] == 'B')
+                        if(_table[X][Y - 3] == 'B' && Y >= 3)
                         {
                             _table[X][Y - 3] = 'F';
                             _table[X][Y - 2] = 'F';
                             _table[X][Y - 1] = 'F';
                             _table[X][Y] = 'F';
+                            printMap(_table);
                             fallShip = true;
                         }
 
@@ -58,42 +112,46 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y - 2] = 'F';
                             _table[X][Y - 1] = 'F';
                             _table[X][Y] = 'F';
+                            printMap(_table);
                             fallShip = true;
                         }
-
                     }
 
                     //absoultly have 3 space maby 4 space
-                    else if(_table[X][Y + 1] == 'S')
+                    else if(_table[X][Y + 1] == 'S' && Y <= 8)
                     {
                         _table[X][Y + 1] = 'B';
                         
                         //have 3 space
-                        if(_table[X][Y + 2] != 'S' && _table[X][Y - 2] != 'B')
+                        if( (_table[X][Y + 2] != 'S' && _table[X][Y - 2] != 'B' && Y <= 7 && Y >= 2) ||
+                                (Y == 1 && _table[X][Y + 2] != 'S'))
                         {
                             _table[X][Y + 1] = 'F';
                             _table[X][Y - 1] = 'F';
                             _table[X][Y] = 'F';
+                            printMap(_table);
                             fallShip = true;
-
                         }
+
                         //havev 4 space
-                        else if(_table[X][Y + 2] == 'S')
+                        else if(_table[X][Y + 2] == 'S' && Y <= 7)
                         {
                             _table[X][Y + 2] = 'F';
                             _table[X][Y + 1] = 'F';
                             _table[X][Y - 1] = 'F';
                             _table[X][Y] = 'F';
+                            printMap(_table);
                             fallShip =  true;
                         }
 
-                        else if(_table[X][Y - 3] == 'W')
+                        else if(_table[X][Y - 3] == 'W' && Y >= 2)
                         {
                             _table[X][Y - 2] = 'F';
                             _table[X][Y - 1] = 'F';
                             _table[X][Y + 1] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            printMap(_table);
                             return;
                         }
                     }
@@ -101,47 +159,104 @@ void attackAgain(char _table[10][10], int X, int Y)
 
                 else if(exactDirection == "Default")
                 {
+                    if(Y == 9)
+                    {
+                        if(_table[X][Y - 2] == 'B')
+                        {
+                            if (_table[X][Y - 3] == 'B')
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X][Y - 1] = 'F';
+                                _table[X][Y - 2] = 'F';
+                                _table[X][Y - 3] = 'F';
+                                fallShip = true;
+                                printMap(_table);
+                                return;
+                            }
+                            
+                            else
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X][Y - 1] = 'F';
+                                _table[X][Y - 2] = 'F';
+                                fallShip = true;
+                                printMap(_table);
+                                return;
+                            }                        
+                        }
+                     
+                        else
+                        {
+                            _table[X][Y] = 'F';
+                            _table[X][Y - 1] = 'F';
+                            fallShip = true;
+                            printMap(_table);
+                            return;
+                        }
+                    }
+
                     //check ship 2 space
-                    if(_table[X][Y + 1] == 'E' && _table[X][Y - 2] == 'E')
+                    if((_table[X][Y + 1] != 'S' && _table[X][Y - 2] != 'S' && (Y <= 8 || Y >= 2)) 
+                        
+                        || (Y == 1 && _table[X][Y + 1] != 'S') 
+                            
+                            || (Y == 9 && _table[X][Y - 2] != 'S'))
                     {
                         //ship had 2 spaces but now fall
                         _table[X][Y] = 'F';
                         _table[X][Y - 1] = 'F';
+                        printMap(_table);
                         fallShip = true;
+                        
                         //atack again random
                         //return;
                     }
 
                     //absoultly have 3 space
-                    else if(_table[X][Y + 1] == 'S' && _table[X][Y + 2] == 'E' && _table[X][Y - 2] == 'E')
+                    else if((_table[X][Y + 1] == 'S' && _table[X][Y + 2] != 'S' && _table[X][Y - 2] != 'S' && (Y <= 7 || Y >= 2))
+                            
+                            ||(Y == 1 && _table[X][Y + 1] == 'S' && _table[X][Y + 2] != 'S') 
+                                
+                                || (Y == 9 && _table[X][Y - 2] != 'S'&& _table[X][Y + 1] == 'S'))
                     {
                         _table[X][Y + 1] = 'F';
                         _table[X][Y - 1] = 'F';
                         _table[X][Y] = 'F';
+                        printMap(_table);
                         fallShip = true;
                         shootSuccses++;
                     }
 
                     //maby ship have 3 or 4 spaces and change direction
-                    else if(_table[X][Y + 1] == 'E')
+                    else if((_table[X][Y + 1] != 'S' && Y <= 8))
                     {
                         _table[X][Y + 1] = 'W';
+                        exactDirection = "Left";
+                        fallShip = false;
+                        printMap(_table);
+                        return;
+                    }
+                   
+                    else if(Y == 9)
+                    {
                         exactDirection = "Left";
                         fallShip = false;
                         return;
                     }
 
                     //have 4 space
-                    else if(_table[X][Y + 1] == 'S')
+                    else if(_table[X][Y + 1] == 'S' && Y <= 7 && Y >= 2)
                     {
                         //absoultly have 4 apace
                         if(_table[X][Y + 2] == 'S')
                         {
-                            _table[X][Y + 2] ='F';
-                            _table[X][Y + 1] = 'F';
                             _table[X][Y - 1] = 'F';
                             _table[X][Y] = 'F';
+                            _table[X][Y + 2] ='F';
+                            _table[X][Y + 1] = 'F';
+                            printMap(_table);
                             fallShip = true;
+                            return ;
                         }
 
                         //absoultly have 4 spacce but should change direction 
@@ -150,10 +265,9 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y + 1] = 'B';
                             _table[X][Y + 2] = 'W';
                             exactDirection = "Left";
-                            
                             fallShip = false;      
                             shootSuccses++;
-                            
+                            printMap(_table);
                             return;                  
                         } 
 
@@ -167,69 +281,142 @@ void attackAgain(char _table[10][10], int X, int Y)
 
                 if(exactDirection == "Left")
                 {
+
+                    if(Y == 0)
+                    {
+                        if(_table[X][Y + 2] == 'B')
+                        {
+                            if(_table[X][Y + 3] == 'B')
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X][Y + 1] = 'F';
+                                _table[X][Y + 2] = 'F';
+                                _table[X][Y + 3] = 'F';
+                                fallShip = true;
+                                printMap(_table);
+                                return;
+                            }
+                            
+                            else
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X][Y + 1] = 'F';
+                                _table[X][Y + 2] = 'F';
+                                fallShip = true;
+                                printMap(_table);
+                                return;                            
+                            }
+                        }
+                    
+                        else
+                        {
+                            _table[X][Y] = 'F';
+                            _table[X][Y + 1] = 'F';
+                            fallShip = true;
+                            printMap(_table);
+                            return;
+                        }
+                    }
+
                     //table 2 space fall
-                    if(_table[X][Y - 1] != 'S' && _table[X][Y + 2] != 'B')
+                    if((_table[X][Y - 1] != 'S' && _table[X][Y + 2] != 'B' && Y >= 1 && Y <= 7) 
+                        || (Y == 0 && _table[X][Y + 2] != 'B') || (Y == 8 && _table[X][Y - 1] != 'S'))
                     {
                         _table[X][Y] = 'F';
                         _table[X][Y + 1] = 'F';
+                        printMap(_table);
                         fallShip = true;
+                        return;
                     }
                   
                     //absoultly have 3 space maby 4 space
-                    else if(_table[X][Y - 1] != 'S' && _table[X][Y + 2] == 'B')
+                    else if(_table[X][Y - 1] != 'S' && _table[X][Y + 2] == 'B' && Y >= 1 && Y <= 7)
                     {
                         //have 4 space
-                        if(_table[X][Y + 3] == 'B')
+                        if(_table[X][Y + 3] == 'B' && Y <= 6)
                         {
                             _table[X][Y + 3] = 'F';
                             _table[X][Y + 2] = 'F';
                             _table[X][Y + 1] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            printMap(_table);
+                            return;
                         }
 
                         //have 3 space
-                        else
+                        else if(Y == 7 || (_table[X][Y + 3] != 'B' && Y <=6))
                         {
                             _table[X][Y + 2] = 'F';
                             _table[X][Y + 1] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            printMap(_table);
+                            return;
                         }
 
                     }
 
                     //absoultly have 3 space maby 4 space
-                    else if(_table[X][Y - 1] == 'S')
+                    else if((_table[X][Y - 1] == 'S' && Y >= 1) || (Y == 0))
                     {
-                        _table[X][Y - 1] = 'B';
+                        
+                        if(Y == 0)
+                        {
+                            if(_table[X][Y + 3] == 'B')
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X][Y + 1] = 'F';
+                                _table[X][Y + 2] = 'F';
+                                _table[X][Y + 3] = 'F';
+                                printMap(_table);
+                                return;
+                            }
+                           
+                            else if(_table[X][Y + 2] == 'B')
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X][Y + 1] = 'F';
+                                _table[X][Y + 2] = 'F';                                
+                                printMap(_table);
+                                return;
+                            }
+
+                        }
+                    
+
+                        if(Y >= 1)
+                            _table[X][Y - 1] = 'B';
                         
                         //have 3 space
-                        if(_table[X][Y - 2] != 'S' && _table[X][Y + 2] != 'B')
+                        if(_table[X][Y - 2] != 'S' && _table[X][Y + 2] != 'B' && Y >= 2 && Y <= 7)
                         {
                             _table[X][Y - 1] = 'F';
                             _table[X][Y + 1] = 'F';
                             _table[X][Y] = 'F';
+                            printMap(_table);
                             fallShip = true;
-
                         }
+                        
                         //havev 4 space
-                        else if(_table[X][Y - 2] == 'S')
+                        else if(_table[X][Y - 2] == 'S' && Y >= 2)
                         {
                             _table[X][Y - 2] = 'F';
                             _table[X][Y - 1] = 'F';
                             _table[X][Y + 1] = 'F';
                             _table[X][Y] = 'F';
+                            printMap(_table);
                             fallShip =  true;
                         }
 
-                        else if(_table[X][Y + 3] == 'W')
+                        else if(_table[X][Y + 3] == 'W' && Y <= 6)
                         {
                             _table[X][Y + 2] = 'F';
                             _table[X][Y + 1] = 'F';
                             _table[X][Y - 1] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            printMap(_table);
                             return;
                         }
                     }
@@ -238,58 +425,104 @@ void attackAgain(char _table[10][10], int X, int Y)
 
                 else if(exactDirection == "Default")
                 {
+
+                    if(Y == 0)
+                    {
+                        if(_table[X][Y + 2] == 'B')
+                        {
+                            if(_table[X][Y + 3] == 'B')
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X][Y + 1] = 'F';
+                                _table[X][Y + 2] = 'F';
+                                _table[X][Y + 3] = 'F';
+                                printMap(_table);
+                                fallShip = true;
+                                return;
+                            }
+                            
+                            else
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X][Y + 1] = 'F';
+                                _table[X][Y + 2] = 'F';
+                                fallShip = true;
+                                printMap(_table);
+                                return;                            
+                            }
+                        }
+                    
+                        else
+                        {
+                            _table[X][Y] = 'F';
+                            _table[X][Y + 1] = 'F';
+                            fallShip = true;
+                            printMap(_table);
+                            return;
+                        }
+                    }
+
                     //check ship 2 space
-                    if(_table[X][Y - 1] == 'E' && _table[X][Y + 2] == 'E')
+                    if(_table[X][Y - 1] != 'S' && _table[X][Y + 2] != 'S' && (Y >= 1 || Y <= 7)
+                        || (Y == 0 && _table[X][Y + 2] != 'S') || (Y == 8 && _table[X][Y - 1] != 'S'))
                     {
                         //ship had 2 spaces but now fall
                         _table[X][Y] = 'F';
                         _table[X][Y + 1] = 'F';
                         fallShip = true;
+                        printMap(_table);
                         //atack again random
                         return;
                     }
 
                     //absoultly have 3 space
-                    else if(_table[X][Y - 1] == 'S' && _table[X][Y - 2] == 'E' && _table[X][Y + 2] == 'E')
+                    else if(_table[X][Y - 1] == 'S' && _table[X][Y - 2] == 'E' && _table[X][Y + 2] == 'E' && Y >= 2 && Y <= 7
+                            || (Y == 1 && _table[X][Y - 1] == 'S' && _table[X][Y + 2] == 'E'))
                     {
                         _table[X][Y - 1] = 'F';
                         _table[X][Y + 1] = 'F';
                         _table[X][Y] = 'F';
                         fallShip = true;
                         shootSuccses++;
+                        printMap(_table);
                     }
 
                     //maby ship have 3 or 4 spaces and change direction
-                    else if(_table[X][Y - 1] == 'E')
+                    else if((_table[X][Y - 1] != 'S' && Y >= 1) || (Y == 0)) 
                     {
-                        _table[X][Y - 1] = 'W';
+                        if(Y >= 1)
+                        {   
+                            _table[X][Y - 1] = 'W';
+                        }
                         exactDirection = "Right";
                         fallShip = false;
-                        return;
+                        printMap(_table);
+                        return;                    
                     }
 
                     //have 4 space
-                    else if(_table[X][Y - 1] == 'S')
+                    else if(_table[X][Y - 1] == 'S' && Y >= 1)
                     {
                         //absoultly have 4 apace
-                        if(_table[X][Y - 2] == 'S')
+                        if(_table[X][Y - 2] == 'S' && Y >= 2)
                         {
                             _table[X][Y - 2] ='F';
                             _table[X][Y - 1] = 'F';
                             _table[X][Y + 1] = 'F';
                             _table[X][Y] = 'F';
+                            printMap(_table);
                             fallShip = true;
                         }
 
                         //absoultly have 4 spacce but should change direction 
-                        else if(_table[X][Y - 2] == 'E' && _table[X][Y + 2] == 'S')
+                        else if(_table[X][Y - 2] == 'E' && _table[X][Y + 2] == 'S' && Y >= 2 && Y <= 7)
                         {
                             _table[X][Y - 1] = 'B';
                             _table[X][Y - 2] = 'W';
                             exactDirection = "Right";            
                             fallShip = false;      
                             shootSuccses++;
-                            
+                            printMap(_table); 
                             return;                  
                         } 
 
@@ -297,10 +530,6 @@ void attackAgain(char _table[10][10], int X, int Y)
                 }                
             }
 
-            else
-            {
-             //   attackAgain(_table, X, Y - 1);
-            }
         }
 
         else if(Y == firstShot[0][1])
@@ -311,25 +540,67 @@ void attackAgain(char _table[10][10], int X, int Y)
             {
                 if(exactDirection == "Down")
                 {
+
+                    if(X == 9)
+                    {
+                        if(_table[X - 2][Y] == 'B')
+                        {
+                            if(_table[X - 3][Y] == 'B')
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X - 1][Y] = 'F';
+                                _table[X - 2][Y] = 'F';
+                                _table[X - 3][Y] = 'F';
+                                fallShip = true;
+                                printMap(_table);
+                                return;                                
+                            }
+
+                            else 
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X - 1][Y] = 'F';
+                                _table[X - 2][Y] = 'F';
+                                fallShip = true;
+                                printMap(_table);
+                                return;        
+                            }
+                        }
+                   
+                        else 
+                        {
+                            _table[X][Y] = 'F';
+                            _table[X - 1][Y] = 'F';
+                            fallShip = true;
+                            printMap(_table);
+                            return;
+                        }
+                    }
+
                     //table 2 space fall
-                    if(_table[X + 1][Y] != 'S' && _table[X - 2][Y] != 'B')
+                    if((_table[X + 1][Y] != 'S' && _table[X - 2][Y] != 'B' && X <= 8 && X >= 2)
+                      || (X == 1 && _table[X + 1][Y] != 'S') || (X == 9 && _table[X - 2][Y] != 'B'))
                     {
                         _table[X][Y] = 'F';
                         _table[X - 1][Y] = 'F';
                         fallShip = true;
+                        printMap(_table);  
+                        return;
                     }
                 
                     //absoultly have 3 space maby 4 space
-                    else if(_table[X + 1][Y] != 'S' && _table[X - 2][Y] == 'B')
+                    else if(_table[X + 1][Y] != 'S' && _table[X - 2][Y] == 'B' && X >= 2 && X <= 8)
                     {
                         //have 4 space
-                        if(_table[X - 3][Y] == 'B')
+                        if(_table[X - 3][Y] == 'B' && X >= 3)
                         {
                             _table[X - 3][Y] = 'F';
                             _table[X - 2][Y] = 'F';
                             _table[X - 1][Y] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            printMap(_table);
+                            return;
                         }
 
                         //have 3 space
@@ -339,41 +610,48 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y - 1] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            printMap(_table);
+                            return;
                         }
 
                     }
 
                     //absoultly have 3 space maby 4 space
-                    else if(_table[X + 1][Y] == 'S')
+                    else if(_table[X + 1][Y] == 'S' && X >= 1 && X <= 8)
                     {
                         _table[X + 1][Y] = 'B';
                         
                         //have 3 space
-                        if(_table[X + 2][Y] != 'S' && _table[X - 2][Y] != 'B')
+                        if((_table[X + 2][Y] != 'S' && _table[X - 2][Y] != 'B' && X <= 8 && X >= 2) || 
+                            (X == 1) && _table[X + 2][Y] != 'S')
                         {
                             _table[X + 1][Y] = 'F';
                             _table[X - 1][Y] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
-
+                            printMap(_table);
+                            return;
                         }
+
                         //havev 4 space
-                        else if(_table[X + 2][Y] == 'S')
+                        else if(_table[X + 2][Y] == 'S' && X <= 8)
                         {
                             _table[X + 2][Y] = 'F';
                             _table[X + 1][Y] = 'F';
                             _table[X - 1][Y] = 'F';
                             _table[X][Y] = 'F';
+                            printMap(_table);
                             fallShip =  true;
                         }
 
-                        else if(_table[X - 3][Y] == 'W')
+                        else if(_table[X - 3][Y] == 'W' && X >= 3)
                         {
                             _table[X - 2][Y] = 'F';
                             _table[X - 1][Y] = 'F';
                             _table[X + 1][Y] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            printMap(_table);
                             return;
                         }
                     }
@@ -381,38 +659,82 @@ void attackAgain(char _table[10][10], int X, int Y)
 
                 else if(exactDirection == "Default")
                 {
+
+                    if(X == 9)
+                    {
+                        if(_table[X - 2][Y] == 'B')
+                        {
+                            if(_table[X - 3][Y] == 'B')
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X - 1][Y] = 'F';
+                                _table[X - 2][Y] = 'F';
+                                _table[X - 3][Y] = 'F';
+                                fallShip = true;
+                                printMap(_table);
+                                return;                                
+                            }
+
+                            else 
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X - 1][Y] = 'F';
+                                _table[X - 2][Y] = 'F';
+                                fallShip = true;
+                                printMap(_table);
+                                return;        
+                            }
+                        }
+                   
+                        else 
+                        {
+                            _table[X][Y] = 'F';
+                            _table[X - 1][Y] = 'F';
+                            fallShip = true;
+                            printMap(_table);
+                            return;
+                        }
+                    }
+            
                      //check ship 2 space
-                    if(_table[X + 1][Y] == 'E' && _table[X - 2][Y] == 'E')
+                    if((_table[X + 1][Y] != 'S' && _table[X - 2][Y] == 'E' && X >= 2 && X <= 8)
+                        || ((X == 1) && _table[X + 1][Y] != 'S') || X == 9 && _table[X - 2][Y] != 'B' || _table[X - 2][Y] != 'S')
                     {
                         //ship had 2 spaces but now fall
                         _table[X][Y] = 'F';
                         _table[X - 1][Y] = 'F';
                         fallShip = true;
+                        printMap(_table);
                         //atack again random
                         return;
                     }
 
                     //absoultly have 3 space
-                    else if(_table[X + 1][Y] == 'S' && _table[X + 2][Y] == 'E' && _table[X - 2][Y] == 'E')
+                    else if((_table[X + 1][Y] == 'S' && _table[X + 2][Y] == 'E' && _table[X - 2][Y] == 'E' && X <= 7 && X >= 2)        
+                        || ((X == 8) && _table[X + 1][Y] == 'S' && _table[X - 2][Y] == 'E') 
+                            || (X == 1 && _table[X + 1][Y] == 'S' && _table[X + 1][Y] != 'S' ) )
                     {
                         _table[X + 1][Y] = 'F';
                         _table[X - 1][Y] = 'F';
                         _table[X][Y] = 'F';
                         fallShip = true;
                         shootSuccses++;
+                        printMap(_table);
                     }
 
                     //maby ship have 3 or 4 spaces and change direction
-                    else if(_table[X][Y + 1] == 'E')
+                    else if(_table[X + 1][Y] == 'E' && X <= 8)
                     {
                         _table[X + 1][Y] = 'W';
                         exactDirection = "UP";
                         fallShip = false;
+                        printMap(_table);
                         return;
+                    
                     }
-
+    
                     //have 4 space
-                    else if(_table[X + 1][Y] == 'S')
+                    else if(_table[X + 1][Y] == 'S' && X <= 8)
                     {
                         //absoultly have 4 apace
                         if(_table[X + 2][Y] == 'S')
@@ -422,6 +744,8 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X - 1][Y] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            printMap(_table);
+                            return;
                         }
 
                         //absoultly have 4 spacce but should change direction 
@@ -433,52 +757,93 @@ void attackAgain(char _table[10][10], int X, int Y)
                             
                             fallShip = false;      
                             shootSuccses++;
-                            
+                            printMap(_table);
                             return;                  
                         } 
-
                     }
                 }
             }
             
             else if(X - firstShot[0][0] < 0)
             {
-                if(exactDirection == "Down")
+                if(exactDirection == "UP")
                 {
+                    if(X == 0)
+                    {
+                        if(_table[X + 2][Y] == 'B')
+                        {
+                            if(_table[X + 3][Y] == 'B')
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X + 1][Y] = 'F';
+                                _table[X + 2][Y] = 'F'; 
+                                _table[X + 3][Y] = 'F';                                 
+                                fallShip = true;
+                                printMap(_table);
+                                return;
+                            }
+                       
+                            else
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X + 1][Y] = 'F';
+                                _table[X + 2][Y] = 'F'; 
+                                fallShip = true;
+                                printMap(_table);
+                                return;
+                            }
+                        }
+                      
+                        else 
+                        {
+                            _table[X][Y] = 'F';
+                            _table[X + 1][Y] = 'F';
+                            fallShip = true;
+                            printMap(_table);
+                            return;
+                        }
+                    }
+
                     //table 2 space fall
-                    if(_table[X - 1][Y] != 'S' && _table[X + 2][Y] != 'B')
+                    if(_table[X - 1][Y] != 'S' && _table[X + 2][Y] != 'B' && X >= 1 && X <= 7 ||
+                       (X == 8 && _table[X - 1][Y] != 'S'))
                     {
                         _table[X][Y] = 'F';
                         _table[X + 1][Y] = 'F';
                         fallShip = true;
+                        printMap(_table);
+                        return;
                     }
                   
                     //absoultly have 3 space maby 4 space
-                    else if(_table[X - 1][Y] != 'S' && _table[X + 2][Y] == 'B')
+                    else if(_table[X - 1][Y] != 'S' && _table[X + 2][Y] == 'B' && X >= 1 && X <= 7)
                     {
                         //have 4 space
-                        if(_table[X + 3][Y] == 'B')
+                        if(_table[X + 3][Y] == 'B' && X <= 6)
                         {
                             _table[X + 3][Y] = 'F';
                             _table[X + 2][Y] = 'F';
                             _table[X + 1][Y] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            printMap(_table);
+                            return;
                         }
 
                         //have 3 space
-                        else
+                        else if(_table[X + 2][Y] == 'B' && X <= 7)
                         {
                             _table[X + 2][Y] = 'F';
                             _table[X + 1][Y] = 'F';
                             _table[X][Y] = 'F';
+                            printMap(_table);
                             fallShip = true;
                         }
 
                     }
 
                     //absoultly have 3 space maby 4 space
-                    else if(_table[X - 1][Y] == 'S')
+                    else if(_table[X - 1][Y] == 'S' && X >= 1)
                     {
                         _table[X - 1][Y] = 'B';
                         
@@ -488,6 +853,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X - 1][Y] = 'F';
                             _table[X + 1][Y] = 'F';
                             _table[X][Y] = 'F';
+                           printMap(_table);
                             fallShip = true;
 
                         }
@@ -499,6 +865,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X - 1][Y] = 'F';
                             _table[X + 1][Y] = 'F';
                             _table[X][Y] = 'F';
+                            printMap(_table);
                             fallShip =  true;
                         }
 
@@ -509,6 +876,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X - 1][Y] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                         printMap(_table);
                             return;
                         }
                     }
@@ -517,58 +885,99 @@ void attackAgain(char _table[10][10], int X, int Y)
 
                 else if(exactDirection == "Default")
                 {
-                   //check ship 2 space
-                    if(_table[X - 1][Y] == 'E' && _table[X + 2][Y] == 'E')
+
+                    if(X == 0)
+                    {
+                        if(_table[X + 2][Y] == 'B')
+                        {
+                            if(_table[X + 3][Y] == 'B')
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X + 1][Y] = 'F';
+                                _table[X + 2][Y] = 'F';
+                                _table[X + 3][Y] = 'F';
+                                fallShip = true;
+                             printMap(_table);
+                                return;                                
+                            }
+
+                            else
+                            {
+                                _table[X][Y] = 'F';
+                                _table[X + 1][Y] = 'F';
+                                _table[X + 2][Y] = 'F';
+                                fallShip = true;
+                               printMap(_table);
+                                return;              
+                            }
+                        }
+
+                        else 
+                        {
+                            _table[X][Y] = 'F';
+                            _table[X + 1][Y] = 'F';
+                            fallShip = true;
+                            printMap(_table);
+                            return;
+                        }   
+                    }
+
+                    //check ship 2 space
+                    if(_table[X - 1][Y] == 'E' && _table[X + 2][Y] == 'E' && X >= 1 && X <= 7)
                     {
                         //ship had 2 spaces but now fall
                         _table[X][Y] = 'F';
                         _table[X + 1][Y] = 'F';
                         fallShip = true;
+                        printMap(_table);
                         //atack again random
                         return;
                     }
 
                     //absoultly have 3 space
-                    else if(_table[X - 1][Y] == 'S' && _table[X - 2][Y] == 'E' && _table[X + 2][Y] == 'E')
+                    else if(_table[X - 1][Y] == 'S' && _table[X - 2][Y] == 'E' && _table[X + 2][Y] == 'E' && X >= 2 && X <= 7)
                     {
                         _table[X - 1][Y] = 'F';
                         _table[X + 1][Y] = 'F';
                         _table[X][Y] = 'F';
                         fallShip = true;
                         shootSuccses++;
+                        printMap(_table);
                     }
 
                     //maby ship have 3 or 4 spaces and change direction
-                    else if(_table[X - 1][Y] == 'E')
+                    else if(_table[X - 1][Y] == 'E' && X >= 1)
                     {
                         _table[X - 1][Y] = 'W';
                         exactDirection = "Down";
                         fallShip = false;
+                       printMap(_table);
                         return;
                     }
 
                     //have 4 space
-                    else if(_table[X - 1][Y] == 'S')
+                    else if(_table[X - 1][Y] == 'S' && X >= 1)
                     {
                         //absoultly have 4 apace
-                        if(_table[X - 2][Y] == 'S')
+                        if(_table[X - 2][Y] == 'S' && X >= 2)
                         {
                             _table[X - 2][Y] ='F';
                             _table[X - 1][Y] = 'F';
                             _table[X + 1][Y] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            printMap(_table);
                         }
 
-                        //absoultly have 4 spacce but should change direction 
-                        else if(_table[X - 2][Y] == 'E' && _table[X + 2][Y] == 'S')
+                        //absoultly have 4 spacce but should change direction  
+                        else if(_table[X - 2][Y] == 'E' && _table[X + 2][Y] == 'S' && X >= 2 && X <= 7)
                         {
                             _table[X - 1][Y] = 'B';
                             _table[X- 2][Y] = 'W';
                             exactDirection = "Down";            
                             fallShip = false;      
                             shootSuccses++;
-                            
+                            printMap(_table);
                             return;                  
                         } 
 
@@ -577,24 +986,56 @@ void attackAgain(char _table[10][10], int X, int Y)
                 }
             }
 
-            else
-            {
-
-            }
         }
 
-        else
-        {
-            direction = "vertical";
-        }
     }
 
-    else
+    
+    else if(_table[X][Y] == 'E')
     {
         _table[X][Y] = 'W';
+        printMap(_table);
 
         if(X == firstShot[0][0] && Y - firstShot[0][1] > 0)
         {
+            if(X == 0)
+            {
+                if(Y == 1)
+                {
+                    exactDirection = "Down";
+                    return;
+                }
+
+                if(_table[X][Y - 2] == 'W')
+                {
+                    exactDirection = "Down";
+                }
+             
+                else
+                {
+                    exactDirection = "Left";
+                }
+             
+                return;
+            }
+
+            else if(X == 9)
+            {
+      
+                if(_table[X][Y - 2] == 'W')
+                {
+                    exactDirection = "Up";
+                }
+              
+                else 
+                {
+                    exactDirection = "Left";
+                    return;
+                }
+
+                return;
+            }
+
             if(_table[X][Y - 2] == 'W')
             {
                 if(_table[X - 1][Y - 1] == 'W')
@@ -604,19 +1045,53 @@ void attackAgain(char _table[10][10], int X, int Y)
                         exactDirection = "Down";
                     }
                 }
+             
                 else
                 {
                     exactDirection = "Up";
                 }
             }
+        
             else
             {
                 exactDirection = "Left";
             }
-        }
 
+        }
+      
         else if(X == firstShot[0][0] && Y - firstShot[0][1] < 0)
         {
+      
+            if(X == 0)
+            {
+                if(_table[X][Y + 2] == 'W')
+                {
+                    exactDirection = "Down";
+                }
+         
+                else 
+                {
+                    exactDirection = "Right";
+                }
+        
+                return;
+            }
+   
+            else if(X == 9)
+            {
+                if(_table[X][Y + 2] == 'W')
+                {
+                    exactDirection = "Up";
+                }
+              
+                else 
+                {
+                    exactDirection = "Right";
+                }
+             
+                return;
+            }
+
             if(_table[X][Y + 2] == 'W')
             {
                 if(_table[X - 1][Y + 1] == 'W')
@@ -635,9 +1110,41 @@ void attackAgain(char _table[10][10], int X, int Y)
                 exactDirection = "Right";
             }
         }
-     
+        
         else if(Y == firstShot[0][1] && X - firstShot[0][0] > 0)
         {
+            if(Y == 0)
+            {
+                if(_table[X - 2][Y] == 'W')
+                {
+                    exactDirection = "Right";
+                }
+            
+                else 
+                {
+                    exactDirection = "Up";
+                }
+
+                return;
+            }
+
+
+            else if(Y == 9)
+            {
+                if(_table[X - 2][Y] == 'W')
+                {
+                    exactDirection = "Left";
+                }
+       
+                else
+                {
+                    exactDirection = "Up";
+                }
+       
+                return;
+            }
+
+
             if(_table[X - 2][Y] == 'W')
             {
                 if(_table[X - 1][Y - 1] == 'W')
@@ -659,16 +1166,45 @@ void attackAgain(char _table[10][10], int X, int Y)
 
         else if(Y == firstShot[0][1] && X - firstShot[0][0] < 0)
         {
-            if(_table[X - 2][Y] == 'W')
+
+            if(Y == 0)
             {
-                if(_table[X - 1][Y - 1] == 'W')
+                if(_table[X + 1][Y+ 1] != 'W')
                 {
                     exactDirection = "Right";
+                }
+                
+                else 
+                {
+                    exactDirection = "Down";
+                }
+                return;
+            }
+
+            else if(Y == 9)
+            {
+                if(_table[X + 1][Y - 1] != 'W')
+                {
+                    exactDirection = "Left";
+                }
+             
+                else
+                {
+                    exactDirection = "Down";
+                }
+                return;
+            }
+
+            if(_table[X + 2][Y] == 'W')
+            {
+                if(_table[X + 1][Y + 1] == 'W')
+                {
+                    exactDirection = "Left";
                 }
      
                 else
                 {
-                    exactDirection= "Left";
+                    exactDirection= "Right";
                 }
             }
   
@@ -681,16 +1217,18 @@ void attackAgain(char _table[10][10], int X, int Y)
         
         return ;
     }
-
 }
 
-void choseDirection(char _table[10][10], int randX, int randY)
-{
+void choseDirection(char _table[10][10], int randX, int randY){
     int x, y;
+    int z = 0;
+
     while(true)
     {
-        if(fallShip == false && shootSuccses != 0)
+
+        if(fallShip == false && shootSuccses != 0 && exactDirection != "Default")
         {
+            z = 1;
             if(exactDirection == "Left")
             {
                 attackAgain(_table, randX,randY - 1);
@@ -714,93 +1252,153 @@ void choseDirection(char _table[10][10], int randX, int randY)
         
         if(fallShip == true)
         {
+            count++;
             shootSuccses = 0;
             fallShip = false;
             exactDirection = "Default";
             return;
         }
 
-        x = (rand() % 3) - 1;
-        y = (rand() % 3) - 1;
-        if(x != 0 && y != 0)
+        if(fallShip == false && z != 1)
         {
-            continue;
-        }
- 
-        if(x == 0 && y == 0)
-        {
-            continue;
-        } 
-     
-        else
-        {
-            x  = x + randX;
+            do {
+                x = (rand() % 3) - 1;
+                y = (rand() % 3) - 1;
+                
+            } while(abs(x) == abs(y));
+            
+            x = x + randX;
             y = y + randY;
-
+            
+            if(x < 0 || x > 9 || y < 0 || y > 9)
+            {
+                continue;
+            }
+            
             attackAgain(_table, x, y);   
-        }
-      
+        }    
         if(fallShip == true)
         {
+            count++;
             shootSuccses = 0;
             fallShip = false;
             exactDirection = "Default";
             return;
         }
     }
-    
 }   
 
-void simpleAttack(char _table[10][10])
+bool checksalam(int x, int y, char _table[10][10])
 {
+    if(x == 0 && y == 0)
+    {
+        if(_table[0][1] != 'S' && _table[1][0] != 'S')
+        {
+            _table[0][0] = 'F';
+            return true;
+        }
+    }
+
+    else if(x == 0 && y == 9)
+    {
+        if(_table[0][8] != 'S' && _table[1][9] != 'S')
+        {
+            _table[0][9] = 'F';            
+            return true;
+        }
+    }
+
+    else if(x == 9 && y == 0)
+    {
+        if(_table[8][0] != 'S' && _table[9][1] != 'S')
+        {
+            _table[9][0] = 'F';            
+            return true;
+        }
+    }  
+
+    else if(x == 9 && y == 9)
+    {
+        if(_table[9][8] != 'S' && _table[8][9] != 'S')
+        {
+            _table[9][9] = 'F';            
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void simpleAttack(char _table[10][10]){
+    
     int xMax;
     int yMax;
-
-    int count = 0;
     int numberOfShook = 0;
 
-    while(true)
+    while(count <= 11)
     {
         srand(time(0));
         int randX = rand() % 10;
         int randY = rand() % 10;
-
-        if(_table[randX][randY] == 'S')
+ 
+        if(checksalam(randX, randY, _table))
         {
-            firstShot[0][0] = randX;
-            firstShot[0][1] = randY;
-             
-            fallShip = false;
-
-            _table[randX][randY] = 'B';
-            shootSuccses++;
-            //check space of ship
-            if(_table [randX][randY + 1] == 'E' && _table [randX][randY - 1] == 'E' &&
-               _table [randX + 1][randY] == 'E' && _table [randX - 1][randY] == 'E')
-            {
-                fallShip = true;
-                count++;    
-                //ship is broken
-                //next attack
-            }
-
-            else
-            {
-                choseDirection(_table, randX, randY);
-            }
-
-            numberOfShook++;
-        }
-         
-        else if(_table[randX][randY] == 'E')
-        {
-            _table[randX][randY] = 'W';
-        }
-
-        else if(_table[randX][randY] == 'W')
-        {
+            printMap(_table);
             continue;
-        }        
+        }
+
+            if(_table[randX][randY] == 'S')
+            {
+                firstShot[0][0] = randX;
+                firstShot[0][1] = randY;
+                
+                fallShip = false;
+
+                _table[randX][randY] = 'B';
+                shootSuccses++;
+
+                //check space of ship
+                if(_table [randX][randY + 1] == 'E' && _table [randX][randY - 1] == 'E' &&
+                _table [randX + 1][randY] == 'E' && _table [randX - 1][randY] == 'E' && randX >= 1
+                && randX <= 8 && randY >= 1 && randY <= 8)
+                
+                {
+                    _table[randX][randY] = 'F';
+                    fallShip = true;
+                    count++;    
+                    continue;
+                }
+                
+
+
+
+
+                else
+                {
+                    printMap(_table);
+                    choseDirection(_table, randX, randY);
+                }
+
+                numberOfShook++;
+            }
+            
+            else if(_table[randX][randY] == 'E')
+            {
+                _table[randX][randY] = 'W';
+            }
+
+            else if(_table[randX][randY] == 'W')
+            {
+                continue;
+            }        
+            
+        
+       
+        printMap(_table);
+        
+        // if all of the  ships of bot should be fall
+        // or all the ship of the player should be fall 
+        // to break of this while 
     
     }
 }
@@ -818,8 +1416,13 @@ int main()
         }
     }
 
-    table[0][1] = 'S';
-    table[0][8] = 'S';
+
+    table[0][0] = 'S';
+    table[5][1] = 'S';
+    table[9][3] = 'S';
+    table[7][2] = 'S';
+    table[0][5] = 'S';
+    table[0][6] = 'S';
     table[2][1] = 'S';
     table[2][2] = 'S';
     table[2][3] = 'S';
@@ -832,12 +1435,17 @@ int main()
     table[6][1] = 'S';
     table[6][3] = 'S';
     table[6][4] = 'S';
-    table[6][5] = 'S';
+    table[9][0] = 'S';
     table[6][7] = 'S';
     table[7][7] = 'S';
     table[9][3] = 'S';
     table[9][4] = 'S';
+    table[9][7] = 'S';
     table[9][8] = 'S';
+
+    table[8][1] = 'S';
+    table[8][2] = 'S';
+    table[8][3] = 'S';
 
 
     simpleAttack(table);
