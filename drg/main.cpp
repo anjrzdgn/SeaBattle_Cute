@@ -13,7 +13,7 @@
 #include <QPushButton>>
 #include <QDebug>
 #include <QSize>
-int ws = 0;
+
 
 class Ship {
 public:
@@ -23,8 +23,12 @@ public:
     int ypos;
     int w;
     int h;
-
+    int zcolumn;
+    int zrow;
     Ship(QLabel *label, QString pixmap, int x, int y, int width, int height) : xpos(x), ypos(y), h(height) {
+
+        zcolumn = (label->x() - 200) / 48;
+        zrow = (label->y() - 190) / 48;
         w = width;
         QPixmap f(pixmap);
         label->setPixmap(f);
@@ -145,51 +149,274 @@ public:
 };
 
 
-class Board {
+
+class Board{
+
 public:
-    bool positions[100]; // array of 100 positions, initialized to false (empty)
 
-    Board() {
-        for (int i = 0; i < 100; i++) {
-            positions[i] = false;
-        }
-    }
-
-    bool isValidPosition(SHIP* ship, QPoint position) {
-        int width = ship->getWidth();
-        int height = ship->getHeight();
-
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                int x = position.x() + i * 50;
-                int y = position.y() + j * 50;
-                int index = (y / 50) * 10 + (x / 50);
-                if (x < 50 || x >= 550 || y < 90 || y >= 790) {
-                    return false; // out of bounds
-                }
-                if (positions[index]) {
-                    return false; // position is not empty
-                }
-            }
-        }
-        return true; // position is valid
-    }
-
-    void placeShip(SHIP* ship, QPoint position) {
-        int width = ship->getWidth();
-        int height = ship->getHeight();
-
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                int x = position.x() + i * 50;
-                int y = position.y() + j * 50;
-                int index = (y / 50) * 10 + (x / 50);
-                positions[index] = true;
+    QChar table[10][10];
+    Board()
+    {
+        for(int i = 0; i < 10; i++)
+        {
+            for(int j = 0; j < 10; j++)
+            {
+                table[i][j] = 'E';
             }
         }
     }
 
+    void setArray(std::vector<std::pair< Ship*,QLabel*>> sshhips);
+
+    void setAroundShip(Ship* sshh);
+
+    void setZeroAroundShip(Ship* sshh);
 };
+///first function
+void Board::setArray(std::vector<std::pair< Ship*,QLabel*>> sshhips)
+{
+    int size;
+    for(auto& sh : sshhips)
+    {
+        size = sh.first->w;
+
+        if(sh.first->st == 'h')
+        {
+            for(int i = sh.first->zcolumn; i <= sh.first->zcolumn + size; i++)
+            {
+                table[sh.first->zrow][i] = 'S';
+            }
+
+            ///call setAroundShip Function
+            //if(sh.first->zcolumn >= 1 && sh.first->zcolumn + size <= 8)
+            //{
+                setAroundShip(sh.first);
+            //}
+
+            // else if(sh.first->zrow == 0 || sh.first->zrow + size == 9)
+            // {
+            //     setZeroAroundShip(sh.first);
+            // }
+
+        }
+        else if(sh.first->st == 'v')
+        {
+            for(int j = sh.first->zrow; j <= sh.first->zrow + size; j++)
+            {
+                table[j][sh.first->zcolumn];
+            }
+
+            ///call setAroundShip Function
+            //if(sh.first->zrow >= 1 && sh.first->zrow + size <= 8)
+            //{
+                setAroundShip(sh.first);
+            //}
+
+            // else if(sh.first->zrow == 0 || sh.first->zrow + size == 9)
+            // {
+            //     setZeroAroundShip(sh.first);
+            // }
+
+        }
+
+    }
+
+}
+
+///second function
+void Board::setAroundShip(Ship* sshh)
+{
+    int y = sshh->zrow;
+    int x = sshh->zcolumn;
+    int size = sshh->w;
+
+    if(sshh->st == 'h')
+    {
+        if(y != 0 && y != 9)
+        {
+            table[x - 1][y] = 'O';
+            table[x + size][y] = 'O';
+        }
+
+        else if(y == 0)
+        {
+            table[y][x + size] = 'O';
+        }
+
+        else if(y == 9)
+        {
+            table[y][x - 1] = 'O';
+        }
+
+        if(y != 0)
+        {
+            for(int i = x - 1; i <= x + size; i++)
+            {
+                table[i][y - 1] = 'O';
+            }
+        }
+
+        if(y != 9)
+        {
+            for(int i = x - 1; i < x + size; i++)
+            {
+                table[y + 1][i] = 'O';
+            }
+        }
+
+    }
+
+    else if(sshh->st == 'v')
+    {
+        if(y != 0 && y != 9)
+        {
+            table[x][y - 1] = 'O';
+            table[x][y + size] = 'O';
+        }
+
+        else if(x == 0)
+        {
+            table[x + size][y] = 'O';
+        }
+
+        else if(x == 9)
+        {
+            table[x - 1][y] = 'O';
+        }
+
+        if(x != 9)
+        {
+            for(int i = y - 1; i <= y + size; i++)
+            {
+                table[x + 1][i] = 'O';
+            }
+
+        }
+        else if(x != 0)
+        {
+            for(int i = y - 1; i <= y + size; i++)
+            {
+                table[x - 1][i] = 'O';
+            }
+        }
+    }
+
+}
+
+///third Function
+// void Board::setZeroAroundShip(Ship* sshh)
+// {
+//     int y = sshh->zcolumn;
+//     int x = sshh->zrow;
+//     int size = sshh->w;
+
+//     if(sshh->st == 'h')
+//     {
+//         if(y != 0 && y != 9)
+//         {
+//             table[x][y - 1] = 'O';
+//             table[x][y + size] = 'O';
+//         }
+
+//         else if(y == 0)
+//         {
+//             table[x][y + size] = 'O';
+//         }
+
+//         else if(y == 9)
+//         {
+//             table[x][y - 1] = 'O';
+//         }
+
+//         if(x == 0)
+//         {
+//             for(int i = y - 1; i <= y + size; i++)
+//             {
+//                 table[x + 1][i] = 'O';
+//             }
+//         }
+
+//         else if(x == 9)
+//         {
+//             for(int i = y - 1; i <= y + size; i++)
+//             {
+//                 table[x - 1][i] = 'O';
+//             }
+//         }
+
+//     }
+
+//     else if(sshh->st == 'v')
+//     {
+//         if(x != 0 && x != 9)
+//         {
+//             table[x - 1][y] = 'O';
+//             table[x + size][y] = 'O';
+//         }
+
+//         else if(x == 0)
+//         {
+//             table[x + size][y] = 'O';
+//         }
+
+//         else if(x == 9)
+//         {
+//             table[x - 1][y] = 'O';
+//         }
+
+//         if(y == 0)
+//         {
+//             for(int i = x - 1; i <= x + size; i++)
+//             {
+//                 table[i][y + 1] = 'O';
+//             }
+//         }
+
+//         else if(y == 9)
+//         {
+//             for(int i = x - 1; i < x + size; i++)
+//             {
+//                 table[i][y - 1] = 'O';
+//             }
+//         }
+//     }
+
+// }
+
+
+////Write function for drop
+bool checkPosOfShip(Ship* sshh)
+{
+    int x = sshh->zrow;
+    int y = sshh->zcolumn;
+
+    if(sshh->st == 'h')
+    {
+        for(int i = y; i < y + size; i++)
+        {
+            if(table[x][i] == 'S' ||table[x][i] == 'O')
+            {
+                return false;
+            }
+        }
+    }
+
+    else if(sshh->st == 'v')
+    {
+        for(int i = x; i < x + size; i++)
+        {
+            if(table[i][y] == 'S' || table[i][y] == 'O')
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+
+
 
 class ClickableLabel : public QLabel {
     Q_OBJECT
