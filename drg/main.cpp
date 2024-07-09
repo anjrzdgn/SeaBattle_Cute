@@ -13,7 +13,7 @@
 #include <QPushButton>>
 #include <QDebug>
 #include <QSize>
-
+int ws = 0;
 
 class Ship {
 public:
@@ -24,7 +24,8 @@ public:
     int w;
     int h;
 
-    Ship(QLabel *label, QString pixmap, int x, int y, int width, int height) : xpos(x), ypos(y), w(width), h(height) {
+    Ship(QLabel *label, QString pixmap, int x, int y, int width, int height) : xpos(x), ypos(y), h(height) {
+        w = width;
         QPixmap f(pixmap);
         label->setPixmap(f);
         label->setGeometry(x, y, width, height);
@@ -82,6 +83,9 @@ public:
 
     }
 };
+
+std::vector<std::pair< Ship*,QLabel*>> ships;
+
 class SHIP {
 public:
     SHIP(int id) : id(id) {} // Add an id constructor parameter
@@ -210,51 +214,50 @@ public:
     QLabel *backgroundLabel1 = new QLabel(this);
     QLabel *backgroundLabel = new QLabel(this);
     ClickableLabel *houseIcon1 = new ClickableLabel(this);
-    std::vector<std::pair< Ship*,QLabel*>> ships;
 
     DragWidget(QWidget *parent = nullptr)
         : QFrame(parent)
     {
 
         QLabel *labelA = new QLabel(this);
-        Ship A(labelA, "C:/SeaBattle_Cute_private/drg/src/1Xship copy.png", 1010, 230, 60, 60);
-        ships.push_back(std::make_pair(&A,labelA));
+        Ship* A = new Ship(labelA, "C:/SeaBattle_Cute_private/drg/src/1Xship copy.png", 1010, 230, 60, 60);
+        ships.push_back(std::make_pair(A,labelA));
 
         QLabel *labelB = new QLabel(this);
-        Ship B(labelB, "C:/SeaBattle_Cute_private/drg/src/1Xship copy.png", 1106, 230, 60, 60);
-        ships.push_back(std::make_pair(&B,labelB));
+        Ship* B = new Ship(labelB, "C:/SeaBattle_Cute_private/drg/src/1Xship copy.png", 1106, 230, 60, 60);
+        ships.push_back(std::make_pair(B,labelB));
 
         QLabel *labelC = new QLabel(this);
-        Ship C(labelC, "C:/SeaBattle_Cute_private/drg/src/1Xship copy.png", 1202, 230, 60, 60);
-        ships.push_back(std::make_pair(&C,labelC));
+        Ship* C = new Ship(labelC, "C:/SeaBattle_Cute_private/drg/src/1Xship copy.png", 1202, 230, 60, 60);
+        ships.push_back(std::make_pair(C,labelC));
 
         QLabel *labelD = new QLabel(this);
-        Ship D(labelD, "C:/SeaBattle_Cute_private/drg/src/1Xship copy.png", 1298, 230, 60, 60);
-        ships.push_back(std::make_pair(&D,labelD));
+        Ship* D = new Ship(labelD, "C:/SeaBattle_Cute_private/drg/src/1Xship copy.png", 1298, 230, 60, 60);
+        ships.push_back(std::make_pair(D,labelD));
 
         QLabel *labelE = new QLabel(this);
-        Ship E(labelE, "C:/SeaBattle_Cute_private/drg/src/2Xship copy.png", 1010, 326, 120, 60);
-        ships.push_back(std::make_pair(&E,labelE));
+        Ship* E = new Ship(labelE, "C:/SeaBattle_Cute_private/drg/src/2Xship copy.png", 1010, 326, 120, 60);
+        ships.push_back(std::make_pair(E,labelE));
 
         QLabel *labelF = new QLabel(this);
-        Ship F(labelF, "C:/SeaBattle_Cute_private/drg/src/2Xship copy.png", 1154, 326, 120, 60);
-        ships.push_back(std::make_pair(&F,labelF));
+        Ship* F = new Ship(labelF, "C:/SeaBattle_Cute_private/drg/src/2Xship copy.png", 1154, 326, 120, 60);
+        ships.push_back(std::make_pair(F,labelF));
 
         QLabel *labelG = new QLabel(this);
-        Ship G(labelG, "C:/SeaBattle_Cute_private/drg/src/2Xship copy.png", 1298, 326, 120, 60);
-        ships.push_back(std::make_pair(&G,labelG));
+        Ship* G = new Ship(labelG, "C:/SeaBattle_Cute_private/drg/src/2Xship copy.png", 1298, 326, 120, 60);
+        ships.push_back(std::make_pair(G,labelG));
 
         QLabel *labelH = new QLabel(this);
-        Ship H(labelH, "C:/SeaBattle_Cute_private/drg/src/3Xship copy.png", 1010, 422, 180, 60);
-        ships.push_back(std::make_pair(&H,labelH));
+        Ship* H = new Ship(labelH, "C:/SeaBattle_Cute_private/drg/src/3Xship copy.png", 1010, 422, 180, 60);
+        ships.push_back(std::make_pair(H,labelH));
 
         QLabel *labelI = new QLabel(this);
-        Ship I(labelI, "C:/SeaBattle_Cute_private/drg/src/3Xship copy.png", 1202, 422, 180, 60);
-        ships.push_back(std::make_pair(&I,labelI));
+        Ship* I = new Ship(labelI, "C:/SeaBattle_Cute_private/drg/src/3Xship copy.png", 1202, 422, 180, 60);
+        ships.push_back(std::make_pair(I,labelI));
 
         QLabel *labelJ = new QLabel(this);
-        Ship J(labelJ, "C:/SeaBattle_Cute_private/drg/src/4Xship copy.png", 1010, 518, 240, 60);
-        ships.push_back(std::make_pair(&J,labelJ));
+        Ship* J = new Ship(labelJ, "C:/SeaBattle_Cute_private/drg/src/4Xship copy.png", 1010, 518, 240, 60);
+        ships.push_back(std::make_pair(J,labelJ));
 
 
         QPushButton* restore = new QPushButton(this);
@@ -338,6 +341,7 @@ protected:
             QPoint offset;
             dataStream >> offset;
 
+
             QLabel *child = static_cast<QLabel*>(childAt(offset));
             if (child) {
                 int x = event->position().toPoint().x();
@@ -351,36 +355,41 @@ protected:
                     int yPos = 190 - 7 + row * 48;
 
                     QPoint position(xPos, yPos);
-
                     Ship* ship = nullptr;
-                    // int ws;
                     for (auto& pair : ships) {
                         if (pair.second == child) {
                             ship = pair.first;
-                            // size = pair.first->label->size();
-                            // ws = size.width();
                             break;
                         }
                     }
 
-                    // if (ws == 32765 && column > 6) {
-                    //     child->move(offset);
-                    // }
-                    // else if (ws == 0 && column > 7) {
-                    //     child->move(offset);
-                    // }
-                    // else if (ws == 718 && column > 8) {
-                    //     child->move(offset);
-                    // }
-                    // else
-                    // {
+                    if (ship->w == 240 && column > 6 && ship->st == 'h') {
+                        child->move(offset);
+                    }
+                    else if (ship->w == 180 && column > 7 && ship->st == 'h') {
+                        child->move(offset);
+                    }
+                    else if (ship->w == 120 && column > 8 && ship->st == 'h') {
+                        child->move(offset);
+                    }
+                    else if (ship->w == 240 && row < 3 && ship->st == 'v') {
+                        child->move(offset);
+                    }
+                    else if (ship->w == 180 && row < 2 && ship->st == 'v') {
+                        child->move(offset);
+                    }
+                    else if (ship->w == 120 && row < 1 && ship->st == 'v') {
+                        child->move(offset);
+                    }
+                    else
+                    {
                         child->move(xPos, yPos);
-                    // }
+                    }
 
 
                     if (ship) {
 
-                            qDebug() << "dropped at position" << position << " " << column << " " << row ; //<< " " << ws;
+                        qDebug() << "dropped at position" << position << " " << column << " " << row << " " << ship->w << " ";
                     } else {
                         qDebug() << "Unknown label";
                     }

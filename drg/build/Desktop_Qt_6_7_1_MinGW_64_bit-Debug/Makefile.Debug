@@ -510,6 +510,9 @@ debug/main.moc: ../../main.cpp \
 		../../../../../../Qt/6.7.1/mingw_64/include/QtCore/QPoint \
 		../../../../../../Qt/6.7.1/mingw_64/include/QtGui/QMouseEvent \
 		../../../../../../Qt/6.7.1/mingw_64/include/QtGui/QDropEvent \
+		../../../../../../Qt/6.7.1/mingw_64/include/QtWidgets/QPushButton \
+		../../../../../../Qt/6.7.1/mingw_64/include/QtWidgets/qpushbutton.h \
+		../../../../../../Qt/6.7.1/mingw_64/include/QtWidgets/qabstractbutton.h \
 		../../../../../../Qt/6.7.1/mingw_64/include/QtCore/QDebug \
 		debug/moc_predefs.h \
 		../../../../Qt/6.7.1/mingw_64/bin/moc.exe
@@ -737,6 +740,9 @@ debug/main.o: ../../main.cpp ../../../../../../Qt/6.7.1/mingw_64/include/QtWidge
 		../../../../../../Qt/6.7.1/mingw_64/include/QtCore/QPoint \
 		../../../../../../Qt/6.7.1/mingw_64/include/QtGui/QMouseEvent \
 		../../../../../../Qt/6.7.1/mingw_64/include/QtGui/QDropEvent \
+		../../../../../../Qt/6.7.1/mingw_64/include/QtWidgets/QPushButton \
+		../../../../../../Qt/6.7.1/mingw_64/include/QtWidgets/qpushbutton.h \
+		../../../../../../Qt/6.7.1/mingw_64/include/QtWidgets/qabstractbutton.h \
 		../../../../../../Qt/6.7.1/mingw_64/include/QtCore/QDebug \
 		debug/main.moc
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\main.o ..\..\main.cpp
