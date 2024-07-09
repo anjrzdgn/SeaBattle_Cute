@@ -11,16 +11,15 @@
 #include <QMouseEvent>
 #include <QDropEvent>
 #include <QDebug>
-<<<<<<< HEAD
 #include <QPushButton>
-=======
 #include <QSize>
+#include <iostream>
 
 
 class Ship {
 public:
     QLabel *label;
-    QChar st='h';
+    QString st = "h";
     int xpos;
     int ypos;
     int w;
@@ -157,12 +156,9 @@ class Board{
 public:
 
     QChar table[10][10];
-    Board()
-    {
-        for(int i = 0; i < 10; i++)
-        {
-            for(int j = 0; j < 10; j++)
-            {
+    Board()  {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
                 table[i][j] = 'E';
             }
         }
@@ -180,130 +176,134 @@ void Board::setArray(std::vector<std::pair< Ship*,QLabel*>> sshhips)
     int size;
     for(auto& sh : sshhips)
     {
-        size = sh.first->w;
+        size = sh.first->w / 60;
+        qDebug() << (sh.second->x()-200)/48 << " " << size <<" " << (sh.second->y()-183)/48;
+        qDebug() << sh.second->x() << " " << sh.second->y() << ' ' << sh.first->st;
 
-        if(sh.first->st == 'h')
+        if(sh.second->x()>= 250*0.8 && sh.second->x() <= 860*0.8 && sh.second->y() >= 220*0.8 && sh.second->y() <= 834*0.8)
         {
-            for(int i = sh.first->zcolumn; i <= sh.first->zcolumn + size; i++)
+            if(sh.first->st == "h")
             {
-                table[sh.first->zrow][i] = 'S';
+                for(int i = (sh.second->x()-200)/48; i < ((sh.second->x()-200)/48) + size; i++)
+                {
+                    table[(sh.second->y()-183)/48][i] = 'S';
+                }
+
+                ///call setAroundShip Function
+                //if(sh.first->zcolumn >= 1 && sh.first->zcolumn + size <= 8)
+                //{
+                   // setAroundShip(sh.first);
+                //}
+
+                // else if(sh.first->zrow == 0 || sh.first->zrow + size == 9)
+                // {
+                //     setZeroAroundShip(sh.first);
+                // }
+
             }
-
-            ///call setAroundShip Function
-            //if(sh.first->zcolumn >= 1 && sh.first->zcolumn + size <= 8)
-            //{
-                setAroundShip(sh.first);
-            //}
-
-            // else if(sh.first->zrow == 0 || sh.first->zrow + size == 9)
+            // else if(sh.first->st == 'v')
             // {
-            //     setZeroAroundShip(sh.first);
+            //     for(int j = sh.first->zrow; j <= sh.first->zrow + size; j++)
+            //     {
+            //         table[j][sh.first->zcolumn];
+            //     }
+
+            //     ///call setAroundShip Function
+            //     //if(sh.first->zrow >= 1 && sh.first->zrow + size <= 8)
+            //     //{
+            //       //  setAroundShip(sh.first);
+            //     //}
+
+            //     // else if(sh.first->zrow == 0 || sh.first->zrow + size == 9)
+            //     // {
+            //     //     setZeroAroundShip(sh.first);
+            //     // }
+
             // }
-
         }
-        else if(sh.first->st == 'v')
-        {
-            for(int j = sh.first->zrow; j <= sh.first->zrow + size; j++)
-            {
-                table[j][sh.first->zcolumn];
-            }
-
-            ///call setAroundShip Function
-            //if(sh.first->zrow >= 1 && sh.first->zrow + size <= 8)
-            //{
-                setAroundShip(sh.first);
-            //}
-
-            // else if(sh.first->zrow == 0 || sh.first->zrow + size == 9)
-            // {
-            //     setZeroAroundShip(sh.first);
-            // }
-
-        }
-
     }
 
 }
 
 ///second function
-void Board::setAroundShip(Ship* sshh)
-{
-    int y = sshh->zrow;
-    int x = sshh->zcolumn;
-    int size = sshh->w;
+// void Board::setAroundShip(Ship* sshh)
+// {
+//     int y = sshh->zrow;
+//     int x = sshh->zcolumn;
+//     int size = sshh->w;
 
-    if(sshh->st == 'h')
-    {
-        if(y != 0 && y != 9)
-        {
-            table[x - 1][y] = 'O';
-            table[x + size][y] = 'O';
-        }
+//     if(sshh->st == 'h')
+//     {
+//         if(y != 0 && y != 9)
+//         {
+//             table[x - 1][y] = 'O';
+//             table[x + size][y] = 'O';
+//         }
 
-        else if(y == 0)
-        {
-            table[y][x + size] = 'O';
-        }
+//         else if(y == 0)
+//         {
+//             table[y][x + size] = 'O';
+//         }
 
-        else if(y == 9)
-        {
-            table[y][x - 1] = 'O';
-        }
+//         else if(y == 9)
+//         {
+//             table[y][x - 1] = 'O';
+//         }
 
-        if(y != 0)
-        {
-            for(int i = x - 1; i <= x + size; i++)
-            {
-                table[i][y - 1] = 'O';
-            }
-        }
+//         if(y != 0)
+//         {
+//             for(int i = x - 1; i <= x + size; i++)
+//             {
+//                 table[i][y - 1] = 'O';
+//             }
+//         }
 
-        if(y != 9)
-        {
-            for(int i = x - 1; i < x + size; i++)
-            {
-                table[y + 1][i] = 'O';
-            }
-        }
+//         if(y != 9)
+//         {
+//             for(int i = x - 1; i < x + size; i++)
+//             {
+//                 table[y + 1][i] = 'O';
+//             }
+//         }
 
-    }
+//     }
 
-    else if(sshh->st == 'v')
-    {
-        if(y != 0 && y != 9)
-        {
-            table[x][y - 1] = 'O';
-            table[x][y + size] = 'O';
-        }
+//     else if(sshh->st == 'v')
+//     {
+//         if(y != 0 && y != 9)
+//         {
+//             table[x][y - 1] = 'O';
+//             table[x][y + size] = 'O';
+//         }
 
-        else if(x == 0)
-        {
-            table[x + size][y] = 'O';
-        }
+//         else if(x == 0)
+//         {
+//             table[x + size][y] = 'O';
+//         }
 
-        else if(x == 9)
-        {
-            table[x - 1][y] = 'O';
-        }
+//         else if(x == 9)
+//         {
+//             table[x - 1][y] = 'O';
+//         }
 
-        if(x != 9)
-        {
-            for(int i = y - 1; i <= y + size; i++)
-            {
-                table[x + 1][i] = 'O';
-            }
+//         if(x != 9)
+//         {
+//             for(int i = y - 1; i <= y + size; i++)
+//             {
+//                 table[x + 1][i] = 'O';
+//             }
 
-        }
-        else if(x != 0)
-        {
-            for(int i = y - 1; i <= y + size; i++)
-            {
-                table[x - 1][i] = 'O';
-            }
-        }
-    }
+//         }
+//         else if(x != 0)
+//         {
+//             for(int i = y - 1; i <= y + size; i++)
+//             {
+//                 table[x - 1][i] = 'O';
+//             }
+//         }
+//     }
 
-}
+// }
 
 ///third Function
 // void Board::setZeroAroundShip(Ship* sshh)
@@ -387,35 +387,35 @@ void Board::setAroundShip(Ship* sshh)
 
 
 ////Write function for drop
-bool checkPosOfShip(Ship* sshh)
-{
-    int x = sshh->zrow;
-    int y = sshh->zcolumn;
+// bool checkPosOfShip(Ship* sshh)
+// {
+//     int x = sshh->zrow;
+//     int y = sshh->zcolumn;
 
-    if(sshh->st == 'h')
-    {
-        for(int i = y; i < y + size; i++)
-        {
-            if(table[x][i] == 'S' ||table[x][i] == 'O')
-            {
-                return false;
-            }
-        }
-    }
+//     if(sshh->st == 'h')
+//     {
+//         for(int i = y; i < y + size; i++)
+//         {
+//             if(table[x][i] == 'S' ||table[x][i] == 'O')
+//             {
+//                 return false;
+//             }
+//         }
+//     }
 
-    else if(sshh->st == 'v')
-    {
-        for(int i = x; i < x + size; i++)
-        {
-            if(table[i][y] == 'S' || table[i][y] == 'O')
-            {
-                return false;
-            }
-        }
-    }
+//     else if(sshh->st == 'v')
+//     {
+//         for(int i = x; i < x + size; i++)
+//         {
+//             if(table[i][y] == 'S' || table[i][y] == 'O')
+//             {
+//                 return false;
+//             }
+//         }
+//     }
 
-    return true;
-}
+//     return true;
+// }
 
 
 
@@ -499,7 +499,8 @@ public:
         next->setGeometry(1070, 665, 180, 50);
         next->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
         next->setCursor(Qt::PointingHandCursor);
-        connect(next, &QPushButton::clicked, QCoreApplication::quit);
+        //connect(next, &QPushButton::clicked, QCoreApplication::quit);
+        connect(next, &QPushButton::clicked, this, &DragWidget::onNextButtonClicked);
 
         QPixmap images("C:/SeaBattle_Cute_private/src_graphic/made/arrangement page copy.png");
         backgroundLabel1->setPixmap(images);
@@ -521,11 +522,27 @@ public:
         houseIcon1->setPixmap(transformedPixmap);
 
         connect(houseIcon1, &ClickableLabel::clicked, this, &DragWidget::rotateHouseIcon);
-        // connect(houseIcon, &ClickableLabel::clicked, this, &DragWidget::rotateHouseIcon);
+        // connect(houseIcon1, &ClickableLabel::clicked, this, &DragWidget::rotateHouseIcon);
 
     }
 
+public slots:
+    void onNextButtonClicked() {
+        Board* br = new Board() ;
+        br->setArray(ships);
+        for (int i = 0; i <= 9; i++)
+        {
+            for (int j = 0; j <= 9; j++)
+            {
+                qDebug() << br->table[i][j];
+            }
+        }
+        // Code to execute when the "next" button is clicked
+        qDebug() << "Next button clicked!";
 
+        // Example: Close the application
+        QApplication::quit();
+    }
 protected:
     void mousePressEvent(QMouseEvent *event) override
     {
@@ -558,8 +575,6 @@ protected:
             event->acceptProposedAction();
     }
 
-
-    Board board; // create an instance of the Board class
 
 
     void dropEvent(QDropEvent *event) override
@@ -616,6 +631,8 @@ protected:
                     }
 
 
+
+
                     if (ship) {
 
                         qDebug() << "dropped at position" << position << " " << column << " " << row << " " << ship->w << " ";
@@ -651,30 +668,15 @@ public slots:
         houseIcon1->setPixmap(transformedPixmap);
     }
 };
->>>>>>> 0ea65693f4d7174c824a59817b1d2ceffc9559ba
 
 
 int main(int argc, char *argv[])
 {
+    QApplication app(argc, argv);
+    DragWidget window;
+    window.setGeometry(0, 0, 1536, 864); // Set window size
+    window.show();
 
-    QApplication a(argc, argv);
-    int screenWidth ;
-    int screenHeight;
-    QScreen *screen = QApplication::primaryScreen();
-    if (screen) {
-        QRect screenGeometry = screen->geometry();
-        screenWidth = screenGeometry.width();
-        screenHeight = screenGeometry.height();
-        qDebug() << "Screen width:" << screenWidth;
-        qDebug() << "Screen height:" << screenHeight;
-    } else {
-        qDebug() << "No screen found!";
-    }
-
-
-    MainWindow w;
-    w.setGeometry(0,0,screenWidth,screenHeight);
-
-    w.show();
-    return a.exec();
+    return app.exec();
 }
+#include "main.moc"
