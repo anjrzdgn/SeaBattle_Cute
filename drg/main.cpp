@@ -112,6 +112,7 @@ public:
 void Board::setArray(std::vector<std::pair< Ship*,QLabel*>> sshhips)
 {
     int size;
+    std::ofstream outFile("cordShips.txt");
     for(auto& sh : sshhips)
     {
         size = sh.first->w / 60;
@@ -120,7 +121,6 @@ void Board::setArray(std::vector<std::pair< Ship*,QLabel*>> sshhips)
 
         if(sh.second->x()>= 250*0.8 && sh.second->x() <= 860*0.8 && sh.second->y() >= 220*0.8 && sh.second->y() <= 834*0.8)
         {
-            std::ofstream outFile("cordShips.txt");
 
             if(sh.first->st == "h")
             {
@@ -128,9 +128,9 @@ void Board::setArray(std::vector<std::pair< Ship*,QLabel*>> sshhips)
                 {
                     table[(sh.second->y()-183)/48][i] = 'S';
 
-                    outFile << (sh.second->y()-183)/48 << "," << (sh.second->x()-200)/48 << '\n';
+                    outFile << (sh.second->y()-183)/48 << "," << i << '\n';
                 }
-                outFile << 'n';
+                outFile << '\n';
             }
             if(sh.first->st == "v")
             {
@@ -138,9 +138,9 @@ void Board::setArray(std::vector<std::pair< Ship*,QLabel*>> sshhips)
                 {
                     table[i][(sh.second->x()-183)/48] = 'S';
 
-                    outFile << (sh.second->y()-183)/48 << "," << (sh.second->x()-200)/48 << '\n';
+                    outFile << i << "," << (sh.second->x()-200)/48 << '\n';
                 }
-                outFile << 'n';
+                outFile << '\n';
             }
         }
     }
@@ -169,6 +169,8 @@ public:
     QLabel *backgroundLabel1 = new QLabel(this);
     QLabel *backgroundLabel = new QLabel(this);
     ClickableLabel *houseIcon1 = new ClickableLabel(this);
+
+    Board check_and_fill;
 
     DragWidget(QWidget *parent = nullptr)
         : QFrame(parent)
@@ -219,7 +221,7 @@ public:
         restore->setGeometry(815, 665, 50, 50);
         restore->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
         restore->setCursor(Qt::PointingHandCursor);
-        connect(restore, &QPushButton::clicked, QCoreApplication::quit);
+        connect(restore, &QPushButton::clicked, this, &DragWidget::restore_all_ship);
 
         QPushButton* next = new QPushButton(this);
         next->setGeometry(1070, 665, 180, 50);
@@ -269,6 +271,21 @@ public slots:
         // Example: Close the application
         QApplication::quit();
     }
+
+    void restore_all_ship()
+    {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                check_and_fill.table[i][j] = 'E';
+            }
+
+        }
+        for(auto& pair : ships)
+        {
+            pair.second->move(pair.first->xpos, pair.first->ypos);
+        }
+    }
+
 protected:
     void mousePressEvent(QMouseEvent *event) override
     {
@@ -352,7 +369,7 @@ protected:
     }
 
 
-    Board check_and_fill;
+
     void dropEvent(QDropEvent *event) override
     {
         if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
@@ -422,22 +439,8 @@ protected:
 
                         if (possible)
                         {
-                            // Clear previous position and surrounding cells
-                            // for (int i = 0; i < size; i++) {
-                            //     check_and_fill.table[prerow][precolumn + i] = 'E';
-                            // }
-                            // for (int i = prerow - 1; i <= prerow + 2; i++) {
-                            //     for (int j = precolumn - 1; j <= precolumn + size; j++) {
-                            //         if (i >= 0 && i < 10 && j >= 0 && j < 10) {
-                            //             check_and_fill.table[i][j] = 'E';
-                            //         }
-                            //     }
-                            // }
-
-                            // Move ship to the new position
                             child->move(xPos, yPos);
 
-                            // Mark new position and surrounding cells
                             for (int i = 0; i < size; i++) {
                                 check_and_fill.table[row][column + i] = 'S';
                             }
