@@ -18,75 +18,43 @@
 class Ship {
 public:
     QLabel *label;
-    QString st = "h";
+    QString st;
     int xpos;
     int ypos;
     int w;
     int h;
     int zcolumn;
     int zrow;
-    Ship(QLabel *label, QString pixmap, int x, int y, int width, int height) : xpos(x), ypos(y), h(height) {
+
+    Ship(QLabel *label, QString pixmap, int x, int y, int width, int height)
+        : label(label), xpos(x), ypos(y), w(width), h(height), st("h") {
 
         zcolumn = (label->x() - 200) / 48;
         zrow = (label->y() - 190) / 48;
-        w = width;
+
         QPixmap f(pixmap);
         label->setPixmap(f);
         label->setGeometry(x, y, width, height);
         label->show();
     }
 
-    void show() {
-        label->show();
-    }
-
-    void getGeo() {
-        label->geometry();
-    }
-
-    void rotate(){
-
-        QTransform transform;
-        if(this->st == 'h'){
-            this->st = 'v';
-            transform.rotate(90); // Rotate by 90 degrees
-        } else if(this->st == 'v'){
-            this->st = 'h';
-            transform.rotate(270); // Rotate by 270 degrees
-        }
-
-        QRect rect = label->geometry();
-        int xp = rect.x();
-        int yp = rect.y();
-        int width = rect.width();
-        int height = rect.height();
-
-        if (this->label->geometry() == QRect(xp, yp, 120, 60)) {
-            // Label is horizontal, rotate to vertical
-            label->setGeometry(xp, yp, 60, 120);
-        } else if (label->geometry() == QRect(xp, yp, 60, 120)) {
-            // Label is vertical, rotate to horizontal
-            label->setGeometry(xp, yp, 120, 60);
-        }else if (label->geometry() == QRect(xp, yp, 60, 180)) {
-            // Label is vertical, rotate to horizontal
-            label->setGeometry(xp, yp, 210, 60);
-        }else if (label->geometry() == QRect(xp, yp, 180, 60)) {
-            // Label is vertical, rotate to horizontal
-            label->setGeometry(xp, yp, 60, 180);
-        }else if (label->geometry() == QRect(xp, yp, 60, 240)) {
-            // Label is vertical, rotate to horizontal
-            label->setGeometry(xp, yp, 240, 60);
-        }else if (label->geometry() == QRect(xp, yp, 240, 60)) {
-            // Label is vertical, rotate to horizontal
-            label->setGeometry(xp, yp, 60, 240);
+    void rotate() {
+        if (st == "h") {
+            st = "v";
+            label->setGeometry(label->x(), label->y(), h, w);  // Swap width and height
+        } else {
+            st = "h";
+            label->setGeometry(label->x(), label->y(), w, h);  // Swap width and height
         }
 
         QPixmap pixmap = label->pixmap();
-        QPixmap transformedPixmap = pixmap.transformed(transform);
+        QTransform transform;
+        transform.rotate(90);
+        QPixmap transformedPixmap = pixmap.transformed(transform, Qt::SmoothTransformation);
         label->setPixmap(transformedPixmap);
-
     }
 };
+
 
 std::vector<std::pair< Ship*,QLabel*>> ships;
 
@@ -223,11 +191,16 @@ public:
         restore->setCursor(Qt::PointingHandCursor);
         connect(restore, &QPushButton::clicked, this, &DragWidget::restore_all_ship);
 
+        QPushButton* rotate = new QPushButton(this);
+        rotate->setGeometry(940, 665, 50, 50);
+        rotate->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+        rotate->setCursor(Qt::PointingHandCursor);
+        connect(rotate, &QPushButton::clicked, this, &DragWidget::rotateShips);
+
         QPushButton* next = new QPushButton(this);
         next->setGeometry(1070, 665, 180, 50);
         next->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
         next->setCursor(Qt::PointingHandCursor);
-        //connect(next, &QPushButton::clicked, QCoreApplication::quit);
         connect(next, &QPushButton::clicked, this, &DragWidget::onNextButtonClicked);
 
         QPixmap images("C:/SeaBattle_Cute_private/src_graphic/made/arrangement page copy.png");
@@ -283,6 +256,14 @@ public slots:
         for(auto& pair : ships)
         {
             pair.second->move(pair.first->xpos, pair.first->ypos);
+        }
+    }
+
+    void rotateShips()
+    {
+        for (auto& pair : ships)
+        {
+            pair.first->rotate();
         }
     }
 
