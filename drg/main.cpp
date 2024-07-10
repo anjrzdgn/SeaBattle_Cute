@@ -39,19 +39,22 @@ public:
     }
 
     void rotate() {
-        if (st == "h") {
-            st = "v";
-            label->setGeometry(label->x(), label->y(), h, w);  // Swap width and height
-        } else {
-            st = "h";
-            label->setGeometry(label->x(), label->y(), w, h);  // Swap width and height
-        }
+        if (label->x() > 1000)
+        {
+            if (st == "h") {
+                st = "v";
+                label->setGeometry(label->x(), label->y(), h, w);  // Swap width and height
+            } else {
+                st = "h";
+                label->setGeometry(label->x(), label->y(), w, h);  // Swap width and height
+            }
 
-        QPixmap pixmap = label->pixmap();
-        QTransform transform;
-        transform.rotate(90);
-        QPixmap transformedPixmap = pixmap.transformed(transform, Qt::SmoothTransformation);
-        label->setPixmap(transformedPixmap);
+            QPixmap pixmap = label->pixmap();
+            QTransform transform;
+            transform.rotate(90);
+            QPixmap transformedPixmap = pixmap.transformed(transform, Qt::SmoothTransformation);
+            label->setPixmap(transformedPixmap);
+        }
     }
 };
 
@@ -181,7 +184,7 @@ public:
         ships.push_back(std::make_pair(I,labelI));
 
         QLabel *labelJ = new QLabel(this);
-        Ship* J = new Ship(labelJ, "C:/SeaBattle_Cute_private/drg/src/4Xship copy.png", 1010, 518, 240, 60);
+        Ship* J = new Ship(labelJ, "C:/SeaBattle_Cute_private/drg/src/4Xship copy.png", 1106, 518, 240, 60);
         ships.push_back(std::make_pair(J,labelJ));
 
 
@@ -192,13 +195,13 @@ public:
         connect(restore, &QPushButton::clicked, this, &DragWidget::restore_all_ship);
 
         QPushButton* rotate = new QPushButton(this);
-        rotate->setGeometry(940, 665, 50, 50);
+        rotate->setGeometry(910, 665, 50, 50);
         rotate->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
         rotate->setCursor(Qt::PointingHandCursor);
         connect(rotate, &QPushButton::clicked, this, &DragWidget::rotateShips);
 
         QPushButton* next = new QPushButton(this);
-        next->setGeometry(1070, 665, 180, 50);
+        next->setGeometry(1210, 665, 170, 50);
         next->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
         next->setCursor(Qt::PointingHandCursor);
         connect(next, &QPushButton::clicked, this, &DragWidget::onNextButtonClicked);
@@ -223,8 +226,6 @@ public:
         houseIcon1->setPixmap(transformedPixmap);
 
         connect(houseIcon1, &ClickableLabel::clicked, this, &DragWidget::rotateHouseIcon);
-        // connect(houseIcon1, &ClickableLabel::clicked, this, &DragWidget::rotateHouseIcon);
-
     }
 
 public slots:
@@ -238,10 +239,7 @@ public slots:
                 qDebug() << br->table[i][j];
             }
         }
-        // Code to execute when the "next" button is clicked
         qDebug() << "Next button clicked!";
-
-        // Example: Close the application
         QApplication::quit();
     }
 
@@ -256,6 +254,7 @@ public slots:
         for(auto& pair : ships)
         {
             pair.second->move(pair.first->xpos, pair.first->ypos);
+            if (pair.first->st == 'v') pair.first->rotate();
         }
     }
 
@@ -343,8 +342,6 @@ protected:
             }
         }
 
-        qDebug() << "drag pos" << precolumn << " " << prerow;
-
         if (event->mimeData()->hasFormat("application/x-dnditemdata"))
             event->acceptProposedAction();
     }
@@ -380,6 +377,8 @@ protected:
                         }
                     }
 
+
+
                     if (ship->w == 240 && column > 6 && ship->st == 'h') {
                         child->move(offset);
                     }
@@ -389,13 +388,13 @@ protected:
                     else if (ship->w == 120 && column > 8 && ship->st == 'h') {
                         child->move(offset);
                     }
-                    else if (ship->w == 240 && row < 3 && ship->st == 'v') {
+                    else if (ship->w == 240 && row > 6 && ship->st == 'v') {
                         child->move(offset);
                     }
-                    else if (ship->w == 180 && row < 2 && ship->st == 'v') {
+                    else if (ship->w == 180 && row > 7 && ship->st == 'v') {
                         child->move(offset);
                     }
-                    else if (ship->w == 120 && row < 1 && ship->st == 'v') {
+                    else if (ship->w == 120 && row > 8 && ship->st == 'v') {
                         child->move(offset);
                     }
                     else
