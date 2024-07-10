@@ -14,6 +14,84 @@ bool fallShip = false;
 int firstShot[1][2];
 int count = 0;
 int ss = 0;
+bool moveMentBot = false;
+/// x , y left of ship
+void setWAroundF(int y, int x, int size, string direc, char table[10][10])
+{
+
+    if(direc == "horizontal")
+    {
+        if(y != 0 && y != 9)
+        {
+            table[x][y - 1] = 'W';
+            table[x][y + size] = 'W';
+        }
+
+        else if(y == 0)
+        {
+            table[x][y + size] = 'W';
+        }
+
+        else if(y == 9)
+        {
+            table[x][y - 1] = 'W';
+        }
+
+        if(x != 0)
+        {
+            for(int i = y - 1; i <= y + size; i++)
+            {
+                table[x - 1][i] = 'W';
+            }
+        }
+
+        if(x != 9)
+        {
+            for(int i = y - 1; i <= y + size; i++)
+            {
+                table[x + 1][i] = 'W';
+            }
+        }
+  
+    }
+
+    else if(direc == "vertocal")
+    {
+        if(x != 0 && x != 9)
+        {
+            table[x - 1][y] = 'W';
+            table[x + size][y] = 'W';
+        }
+
+        else if(x == 0)
+        {
+            table[x + size][y] = 'W';
+        }
+
+        else if(x == 9)
+        {
+            table[x - 1][y] = 'W';
+        }
+
+        if(y != 9)
+        {
+            for(int i = x - 1 ; i <= x + size; i++)
+            {
+                table[i][y + 1] = 'W';
+            }
+
+        }
+        
+        else if(y != 0)
+        {
+            for(int i = x - 1; i <= x + size; i++)
+            {
+                table[i][y - 1] = 'W';
+            }
+        }
+    }
+
+}
 
 void win()
 {
@@ -63,8 +141,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                 lastDirec = "Right";
 
                 if(exactDirection == "Right")
-                {     
-
+                {                                    
                     if(Y == 9)
                     {
                         if(_table[X][Y - 2] == 'B')
@@ -75,6 +152,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X][Y - 1] = 'F';
                                 _table[X][Y - 2] = 'F';
                                 _table[X][Y - 3] = 'F';
+                                setWAroundF(Y - 3,X ,4, "horizontal", _table);
                                 fallShip = true;
                                 printMap(_table);
                                 return;
@@ -86,6 +164,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X][Y - 1] = 'F';
                                 _table[X][Y - 2] = 'F';
                                 fallShip = true;
+                                setWAroundF(Y - 2,X ,3, "horizontal", _table);
                                 printMap(_table);         
                                 return;
                             }                        
@@ -96,6 +175,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y] = 'F';
                             _table[X][Y - 1] = 'F';
                             fallShip = true;
+                            setWAroundF(Y - 1, X, 2, "horizontal", _table);
                             printMap(_table);
                             return;
                         }
@@ -108,12 +188,14 @@ void attackAgain(char _table[10][10], int X, int Y)
                         _table[X][Y] = 'F';
                         _table[X][Y - 1] = 'F';
                         printMap(_table);
+                        setWAroundF(Y - 1, X, 2, "horizontal", _table);
                         fallShip = true;
+                        return;
                     }
                 
                     //absoultly have 3 space maby 4 space
                     else if((_table[X][Y + 1] != 'S' && _table[X][Y - 2] == 'B' && Y <= 8) ||
-                                (Y == 9 && _table[X][Y - 2] == 'B'))
+                                (Y == 9 && _table[X][Y - 2] == 'B'))         
                     {
                         //have 4 space
                         if(_table[X][Y - 3] == 'B' && Y >= 3)
@@ -122,6 +204,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y - 2] = 'F';
                             _table[X][Y - 1] = 'F';
                             _table[X][Y] = 'F';
+                            setWAroundF(Y - 3, X, 4, "horizontal", _table);
                             printMap(_table);
                             fallShip = true;
                         }
@@ -132,6 +215,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y - 2] = 'F';
                             _table[X][Y - 1] = 'F';
                             _table[X][Y] = 'F';
+                            setWAroundF(Y - 2, X, 3, "horizontal", _table);
                             printMap(_table);
                             fallShip = true;
                         }
@@ -149,6 +233,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y - 1] = 'F';
                             _table[X][Y - 2] = 'F';
                             fallShip = true;
+                            setWAroundF(Y - 2, X, 4, "horizontal", _table);
                             return;
                         }
 
@@ -159,6 +244,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y + 1] = 'F';
                             _table[X][Y - 1] = 'F';
                             _table[X][Y] = 'F';
+                            setWAroundF(Y - 1, X, 3, "horizontal", _table);
                             printMap(_table);
                             fallShip = true;
                         }
@@ -170,6 +256,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y + 1] = 'F';
                             _table[X][Y - 1] = 'F';
                             _table[X][Y] = 'F';
+                            setWAroundF(Y - 1, X, 4, "horizontal", _table);
                             printMap(_table);
                             fallShip =  true;
                         }
@@ -180,28 +267,29 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y - 1] = 'F';
                             _table[X][Y + 1] = 'F';
                             _table[X][Y] = 'F';
+                            setWAroundF(Y - 2, X, 4, "horizontal", _table);
                             fallShip = true;
                             printMap(_table);
                             return;
                         }
 
                     }
-
                 }
-         
+          
                 else if(exactDirection == "Default")
                 {
                     if(Y == 9)
                     {
-                        if(_table[X][Y - 2] == 'B')
+                        if(_table[X][Y - 2] == 'S')
                         {
-                            if (_table[X][Y - 3] == 'B')
+                            if (_table[X][Y - 3] == 'S')
                             {
                                 _table[X][Y] = 'F';
                                 _table[X][Y - 1] = 'F';
                                 _table[X][Y - 2] = 'F';
                                 _table[X][Y - 3] = 'F';
                                 fallShip = true;
+                                setWAroundF(Y - 3, X, 4, "horizontal", _table);
                                 printMap(_table);
                                 return;
                             }
@@ -212,21 +300,21 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X][Y - 1] = 'F';
                                 _table[X][Y - 2] = 'F';
                                 fallShip = true;
+                                setWAroundF(Y - 2, X, 3, "horizontal", _table);
                                 printMap(_table);
                                 return;
                             }                        
                         }
-                     
                         else
                         {
                             _table[X][Y] = 'F';
                             _table[X][Y - 1] = 'F';
                             fallShip = true;
+                            setWAroundF(Y - 1, X, 2, "horizontal", _table);
                             printMap(_table);
                             return;
                         }
                     }
-
                     //check ship 2 space
                     if((_table[X][Y + 1] != 'S' && _table[X][Y - 2] != 'S' && (Y <= 8 || Y >= 2)) 
                         
@@ -237,11 +325,13 @@ void attackAgain(char _table[10][10], int X, int Y)
                         //ship had 2 spaces but now fall
                         _table[X][Y] = 'F';
                         _table[X][Y - 1] = 'F';
+                        setWAroundF(Y - 1, X, 2, "horizontal", _table);
                         printMap(_table);
                         fallShip = true;
                         
-                        //atack again random
-                        //return;
+                        ///call function to w arount f
+                        
+                        return;
                     }
 
                     //absoultly have 3 space
@@ -254,9 +344,11 @@ void attackAgain(char _table[10][10], int X, int Y)
                         _table[X][Y + 1] = 'F';
                         _table[X][Y - 1] = 'F';
                         _table[X][Y] = 'F';
+                        setWAroundF(Y - 1, X, 3, "horizontal", _table);
                         printMap(_table);
                         fallShip = true;
                         shootSuccses++;
+                        return;
                     }
 
                     //maby ship have 3 or 4 spaces and change direction
@@ -286,6 +378,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y] = 'F';
                             _table[X][Y + 2] ='F';
                             _table[X][Y + 1] = 'F';
+                            setWAroundF(Y - 1, X, 4, "horizontal", _table);
                             printMap(_table);
                             fallShip = true;
                             return ;
@@ -327,6 +420,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X][Y + 2] = 'F';
                                 _table[X][Y + 3] = 'F';
                                 fallShip = true;
+                                setWAroundF(Y, X, 4, "horizontal", _table);
                                 printMap(_table);
                                 return;
                             }
@@ -337,6 +431,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X][Y + 1] = 'F';
                                 _table[X][Y + 2] = 'F';
                                 fallShip = true;
+                                setWAroundF(Y, X, 3, "horizontal", _table);
                                 printMap(_table);
                                 return;                            
                             }
@@ -347,6 +442,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y] = 'F';
                             _table[X][Y + 1] = 'F';
                             fallShip = true;
+                            setWAroundF(Y, X, 2, "horizontal", _table);
                             printMap(_table);
                             return;
                         }
@@ -358,6 +454,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                     {
                         _table[X][Y] = 'F';
                         _table[X][Y + 1] = 'F';
+                        setWAroundF(Y, X, 2, "horizontal", _table);
                         printMap(_table);
                         fallShip = true;
                         return;
@@ -374,6 +471,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y + 1] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            setWAroundF(Y, X, 4, "horizontal", _table);
                             printMap(_table);
                             return;
                         }
@@ -385,6 +483,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y + 1] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            setWAroundF(Y, X, 3, "horizontal", _table);
                             printMap(_table);
                             return;
                         }
@@ -403,6 +502,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X][Y + 1] = 'F';
                                 _table[X][Y + 2] = 'F';
                                 _table[X][Y + 3] = 'F';
+                                setWAroundF(Y, X, 4, "horizontal", _table);
                                 printMap(_table);
                                 return;
                             }
@@ -412,6 +512,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X][Y] = 'F';
                                 _table[X][Y + 1] = 'F';
                                 _table[X][Y + 2] = 'F';                                
+                                setWAroundF(Y, X, 3, "horizontal", _table);
                                 printMap(_table);
                                 return;
                             }
@@ -428,6 +529,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y - 1] = 'F';
                             _table[X][Y + 1] = 'F';
                             _table[X][Y] = 'F';
+                            setWAroundF(Y - 1, X, 3, "horizontal", _table);
                             printMap(_table);
                             fallShip = true;
                         }
@@ -439,6 +541,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y - 1] = 'F';
                             _table[X][Y + 1] = 'F';
                             _table[X][Y] = 'F';
+                            setWAroundF(Y - 2, X, 4, "horizontal", _table);
                             printMap(_table);
                             fallShip =  true;
                         }
@@ -450,6 +553,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y - 1] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            setWAroundF(Y - 1, X, 4, "horizontal", _table);
                             printMap(_table);
                             return;
                         }
@@ -463,57 +567,38 @@ void attackAgain(char _table[10][10], int X, int Y)
 
                     if(Y == 0)
                     {
-                        if(_table[X][Y + 2] == 'B')
+                        if(_table[X][Y + 2] == 'S')
                         {
-                            if(_table[X][Y + 3] == 'B')
+                            if(_table[X][Y + 3] == 'S')
                             {
                                 _table[X][Y] = 'F';
                                 _table[X][Y + 1] = 'F';
                                 _table[X][Y + 2] = 'F';
                                 _table[X][Y + 3] = 'F';
+                                setWAroundF(Y, X, 4, "horizontal", _table);
                                 printMap(_table);
                                 fallShip = true;
                                 return;
-                            }
+                            }                     
                             
-                            else if(_table[X][Y + 3] == 'S')
-                            {
-                                _table[X][Y] = 'B';
-                                _table[X][Y + 1] = 'B';
-                                _table[X][Y + 2] = 'B';
-                                exactDirection = "Right";
-                                printMap(_table);
-                                fallShip = false;
-                                return;
-                            }                            
-                            
-                            else if(_table[X][Y + 3] != 'S' && _table[X][Y + 3] != 'B')
+                            else if(_table[X][Y + 3] != 'S')
                             {
                                 _table[X][Y] = 'F';
                                 _table[X][Y + 1] = 'F';
                                 _table[X][Y + 2] = 'F';
                                 fallShip = true;
+                                setWAroundF(Y, X, 3, "horizontal", _table);
                                 printMap(_table);
                                 return;                            
                             }
                         }
-                  
-                        else if(_table[X][Y + 2] == 'S')
-                        {
-                            _table[X][Y + 1] = 'B';
-                            _table[X][Y] = 'B';
-                            exactDirection = "Right";
-                            printMap(_table);
-                            fallShip = false;
-                            return;
-
-                        }
-                    
-                        else if(_table[X][Y + 2] != 'S' && _table[X][Y + 2] != 'B')
+                                      
+                        else if(_table[X][Y + 2] != 'S')
                         {
                             _table[X][Y] = 'F';
                             _table[X][Y + 1] = 'F';
                             fallShip = true;
+                            setWAroundF(Y, X, 2, "horizontal", _table);
                             printMap(_table);
                             return;
                         }
@@ -527,6 +612,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                         _table[X][Y] = 'F';
                         _table[X][Y + 1] = 'F';
                         fallShip = true;
+                        setWAroundF(Y, X, 2, "horizontal", _table);
                         printMap(_table);
                         //atack again random
                         return;
@@ -541,7 +627,9 @@ void attackAgain(char _table[10][10], int X, int Y)
                         _table[X][Y] = 'F';
                         fallShip = true;
                         shootSuccses++;
+                        setWAroundF(Y - 1, X, 3, "horizontal", _table);
                         printMap(_table);
+                        return;
                     }
 
                     //have 4 space
@@ -554,8 +642,10 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y - 1] = 'F';
                             _table[X][Y + 1] = 'F';
                             _table[X][Y] = 'F';
+                            setWAroundF(Y - 2, X, 4, "horizontal", _table);
                             printMap(_table);
                             fallShip = true;
+                            return;
                         }
 
                         //absoultly have 4 spacce but should change direction 
@@ -572,6 +662,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                         _table[X][Y + 1] = 'F';
                                         _table[X][Y + 2] = 'F';
                                         fallShip = true;
+                                        setWAroundF(Y - 1, X, 4, "horizontal", _table);
                                         printMap(_table);
                                         shootSuccses++;
                                         return;
@@ -583,6 +674,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                         _table[X][Y - 1] = 'F';
                                         _table[X][Y + 1] = 'F';
                                         fallShip = true;
+                                        setWAroundF(Y - 1, X, 3, "horizontal", _table);
                                         printMap(_table);
                                         shootSuccses++;
                                         return;
@@ -596,6 +688,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                     _table[X][Y] = 'F';
                                     fallShip = true;      
                                     shootSuccses++;
+                                    setWAroundF(Y - 1, X, 2, "horizontal", _table);
                                     printMap(_table); 
                                     return;         
                                 }
@@ -629,21 +722,19 @@ void attackAgain(char _table[10][10], int X, int Y)
                 }                
 
             }
+
         }
-
-
 
 
         else if(Y == firstShot[0][1])
         {
-            direction = "vertical";
+            direction = "vertocal";
             
             if(X - firstShot[0][0] > 0)
             {
                 lastDirec = "Down";
                 if(exactDirection == "Down")
                 {
-
                     if(X == 9)
                     {
                         if(_table[X - 2][Y] == 'B')
@@ -655,6 +746,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X - 2][Y] = 'F';
                                 _table[X - 3][Y] = 'F';
                                 fallShip = true;
+                                setWAroundF(Y, X - 3, 4, "vertocal", _table);
                                 printMap(_table);
                                 return;                                
                             }
@@ -665,6 +757,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X - 1][Y] = 'F';
                                 _table[X - 2][Y] = 'F';
                                 fallShip = true;
+                                setWAroundF(Y, X - 2, 3, "vertocal", _table);
                                 printMap(_table);
                                 return;        
                             }
@@ -675,6 +768,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y] = 'F';
                             _table[X - 1][Y] = 'F';
                             fallShip = true;
+                            setWAroundF(Y, X - 1, 2, "vertocal", _table);
                             printMap(_table);
                             return;
                         }
@@ -682,11 +776,12 @@ void attackAgain(char _table[10][10], int X, int Y)
 
                     //table 2 space fall
                     if((_table[X + 1][Y] != 'S' && _table[X - 2][Y] != 'B' && X <= 8 && X >= 2)
-                      || (X == 1 && _table[X + 1][Y] != 'S') || (X == 9 && _table[X - 2][Y] != 'B'))
+                        || (X == 1 && _table[X + 1][Y] != 'S') || (X == 9 && _table[X - 2][Y] != 'B'))
                     {
                         _table[X][Y] = 'F';
                         _table[X - 1][Y] = 'F';
                         fallShip = true;
+                        setWAroundF(Y, X - 1, 2, "vertocal", _table);
                         printMap(_table);  
                         return;
                     }
@@ -702,6 +797,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X - 1][Y] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            setWAroundF(Y, X - 3, 4, "vertocal", _table);
                             printMap(_table);
                             return;
                         }
@@ -709,10 +805,11 @@ void attackAgain(char _table[10][10], int X, int Y)
                         //have 3 space
                         else
                         {
-                            _table[X][Y - 2] = 'F';
-                            _table[X][Y - 1] = 'F';
+                            _table[X - 2][Y] = 'F';
+                            _table[X - 1][Y] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            setWAroundF(Y, X - 2, 3, "vertocal", _table);
                             printMap(_table);
                             return;
                         }
@@ -732,6 +829,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X - 1][Y] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            setWAroundF(Y, X - 1, 3, "vertocal", _table);
                             printMap(_table);
                             return;
                         }
@@ -743,17 +841,19 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X + 1][Y] = 'F';
                             _table[X - 1][Y] = 'F';
                             _table[X][Y] = 'F';
+                            setWAroundF(Y, X - 1, 4, "vertocal", _table);
                             printMap(_table);
                             fallShip =  true;
                         }
 
-                        else if(_table[X - 3][Y] == 'W' && X >= 3)
+                        else if(_table[X - 3][Y] == 'W' && _table[X - 2][Y] == 'B' && X >= 3)
                         {
                             _table[X - 2][Y] = 'F';
                             _table[X - 1][Y] = 'F';
                             _table[X + 1][Y] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            setWAroundF(Y, X - 2, 4, "vertocal", _table);
                             printMap(_table);
                             return;
                         }
@@ -762,18 +862,18 @@ void attackAgain(char _table[10][10], int X, int Y)
 
                 else if(exactDirection == "Default")
                 {
-
                     if(X == 9)
                     {
-                        if(_table[X - 2][Y] == 'B')
+                        if(_table[X - 2][Y] == 'S')
                         {
-                            if(_table[X - 3][Y] == 'B')
+                            if(_table[X - 3][Y] == 'S')
                             {
                                 _table[X][Y] = 'F';
                                 _table[X - 1][Y] = 'F';
                                 _table[X - 2][Y] = 'F';
                                 _table[X - 3][Y] = 'F';
                                 fallShip = true;
+                                setWAroundF(Y, X - 3, 4, "vertocal", _table);
                                 printMap(_table);
                                 return;                                
                             }
@@ -784,6 +884,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X - 1][Y] = 'F';
                                 _table[X - 2][Y] = 'F';
                                 fallShip = true;
+                                setWAroundF(Y, X - 2, 3, "vertocal", _table);
                                 printMap(_table);
                                 return;        
                             }
@@ -794,13 +895,14 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y] = 'F';
                             _table[X - 1][Y] = 'F';
                             fallShip = true;
+                            setWAroundF(Y, X - 1, 2, "vertocal", _table);
                             printMap(_table);
                             return;
                         }
                     }
             
                      //check ship 2 space
-                    if((_table[X + 1][Y] != 'S' && _table[X - 2][Y] == 'E' && X >= 2 && X <= 8)
+                    if((_table[X + 1][Y] != 'S' && _table[X - 2][Y] != 'S' && X >= 2 && X <= 8)
                         || ((X == 1) && _table[X + 1][Y] != 'S') 
                         ||((X == 9) && (_table[X - 2][Y] != 'B' || _table[X - 2][Y] != 'S')))
                     {
@@ -808,14 +910,15 @@ void attackAgain(char _table[10][10], int X, int Y)
                         _table[X][Y] = 'F';
                         _table[X - 1][Y] = 'F';
                         fallShip = true;
+                        setWAroundF(Y, X - 1, 2, "vertocal", _table);
                         printMap(_table);
                         //atack again random
                         return;
                     }
 
                     //absoultly have 3 space
-                    else if((_table[X + 1][Y] == 'S' && _table[X + 2][Y] == 'E' && _table[X - 2][Y] == 'E' && X <= 7 && X >= 2)        
-                        || ((X == 8) && _table[X + 1][Y] == 'S' && _table[X - 2][Y] == 'E') 
+                    else if((_table[X + 1][Y] == 'S' && _table[X + 2][Y] != 'S' && _table[X - 2][Y] != 'S' && X <= 7 && X >= 2)        
+                        || ((X == 8) && _table[X + 1][Y] == 'S' && _table[X - 2][Y] != 'S') 
                             || (X == 1 && _table[X + 1][Y] == 'S' && _table[X + 1][Y] != 'S' ) )
                     {
                         _table[X + 1][Y] = 'F';
@@ -823,11 +926,13 @@ void attackAgain(char _table[10][10], int X, int Y)
                         _table[X][Y] = 'F';
                         fallShip = true;
                         shootSuccses++;
+                        setWAroundF(Y, X - 1, 3, "vertocal", _table);
                         printMap(_table);
+                        return;
                     }
 
                     //maby ship have 3 or 4 spaces and change direction
-                    else if(_table[X + 1][Y] == 'E' && X <= 8)
+                    else if(_table[X + 1][Y] != 'S' && X <= 8)
                     {
                         _table[X + 1][Y] = 'W';
                         exactDirection = "Up";
@@ -848,12 +953,13 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X - 1][Y] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            setWAroundF(Y, X - 1, 4, "vertocal", _table);
                             printMap(_table);
                             return;
                         }
 
                         //absoultly have 4 spacce but should change direction 
-                        else if(_table[X + 2][Y] == 'E' && _table[X - 2][Y] == 'S')
+                        else if(_table[X + 2][Y] != 'S' && _table[X - 2][Y] == 'S')
                         {
                             _table[X + 1][Y] = 'B';
                             _table[X + 2][Y] = 'W';
@@ -884,6 +990,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X + 2][Y] = 'F'; 
                                 _table[X + 3][Y] = 'F';                                 
                                 fallShip = true;
+                                setWAroundF(Y, X, 4, "vertocal", _table);
                                 printMap(_table);
                                 return;
                             }
@@ -894,6 +1001,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X + 1][Y] = 'F';
                                 _table[X + 2][Y] = 'F'; 
                                 fallShip = true;
+                                setWAroundF(Y, X, 3, "vertocal", _table);
                                 printMap(_table);
                                 return;
                             }
@@ -904,6 +1012,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y] = 'F';
                             _table[X + 1][Y] = 'F';
                             fallShip = true;
+                            setWAroundF(Y, X, 2, "vertocal", _table);
                             printMap(_table);
                             return;
                         }
@@ -916,6 +1025,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                         _table[X][Y] = 'F';
                         _table[X + 1][Y] = 'F';
                         fallShip = true;
+                        setWAroundF(Y, X, 2, "vertocal", _table);
                         printMap(_table);
                         return;
                     }
@@ -930,6 +1040,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X + 2][Y] = 'F';
                             _table[X + 1][Y] = 'F';
                             _table[X][Y] = 'F';
+                            setWAroundF(Y, X, 4, "vertocal", _table);
                             fallShip = true;
                             printMap(_table);
                             return;
@@ -941,6 +1052,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X + 2][Y] = 'F';
                             _table[X + 1][Y] = 'F';
                             _table[X][Y] = 'F';
+                            setWAroundF(Y, X, 3, "vertocal", _table);
                             printMap(_table);
                             fallShip = true;
                         }
@@ -958,9 +1070,10 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X - 1][Y] = 'F';
                             _table[X + 1][Y] = 'F';
                             _table[X][Y] = 'F';
+                            setWAroundF(Y, X - 1, 3, "vertocal", _table);
                             printMap(_table);
                             fallShip = true;
-
+                            return;
                         }
                         
                         //havev 4 space
@@ -970,8 +1083,10 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X - 1][Y] = 'F';
                             _table[X + 1][Y] = 'F';
                             _table[X][Y] = 'F';
+                            setWAroundF(Y, X - 2, 4, "vertocal", _table);
                             printMap(_table);
                             fallShip =  true;
+                            return;
                         }
 
                         else if(_table[X + 3][Y] == 'W')
@@ -981,6 +1096,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X - 1][Y] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            setWAroundF(Y, X - 1, 4, "vertocal", _table);
                             printMap(_table);
                             return;
                         }
@@ -1001,6 +1117,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X + 2][Y] = 'F';
                                 _table[X + 3][Y] = 'F';
                                 fallShip = true;
+                                setWAroundF(Y, X , 4, "vertocal", _table);
                                 printMap(_table);
                                 return;                                
                             }
@@ -1011,6 +1128,7 @@ void attackAgain(char _table[10][10], int X, int Y)
                                 _table[X + 1][Y] = 'F';
                                 _table[X + 2][Y] = 'F';
                                 fallShip = true;
+                                setWAroundF(Y, X, 3, "vertocal", _table);
                                 printMap(_table);
                                 return;              
                             }
@@ -1021,36 +1139,40 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X][Y] = 'F';
                             _table[X + 1][Y] = 'F';
                             fallShip = true;
+                            setWAroundF(Y, X, 2, "vertocal", _table);
                             printMap(_table);
                             return;
                         }   
                     }
 
                     //check ship 2 space
-                    if(_table[X - 1][Y] == 'E' && (_table[X + 2][Y] == 'E' || _table[X + 2][Y] == 'W') && X >= 1 && X <= 7)
+                    if(_table[X - 1][Y] != 'S' && _table[X + 2][Y] != 'S'  && X >= 1 && X <= 7)
                     {
                         //ship had 2 spaces but now fall
                         _table[X][Y] = 'F';
                         _table[X + 1][Y] = 'F';
                         fallShip = true;
+                        setWAroundF(Y, X, 2, "vertocal", _table);
                         printMap(_table);
                         //atack again random
                         return;
                     }
 
                     //absoultly have 3 space
-                    else if(_table[X - 1][Y] == 'S' && (_table[X - 2][Y] == 'E' || _table[X - 2][Y] == 'W') && (_table[X + 2][Y] == 'E' || _table[X + 2][Y] == 'W') && X >= 2 && X <= 7)
+                    else if(_table[X - 1][Y] == 'S' && _table[X - 2][Y] != 'S' && _table[X + 2][Y] != 'S' && X >= 2 && X <= 7)
                     {
                         _table[X - 1][Y] = 'F';
                         _table[X + 1][Y] = 'F';
                         _table[X][Y] = 'F';
                         fallShip = true;
                         shootSuccses++;
+                        setWAroundF(Y, X - 1, 3, "vertocal", _table);
                         printMap(_table);
+                        return;
                     }
 
                     //maby ship have 3 or 4 spaces and change direction
-                    else if((_table[X - 1][Y] == 'E' || _table[X - 1][Y] == 'W') && X >= 1)
+                    else if(_table[X - 1][Y] != 'S' && X >= 1)
                     {
                         _table[X - 1][Y] = 'W';
                         exactDirection = "Down";
@@ -1070,11 +1192,13 @@ void attackAgain(char _table[10][10], int X, int Y)
                             _table[X + 1][Y] = 'F';
                             _table[X][Y] = 'F';
                             fallShip = true;
+                            setWAroundF(Y, X - 2, 4, "vertocal", _table);
                             printMap(_table);
+                            return;
                         }
 
                         //absoultly have 4 spacce but should change direction  
-                        else if((_table[X - 2][Y] == 'E' || _table[X - 2][Y] == 'W')&& _table[X + 2][Y] == 'S' && X >= 2 && X <= 7)
+                        else if(_table[X - 2][Y] != 'S'&& _table[X + 2][Y] == 'S' && X >= 2 && X <= 7)
                         {
                             _table[X - 1][Y] = 'B';
                             _table[X- 2][Y] = 'W';
@@ -1084,19 +1208,15 @@ void attackAgain(char _table[10][10], int X, int Y)
                             printMap(_table);
                             return;                  
                         } 
-
-                    }
-                     
+                    }            
                 }
-            
-            
-            
             }
-
         }
-
     }
 
+    
+    
+    
     else if(_table[X][Y] == 'E')
     {
         _table[X][Y] = 'W';
@@ -1442,6 +1562,11 @@ void choseDirection(char _table[10][10], int randX, int randY)
 
     while(count < 10)
     {
+        if(moveMentBot == false)
+        {
+            cont
+        }
+
 
         if(fallShip == false && shootSuccses != 0 && exactDirection != "Default")
         {
@@ -1575,8 +1700,6 @@ void choseDirection(char _table[10][10], int randX, int randY)
                 }
             }
 
-
-
             if(x < 0 || x > 9 || y < 0 || y > 9)
             {
                 continue;
@@ -1608,8 +1731,6 @@ void choseDirection(char _table[10][10], int randX, int randY)
     {
         cout << endl << "WIIIN 110" << endl;
     }
-
-
 }   
 
 bool checksalam(int x, int y, char _table[10][10])
@@ -1619,6 +1740,9 @@ bool checksalam(int x, int y, char _table[10][10])
         if(_table[0][1] != 'S' && _table[1][0] != 'S')
         {
             _table[0][0] = 'F';
+            _table[0][1] = 'W';
+            _table[1][0] = 'W';
+            _table[1][1] = 'W';     
             return true;
         }
     }
@@ -1628,6 +1752,9 @@ bool checksalam(int x, int y, char _table[10][10])
         if(_table[0][8] != 'S' && _table[1][9] != 'S')
         {
             _table[0][9] = 'F';            
+            _table[0][8] = 'F';
+            _table[1][9] = 'F';
+            _table[1][8] = 'F';
             return true;
         }
     }
@@ -1637,6 +1764,10 @@ bool checksalam(int x, int y, char _table[10][10])
         if(_table[8][0] != 'S' && _table[9][1] != 'S')
         {
             _table[9][0] = 'F';            
+            _table[9][1] = 'F';
+            _table[8][1] = 'F';
+            _table[8][0] = 'F';
+
             return true;
         }
     }  
@@ -1646,6 +1777,9 @@ bool checksalam(int x, int y, char _table[10][10])
         if(_table[9][8] != 'S' && _table[8][9] != 'S')
         {
             _table[9][9] = 'F';            
+            _table[9][8] = 'F';
+            _table[8][9] = 'F';
+            _table[8][8] = 'F';
             return true;
         }
     }
@@ -1653,14 +1787,17 @@ bool checksalam(int x, int y, char _table[10][10])
     return false;
 }
 
-void simpleAttack(char _table[10][10]){
+void simpleAttack(char _table[10][10]){   
     
 
     int numberOfShook = 0;
 
     while(count < 10)
     {
-
+        if(movement == false)
+        {
+            continue;
+        }
         // std::random_device dev;
         // std::mt19937 rng(dev());
         // std::uniform_int_distribution<std::mt19937::result_type> dist6(0, 9);
@@ -1671,7 +1808,7 @@ void simpleAttack(char _table[10][10]){
 
         if(_table[randX][randY] == 'S')
         {
-
+            movement = true;
             if(checksalam(randX, randY, _table))
             {
                 printMap(_table);
@@ -1698,6 +1835,7 @@ void simpleAttack(char _table[10][10]){
                 _table[randX][randY] = 'F';
                 fallShip = true;
                 count++;    
+                setWAroundF(randY, randX, 1, "horizontal", _table);
                 printMap(_table);
                 check();
                 continue;
@@ -1715,17 +1853,15 @@ void simpleAttack(char _table[10][10]){
         else if(_table[randX][randY] == 'E')
         {
             _table[randX][randY] = 'W';
+            movement = false;
         }
 
         else if(_table[randX][randY] == 'W' || _table[randX][randY] == 'F')
         {
             continue;
         }        
-        
-    
        
         printMap(_table);
-        
     }
     
         cout << endl << "WIIIN 110" << endl;
@@ -1767,13 +1903,26 @@ int main()
     table[9][2] = 'S';
     table[9][3] = 'S';
     table[9][4] = 'S';
-    table[9][9] = 'S';
+
+    table[4][4] = 'W';
+    table[5][4] = 'W';
+    table[6][5] = 'W';
+    table[5][6] = 'W';
+    table[4][6] = 'W';
+    table[3][5] = 'W';
 
 
     table[2][1] = 'S';
     table[2][2] = 'S';
     table[2][3] = 'S';
     table[2][4] = 'S';
+
+        table[9][9] = 'S';
+        table[9][8] = 'S';
+        table[9][7] = 'S';
+        table[9][6] = 'S';
+
+
 
     for(int i = 0; i < 10; i++)
     {
@@ -1790,3 +1939,4 @@ int main()
     win();
     return 0;
 }
+
