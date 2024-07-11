@@ -59,18 +59,18 @@ public:
         next->setCursor(Qt::PointingHandCursor);
         connect(next, &QPushButton::clicked, this, &choose_play_mode::onNextClicked);
 
-        QPixmap images("C:/SeaBattle_Cute_private/src_graphic/made/playMode page copy.png");
+        QPixmap images("E:/qt1/drg/playModepage.png");
         backgroundLabel->setPixmap(images);
         backgroundLabel->setScaledContents(true);
         backgroundLabel->setGeometry(0, 0, 1536, 864); // Set the geometry of the background label to cover the entire window
         backgroundLabel->lower(); // Send the background label to the back
 
-        QPixmap BWF_image("C:/SeaBattle_Cute_private/src_graphic/made/selection boarder2 copy.png");
+        QPixmap BWF_image("E:/qt1/drg/selectionboarder2.png");
         BWF_boarder->setPixmap(BWF_image);
         BWF_boarder->setScaledContents(true);
         BWF_boarder->setGeometry(270, 215, 245, 245); // Set the geometry of the background label to cover the entire window
 
-        QPixmap CA_image("C:/SeaBattle_Cute_private/src_graphic/made/selection boarder1 copy.png");
+        QPixmap CA_image("E:/qt1/drg/selectionboarder1.png");
         CA_boarder->setPixmap(CA_image);
         CA_boarder->setScaledContents(true);
         CA_boarder->setGeometry(840, 535, 420, 95); // Set the geometry of the background label to cover the entire window
