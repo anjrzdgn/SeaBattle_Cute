@@ -1,0 +1,13 @@
+release/choosmode.o
+release/choosreg.o
+release/companypage.o
+release/login.o
+release/main.o
+release/mainwindow.o
+release/signup.o
+release/moc_choosmode.o
+release/moc_choosreg.o
+release/moc_companypage.o
+release/moc_login.o
+release/moc_mainwindow.o
+release/moc_signup.o

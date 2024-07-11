@@ -148,43 +148,43 @@ public:
     {
 
         QLabel *labelA = new QLabel(this);
-        Ship* A = new Ship(labelA, "C:/SeaBattle_Cute_private/drg/src/1Xship copy.png", 1010, 230, 60, 60);
+        Ship* A = new Ship(labelA, "E:/qt1/drg/1^1ship.png", 1010, 230, 60, 60);
         ships.push_back(std::make_pair(A,labelA));
 
         QLabel *labelB = new QLabel(this);
-        Ship* B = new Ship(labelB, "C:/SeaBattle_Cute_private/drg/src/1Xship copy.png", 1106, 230, 60, 60);
+        Ship* B = new Ship(labelB, "E:/qt1/drg/1^1ship.png", 1106, 230, 60, 60);
         ships.push_back(std::make_pair(B,labelB));
 
         QLabel *labelC = new QLabel(this);
-        Ship* C = new Ship(labelC, "C:/SeaBattle_Cute_private/drg/src/1Xship copy.png", 1202, 230, 60, 60);
+        Ship* C = new Ship(labelC, "E:/qt1/drg/1^1ship.png", 1202, 230, 60, 60);
         ships.push_back(std::make_pair(C,labelC));
 
         QLabel *labelD = new QLabel(this);
-        Ship* D = new Ship(labelD, "C:/SeaBattle_Cute_private/drg/src/1Xship copy.png", 1298, 230, 60, 60);
+        Ship* D = new Ship(labelD, "E:/qt1/drg/1^1ship.png", 1298, 230, 60, 60);
         ships.push_back(std::make_pair(D,labelD));
 
         QLabel *labelE = new QLabel(this);
-        Ship* E = new Ship(labelE, "C:/SeaBattle_Cute_private/drg/src/2Xship copy.png", 1010, 326, 120, 60);
+        Ship* E = new Ship(labelE,"E:/qt1/drg/2^1ship.png", 1010, 326, 120, 60);
         ships.push_back(std::make_pair(E,labelE));
 
         QLabel *labelF = new QLabel(this);
-        Ship* F = new Ship(labelF, "C:/SeaBattle_Cute_private/drg/src/2Xship copy.png", 1154, 326, 120, 60);
+        Ship* F = new Ship(labelF,"E:/qt1/drg/2^1ship.png", 1154, 326, 120, 60);
         ships.push_back(std::make_pair(F,labelF));
 
         QLabel *labelG = new QLabel(this);
-        Ship* G = new Ship(labelG, "C:/SeaBattle_Cute_private/drg/src/2Xship copy.png", 1298, 326, 120, 60);
+        Ship* G = new Ship(labelG, "E:/qt1/drg/2^1ship.png", 1298, 326, 120, 60);
         ships.push_back(std::make_pair(G,labelG));
 
         QLabel *labelH = new QLabel(this);
-        Ship* H = new Ship(labelH, "C:/SeaBattle_Cute_private/drg/src/3Xship copy.png", 1010, 422, 180, 60);
+        Ship* H = new Ship(labelH, "E:/qt1/drg/3^1ship.png", 1010, 422, 180, 60);
         ships.push_back(std::make_pair(H,labelH));
 
         QLabel *labelI = new QLabel(this);
-        Ship* I = new Ship(labelI, "C:/SeaBattle_Cute_private/drg/src/3Xship copy.png", 1202, 422, 180, 60);
+        Ship* I = new Ship(labelI,"E:/qt1/drg/3^1ship.png", 1202, 422, 180, 60);
         ships.push_back(std::make_pair(I,labelI));
 
         QLabel *labelJ = new QLabel(this);
-        Ship* J = new Ship(labelJ, "C:/SeaBattle_Cute_private/drg/src/4Xship copy.png", 1106, 518, 240, 60);
+        Ship* J = new Ship(labelJ,"E:/qt1/drg/4^1ship.png", 1106, 518, 240, 60);
         ships.push_back(std::make_pair(J,labelJ));
 
 
@@ -206,7 +206,7 @@ public:
         next->setCursor(Qt::PointingHandCursor);
         connect(next, &QPushButton::clicked, this, &DragWidget::onNextButtonClicked);
 
-        QPixmap images("C:/SeaBattle_Cute_private/src_graphic/made/arrangement page copy.png");
+        QPixmap images("E:/qt1/drg/arrangementpage.png");
         backgroundLabel1->setPixmap(images);
         backgroundLabel1->setScaledContents(true);
         backgroundLabel1->setGeometry(0, 0, 1536, 864); // Set the geometry of the background label to cover the entire window
