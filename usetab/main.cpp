@@ -24,4 +24,4 @@ int main(int argc, char *argv[])
     w.show();
     return a.exec();
 }
-// #include "main.moc"
+#include "main.moc"

@@ -216,16 +216,6 @@ public:
         setMinimumSize(200, 200);
         setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
         setAcceptDrops(true);
-
-        QTransform transform;
-        transform.rotate(90); // Rotate by 45 degrees
-        houseIcon1->setGeometry(1000,310, 50, 210);
-
-        QPixmap pixmap = houseIcon1->pixmap();
-        QPixmap transformedPixmap = pixmap.transformed(transform);
-        houseIcon1->setPixmap(transformedPixmap);
-
-        connect(houseIcon1, &ClickableLabel::clicked, this, &DragWidget::rotateHouseIcon);
     }
 
 public slots:
@@ -291,7 +281,7 @@ protected:
     void dragEnterEvent(QDragEnterEvent *event) override
     {
         QLabel *child = static_cast<QLabel*>(childAt(mapFromGlobal(event->pos())));
-        if (!child || child == backgroundLabel1|| child == backgroundLabel) // Ignore the background label
+        if (!child || child == backgroundLabel1 || child == backgroundLabel) // Ignore the background label
             return;
 
         Ship* ship = nullptr;
@@ -309,33 +299,66 @@ protected:
             prerow++;
         }
 
-        int size = child->width()/60;
+        int size = ship->st == "h" ? child->width() / 60 : child->height() / 60;
 
-        for (int i = 0; i < size; i++) {
-            check_and_fill.table[prerow][precolumn + i] = 'E';
-        }
-        for (int i = prerow - 1; i <= prerow + 2; i++) {
-            for (int j = precolumn - 1; j <= precolumn + size; j++) {
-                if (i >= 0 && i < 10 && j >= 0 && j < 10) {
-                    check_and_fill.table[i][j] = 'E';
+        if (prerow < 10 && precolumn < 10)
+        {
+            if (ship->st == "h") {
+                for (int i = 0; i < size; i++) {
+                    check_and_fill.table[prerow][precolumn + i] = 'E';
+                }
+                for (int i = prerow - 1; i <= prerow + 1; i++) {
+                    for (int j = precolumn - 1; j <= precolumn + size; j++) {
+                        if (i >= 0 && i < 10 && j >= 0 && j < 10) {
+                            check_and_fill.table[i][j] = 'E';
+                        }
+                    }
+                }
+            } else if (ship->st == "v") {
+                for (int i = 0; i < size; i++) {
+                    check_and_fill.table[prerow + i][precolumn] = 'E';
+                }
+                for (int i = prerow - 1; i <= prerow + size; i++) {
+                    for (int j = precolumn - 1; j <= precolumn + 1; j++) {
+                        if (i >= 0 && i < 10 && j >= 0 && j < 10) {
+                            check_and_fill.table[i][j] = 'E';
+                        }
+                    }
                 }
             }
         }
 
-        for (auto& pair : ships) {
+        for (auto& pair : ships)
+        {
             if (pair.second != child)
             {
                 int column = (pair.second->x() - 200) / 48;
                 int row = (pair.second->y() - 190) / 48;
-                int ss = pair.second->width()/60;
+                int ss = pair.first->st == "h" ? pair.second->width() / 60 : pair.second->height() / 60;
 
-                for (int i = 0; i < ss; i++) {
-                    check_and_fill.table[row][column + i] = 'S';
-                }
-                for (int i = row - 1; i <= row + 1; i++) {
-                    for (int j = column - 1; j <= column + ss; j++) {
-                        if (i >= 0 && i < 10 && j >= 0 && j < 10 && check_and_fill.table[i][j] != 'S') {
-                            check_and_fill.table[i][j] = 'O';
+                if (column < 10 && row < 10)
+                {
+                    if (pair.first->st == "h") {
+                        for (int i = 0; i < ss; i++) {
+                            check_and_fill.table[row][column + i] = 'S';
+                        }
+                        for (int i = row - 1; i <= row + 1; i++) {
+                            for (int j = column - 1; j <= column + ss; j++) {
+                                if (i >= 0 && i < 10 && j >= 0 && j < 10 && check_and_fill.table[i][j] != 'S') {
+                                    check_and_fill.table[i][j] = 'O';
+                                }
+                            }
+                        }
+                    } else if (pair.first->st == "v") {
+                        for (int i = 0; i < ss; i++) {
+                            check_and_fill.table[row + i][column] = 'S';
+                        }
+                        for (int i = row - 1; i <= row + ss; i++) {
+                            for (int j = column - 1; j <= column + 1; j++) {
+                                if (i >= 0 && i < 10 && j >= 0 && j < 10 && check_and_fill.table[i][j] != 'S') {
+                                    check_and_fill.table[i][j] = 'O';
+                                }
+                            }
                         }
                     }
                 }
@@ -345,6 +368,7 @@ protected:
         if (event->mimeData()->hasFormat("application/x-dnditemdata"))
             event->acceptProposedAction();
     }
+
 
 
 
@@ -365,19 +389,23 @@ protected:
                     int column = (x - 200) / 48;
                     int row = (y - 190) / 48;
 
-                    int xPos = 200  + column * 48;
+                    int xPos = 200 + column * 48;
                     int yPos = 190 - 7 + row * 48;
 
                     QPoint position(xPos, yPos);
+
                     Ship* ship = nullptr;
-                    for (auto& pair : ships) {
-                        if (pair.second == child) {
+                    for (auto& pair : ships)
+                    {
+                        if (pair.second == child)
+                        {
                             ship = pair.first;
                             break;
                         }
                     }
 
-
+                    qDebug() << column << ' ' << row;
+                    qDebug() << check_and_fill.table[row][column];
 
                     if (ship->w == 240 && column > 6 && ship->st == 'h') {
                         child->move(offset);
@@ -388,13 +416,13 @@ protected:
                     else if (ship->w == 120 && column > 8 && ship->st == 'h') {
                         child->move(offset);
                     }
-                    else if (ship->w == 240 && row > 6 && ship->st == 'v') {
+                    else if (ship->w == 240 && row < 3 && ship->st == 'v') {
                         child->move(offset);
                     }
-                    else if (ship->w == 180 && row > 7 && ship->st == 'v') {
+                    else if (ship->w == 180 && row < 2 && ship->st == 'v') {
                         child->move(offset);
                     }
-                    else if (ship->w == 120 && row > 8 && ship->st == 'v') {
+                    else if (ship->w == 120 && row < 1 && ship->st == 'v') {
                         child->move(offset);
                     }
                     else
@@ -410,39 +438,78 @@ protected:
                         }
 
                         // Check if the new position is valid for a horizontal ship
-                        for (int i = 0; i < size; i++) {
-                            if (check_and_fill.table[row][column + i] != 'E') {
-                                possible = false;
-                                break;
+                        if (ship->st == 'h') {
+                            for (int i = 0; i < size; i++) {
+                                if (check_and_fill.table[row][column + i] != 'E') {
+                                    possible = false;
+                                    break;
+                                }
+                            }
+                        }
+                        else if (ship->st == 'v') { // Check if the new position is valid for a vertical ship
+                            for (int i = 0; i < size; i++) {
+                                if (check_and_fill.table[row + i][column] != 'E') {
+                                    possible = false;
+                                    break;
+                                }
                             }
                         }
 
+
                         if (possible)
                         {
-                            child->move(xPos, yPos);
-
-                            for (int i = 0; i < size; i++) {
-                                check_and_fill.table[row][column + i] = 'S';
+                            if (ship->st == 'v' && size == 2)
+                            {
+                                child->move(xPos, yPos - 10);
                             }
-                            for (int i = row - 1; i <= row + 1; i++) {
-                                for (int j = column - 1; j <= column + size; j++) {
-                                    if (i >= 0 && i < 10 && j >= 0 && j < 10 && check_and_fill.table[i][j] != 'S') {
-                                        check_and_fill.table[i][j] = 'O';
+                            else if (ship->st == 'v' && size == 3)
+                            {
+                                child->move(xPos, yPos - 15);
+                            }
+                            else if (ship->st == 'v' && size == 4)
+                            {
+                                child->move(xPos, yPos - 20);
+                            }
+                            else
+                            {
+                                child->move(xPos, yPos);
+                            }
+
+
+                            if (ship->st == 'h') {
+                                // Set the ship cells for horizontal ships
+                                for (int i = 0; i < size; i++) {
+                                    check_and_fill.table[row][column + i] = 'S';
+                                }
+                                // Set the surrounding cells for horizontal ships
+                                for (int i = row - 1; i <= row + 1; i++) {
+                                    for (int j = column - 1; j <= column + size; j++) {
+                                        if (i >= 0 && i < 10 && j >= 0 && j < 10 && check_and_fill.table[i][j] != 'S') {
+                                            check_and_fill.table[i][j] = 'O';
+                                        }
                                     }
                                 }
                             }
-
-                            for (int i = 0; i < 10; i++) {
-                                for (int j = 0; j < 10; j++) {
-                                    qDebug().nospace() << check_and_fill.table[i][j];
+                            else if (ship->st == 'v') {
+                                // Set the ship cells for vertical ships
+                                for (int i = 0; i < size; i++) {
+                                    check_and_fill.table[row + i][column] = 'S';
                                 }
-                                qDebug() << "\n";
+                                // Set the surrounding cells for vertical ships
+                                for (int i = row - 1; i <= row + size; i++) {
+                                    for (int j = column - 1; j <= column + 1; j++) {
+                                        if (i >= 0 && i < 10 && j >= 0 && j < 10 && check_and_fill.table[i][j] != 'S') {
+                                            check_and_fill.table[i][j] = 'O';
+                                        }
+                                    }
+                                }
                             }
                         }
                         else
                         {
                             child->move(offset);
                         }
+
 
                     }
 
@@ -461,45 +528,16 @@ protected:
                             }
                         }
                     }
-
-                    if (ship)
-                    {
-
-                        qDebug() << "dropped at position" << position << " " << column << " " << row << " " << ship->w << " ";
-                    }
-                    else
-                    {
-                        qDebug() << "Unknown label";
-                    }
                 }
                 else
                 {
-                    child->move(offset); // move the label back to its original position
+                    child->move(offset);
                 }
                 child->show();
             }
 
             event->acceptProposedAction();
         }
-    }
-
-public slots:
-    void rotateHouseIcon() {
-
-        QTransform transform;
-        transform.rotate(90); // Rotate by 90 degrees
-
-        if (houseIcon1->geometry() == QRect(1000, 310, 210, 50)) {
-            // Label is horizontal, rotate to vertical
-            houseIcon1->setGeometry(1000, 310, 50, 210);
-        } else if (houseIcon1->geometry() == QRect(1000, 310, 50, 210)) {
-            // Label is vertical, rotate to horizontal
-            houseIcon1->setGeometry(1000, 310, 210, 50);
-        }
-
-        QPixmap pixmap = houseIcon1->pixmap();
-        QPixmap transformedPixmap = pixmap.transformed(transform);
-        houseIcon1->setPixmap(transformedPixmap);
     }
 };
 
@@ -508,7 +546,7 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     DragWidget window;
-    window.setGeometry(0, 0, 1536, 864); // Set window size
+    window.setGeometry(0, 0, 1536, 864);
     window.show();
 
     return app.exec();
