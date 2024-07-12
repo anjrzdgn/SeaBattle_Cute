@@ -10,6 +10,8 @@
 #include <QGraphicsOpacityEffect>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QMouseEvent>
+#include <QPoint>
 
 class armoury_info
 {
@@ -48,6 +50,10 @@ public:
     QLabel *remain_oil = new QLabel(this);
     QLabel *rank = new QLabel(this);
 
+    QLabel *defence1 = new QLabel(this);
+    QLabel *defence2 = new QLabel(this);
+    QLabel *defence3 = new QLabel(this);
+
     QPushButton* reset = new QPushButton(this);
 
     QPushButton* bomb_atomic = new QPushButton(this);
@@ -70,7 +76,7 @@ public:
 
     QPushButton* next = new QPushButton(this);
 
-    arselanPage()
+    arselanPage() : lastClickPosition(0, 0), waitingForClick(false)
     {
         arsenal.bomb_atomic = 0;
         arsenal.bomb_3X3 = 0;
@@ -93,7 +99,6 @@ public:
         opacityEffect5->setOpacity(0.7);
         opacityEffect6->setOpacity(0.7);
 
-
         remain_oil->setGeometry(1120, 82, 160, 160);
         remain_oil->setFont(font_oil);
         remain_oil->setStyleSheet("QLabel { color : black; }");
@@ -104,7 +109,16 @@ public:
         rank->setStyleSheet("QLabel { color : black; }");
         rank->setText(QString::number(user_rank));
 
-
+        QPixmap defence_area_image("C:/SeaBattle_Cute_private/src_graphic/made/airdefence area copy.png");
+        defence1->setPixmap(defence_area_image);
+        defence1->setGeometry(190, 190, 485, 96);
+        defence1->setVisible(false);
+        defence2->setPixmap(defence_area_image);
+        defence2->setGeometry(190, 330, 485, 96);
+        defence2->setVisible(false);
+        defence3->setPixmap(defence_area_image);
+        defence3->setGeometry(190, 570, 485, 96);
+        defence3->setVisible(false);
 
         // Bomb Atomic
         bomb_atomic->setGeometry(760, 240, 160, 160);
@@ -173,11 +187,10 @@ public:
         connect(next, &QPushButton::clicked, this, &arselanPage::onNextClicked);
 
         // Reset Button
-        reset->setGeometry(815,664,50,50);
+        reset->setGeometry(815, 664, 50, 50);
         reset->setCursor(Qt::PointingHandCursor);
         reset->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
         connect(reset, &QPushButton::clicked, this, &arselanPage::onResetClicked);
-
 
         // Background Image
         QPixmap images("C:/SeaBattle_Cute_private/src_graphic/made/arsenals page copy.png");
@@ -308,19 +321,33 @@ public slots:
         if (arsenal.air_defence < 3 && user_rank >= 2 && user_oil >= 12)
         {
             arsenal.air_defence += 1;
+
+            if (arsenal.air_defence == 1)
+            {
+                defence1->setVisible(true);
+            }
+            else if (arsenal.air_defence == 2)
+            {
+                defence2->setVisible(true);
+            }
+            else if (arsenal.air_defence == 3)
+            {
+                defence3->setVisible(true);
+            }
+
             user_oil -= 12;
             air_defence_quantity->setText(QString::number(arsenal.air_defence));
-            if (user_oil/100 >= 1)
+            if (user_oil / 100 >= 1)
             {
-                remain_oil->move(1120,82);
+                remain_oil->move(1120, 82);
             }
-            else if (user_oil/10 >= 1)
+            else if (user_oil / 10 >= 1)
             {
-                remain_oil->move(1130,82);
+                remain_oil->move(1130, 82);
             }
             else if (user_oil >= 1)
             {
-                remain_oil->move(1140,82);
+                remain_oil->move(1140, 82);
             }
             remain_oil->setText(QString::number(user_oil));
         }
@@ -338,7 +365,7 @@ public slots:
                     (arsenal.bomb_4X2 * 10) +
                     (arsenal.air_defence * 12) +
                     (arsenal.observation * 15) +
-                    (arsenal.sea_mine * 5) ;
+                    (arsenal.sea_mine * 5);
 
         arsenal.bomb_atomic = 0;
         arsenal.bomb_3X3 = 0;
@@ -347,6 +374,10 @@ public slots:
         arsenal.observation = 0;
         arsenal.sea_mine = 0;
 
+        defence1->setVisible(false);
+        defence2->setVisible(false);
+        defence3->setVisible(false);
+
         bomb_atomic_quantity->setText("");
         air_defence_quantity->setText("");
         observation_quantity->setText("");
@@ -354,21 +385,24 @@ public slots:
         bomb_4X2_quantity->setText("");
         bomb_3X3_quantity->setText("");
 
-
-        if (user_oil/100 >= 1)
+        if (user_oil / 100 >= 1)
         {
-            remain_oil->move(1120,82);
+            remain_oil->move(1120, 82);
         }
-        else if (user_oil/10 >= 1)
+        else if (user_oil / 10 >= 1)
         {
-            remain_oil->move(1130,82);
+            remain_oil->move(1130, 82);
         }
         else if (user_oil >= 1)
         {
-            remain_oil->move(1140,82);
+            remain_oil->move(1140, 82);
         }
         remain_oil->setText(QString::number(user_oil));
     }
+
+private:
+    QPoint lastClickPosition;
+    bool waitingForClick;
 };
 
 int main(int argc, char *argv[])
