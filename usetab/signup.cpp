@@ -290,7 +290,7 @@ bool SignUp::CheckUser(QString username)
 
 void SignUp::WriteDB() {
 
-    qDebug()<<"salam";
+
     if(this->Username->text()!="" && this->Email->text()!="" && this->FirstName->text()!="" && this->Password->text()!="" && this->Lastname->text()!="" ){
 
         QString username=this->Username->text();
@@ -311,8 +311,9 @@ void SignUp::WriteDB() {
 
         if(CheckUser(username)&& CheckPass(password,username)&& checkEmail(email)&&CheckPasswordComplexity(password)&&isValidName(name)&&isValidName(lastname))
         {
+            qDebug()<<"salam";
             QSqlDatabase myd = QSqlDatabase::addDatabase("QSQLITE");
-            myd.setDatabaseName("E:/qt1/LogIn/LogIn/information.db");
+            myd.setDatabaseName("E:/qt1/sql/mydba.db");
 
 
             if(myd.open()){

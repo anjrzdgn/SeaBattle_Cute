@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QTabBar>
+#include <QString>
 
 
 
@@ -24,14 +25,20 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     QTabWidget *tabs;
+    QString _bwf;
+    QString _ca;
 
  // declare the slot
 public slots:
     void switchToTab3();
     void switchToTab4();
     void switchToTab5();
+    void switchToTab6();
     void ChoosReg_to_ligin();
     void ChoosReg_to_signup();
+
+    void get_BWF(QString);
+    void get_CA(QString);
 
 private:
     Ui::MainWindow *ui;

@@ -1,18 +1,18 @@
-#ifndef CLICKED_H
-#define CLICKED_H
+// #ifndef CLICKED_H
+// #define CLICKED_H
 
-#include <QLabel>
+// #include <QLabel>
 
-class ClickableLabel : public QLabel {
-    Q_OBJECT
+// class ClickableLabel : public QLabel {
+//     Q_OBJECT
 
-public:
-    ClickableLabel(QWidget *parent = nullptr);
+// public:
+//     ClickableLabel(QWidget *parent = nullptr);
 
-signals:
-    void clicked();
+// signals:
+//     void clicked();
 
-protected:
-    void mousePressEvent(QMouseEvent *event) override;
-};
-#endif // CLICKED_H
+// protected:
+//     void mousePressEvent(QMouseEvent *event) override;
+// };
+// #endif // CLICKED_H

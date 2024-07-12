@@ -37,8 +37,11 @@ namespace {
 struct qt_meta_stringdata_CLASSchoose_play_modeENDCLASS_t {};
 constexpr auto qt_meta_stringdata_CLASSchoose_play_modeENDCLASS = QtMocHelpers::stringData(
     "choose_play_mode",
-    "onVSBotClicked",
+    "send_BWF",
     "",
+    "send_CA",
+    "mode_to_arreng",
+    "onVSBotClicked",
     "onWithFriendClicked",
     "onWIFIClicked",
     "onADModeClicked",
@@ -56,20 +59,30 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSchoose_play_modeENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       6,   14, // methods
+       9,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       0,       // signalCount
+       3,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags, initial metatype offsets
+       1,    1,   68,    2, 0x06,    1 /* Public */,
+       3,    1,   71,    2, 0x06,    3 /* Public */,
+       4,    0,   74,    2, 0x06,    5 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   50,    2, 0x08,    1 /* Private */,
-       3,    0,   51,    2, 0x08,    2 /* Private */,
-       4,    0,   52,    2, 0x08,    3 /* Private */,
-       5,    0,   53,    2, 0x08,    4 /* Private */,
-       6,    0,   54,    2, 0x08,    5 /* Private */,
-       7,    0,   55,    2, 0x08,    6 /* Private */,
+       5,    0,   75,    2, 0x08,    6 /* Private */,
+       6,    0,   76,    2, 0x08,    7 /* Private */,
+       7,    0,   77,    2, 0x08,    8 /* Private */,
+       8,    0,   78,    2, 0x08,    9 /* Private */,
+       9,    0,   79,    2, 0x08,   10 /* Private */,
+      10,    0,   80,    2, 0x08,   11 /* Private */,
+
+ // signals: parameters
+    QMetaType::Void, QMetaType::QString,    2,
+    QMetaType::Void, QMetaType::QString,    2,
+    QMetaType::Void,
 
  // slots: parameters
     QMetaType::Void,
@@ -91,6 +104,14 @@ Q_CONSTINIT const QMetaObject choose_play_mode::staticMetaObject = { {
     qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSchoose_play_modeENDCLASS_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<choose_play_mode, std::true_type>,
+        // method 'send_BWF'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QString, std::false_type>,
+        // method 'send_CA'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QString, std::false_type>,
+        // method 'mode_to_arreng'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onVSBotClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onWithFriendClicked'
@@ -113,16 +134,41 @@ void choose_play_mode::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         auto *_t = static_cast<choose_play_mode *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->onVSBotClicked(); break;
-        case 1: _t->onWithFriendClicked(); break;
-        case 2: _t->onWIFIClicked(); break;
-        case 3: _t->onADModeClicked(); break;
-        case 4: _t->onCLModeClicked(); break;
-        case 5: _t->onNextClicked(); break;
+        case 0: _t->send_BWF((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 1: _t->send_CA((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 2: _t->mode_to_arreng(); break;
+        case 3: _t->onVSBotClicked(); break;
+        case 4: _t->onWithFriendClicked(); break;
+        case 5: _t->onWIFIClicked(); break;
+        case 6: _t->onADModeClicked(); break;
+        case 7: _t->onCLModeClicked(); break;
+        case 8: _t->onNextClicked(); break;
         default: ;
         }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        {
+            using _t = void (choose_play_mode::*)(QString );
+            if (_t _q_method = &choose_play_mode::send_BWF; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 0;
+                return;
+            }
+        }
+        {
+            using _t = void (choose_play_mode::*)(QString );
+            if (_t _q_method = &choose_play_mode::send_CA; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 1;
+                return;
+            }
+        }
+        {
+            using _t = void (choose_play_mode::*)();
+            if (_t _q_method = &choose_play_mode::mode_to_arreng; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 2;
+                return;
+            }
+        }
     }
-    (void)_a;
 }
 
 const QMetaObject *choose_play_mode::metaObject() const
@@ -144,14 +190,34 @@ int choose_play_mode::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 6)
+        if (_id < 9)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 6;
+        _id -= 9;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 6)
+        if (_id < 9)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 6;
+        _id -= 9;
     }
     return _id;
+}
+
+// SIGNAL 0
+void choose_play_mode::send_BWF(QString _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
+}
+
+// SIGNAL 1
+void choose_play_mode::send_CA(QString _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 1, _a);
+}
+
+// SIGNAL 2
+void choose_play_mode::mode_to_arreng()
+{
+    QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
 }
 QT_WARNING_POP

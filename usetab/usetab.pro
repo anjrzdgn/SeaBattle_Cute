@@ -24,7 +24,9 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     ship.cpp \
-    signup.cpp
+    signup.cpp \
+    withfriend.cpp \
+    withrbot.cpp
 
 HEADERS += \
     arrengpage.h \
@@ -38,7 +40,9 @@ HEADERS += \
     login.h \
     mainwindow.h \
     ship.h \
-    signup.h
+    signup.h \
+    withfriend.h \
+    withrbot.h
 
 FORMS += \
     mainwindow.ui

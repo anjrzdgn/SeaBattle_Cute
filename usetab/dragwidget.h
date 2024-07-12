@@ -50,6 +50,8 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
+signals:
+    void ARG();
 };
 
 #endif // DRAGWIDGET_H

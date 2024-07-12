@@ -98,4 +98,8 @@ void choose_play_mode::onCLModeClicked()
 
 void choose_play_mode::onNextClicked()
 {
+    emit send_BWF(this->BWF);
+    emit send_CA(this->CA);
+    emit mode_to_arreng();
+
 }

@@ -58,10 +58,10 @@ void LogIn::checkUser()
     myd.setDatabaseName("E:/qt1/sql/mydba.db"); // Use forward slashes for Windows paths
 
     if(myd.open()){
-        qDebug()<<"connected..";
+        // qDebug()<<"connected..";
 
         QSqlQuery qry;
-        qry.prepare("SELECT information FROM info WHERE username = :username AND password = :password ");
+        qry.prepare("SELECT name FROM info WHERE username = :username AND password = :password ");
         qry.bindValue(":username", username);
         qry.bindValue(":password", password);
 
@@ -69,6 +69,7 @@ void LogIn::checkUser()
             if (qry.next()) {
                 QString name = qry.value(0).toString();
                 qDebug() << "Name: " << name;
+                emit this->Enter();
             } else {
                 qDebug() << "Invalid username or password";
             }

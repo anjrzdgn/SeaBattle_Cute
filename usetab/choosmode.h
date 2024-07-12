@@ -30,6 +30,10 @@ private slots:
     void onADModeClicked();
     void onCLModeClicked();
     void onNextClicked();
+signals:
+    void send_BWF(QString);
+    void send_CA(QString);
+    void mode_to_arreng();
 };
 
 

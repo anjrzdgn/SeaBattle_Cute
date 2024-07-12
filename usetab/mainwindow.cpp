@@ -9,6 +9,7 @@
 #include "loading.h"
 // #include "clicked.h"
 #include <QIcon>
+#include "withfriend.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -28,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 
+
     QWidget *tab2 = new QWidget;
     QWidget *tab3 = new QWidget;
     QWidget *tab4 = new QWidget; // new tab
@@ -35,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
     QWidget *tab6 = new QWidget; // new tab
     QWidget *tab7 = new QWidget;
     QWidget *tab8 = new QWidget;
+    QWidget *tab9 = new QWidget;
 
 
 
@@ -51,6 +54,7 @@ MainWindow::MainWindow(QWidget *parent)
     tabs->addTab(tab6, "Tab 6");
     tabs->addTab(tab7, "Tab 7");
     tabs->addTab(tab8, "Tab 8");
+    tabs->addTab(tab9, "Tab 9");
 
     // Create a LogIn instance and add it to tab3
     // LogIn *logIn = new LogIn;
@@ -90,6 +94,14 @@ MainWindow::MainWindow(QWidget *parent)
     tab8Layout->addWidget(arrengPage);
 
 
+    GamePage *gamepage = new GamePage; // Create an instance of ArrengPage
+    QVBoxLayout *tab9Layout = new QVBoxLayout(tab9);
+    tab9Layout->addWidget(gamepage);
+
+    connect(chooseMode,&choose_play_mode::send_BWF,this,&MainWindow::get_BWF);
+    connect(chooseMode,&choose_play_mode::send_CA,this,&MainWindow::get_CA);
+    connect(chooseMode,&choose_play_mode::mode_to_arreng,this,&MainWindow::switchToTab6);
+
     connect(logIn,&LogIn::Enter,this,&MainWindow::switchToTab5);
     connect(signUp,&SignUp::passed,this,&MainWindow::ChoosReg_to_ligin);
     connect(loading, &LoadingPage::loadingFinished, this, &MainWindow::switchToTab3);
@@ -123,7 +135,19 @@ void MainWindow::switchToTab5() {
     tabs->setCurrentIndex(4); // switch to tab 3
 }
 
+void MainWindow::switchToTab6() {
+    tabs->setCurrentIndex(6); // switch to tab 3
+}
+
 
 void MainWindow::ChoosReg_to_signup() {
     tabs->setCurrentIndex(3); // switch to tab 5
+}
+
+void MainWindow::get_BWF(QString bwf) {
+    this->_bwf=bwf;
+}
+
+void MainWindow::get_CA(QString ca) {
+    this->_ca=ca;
 }

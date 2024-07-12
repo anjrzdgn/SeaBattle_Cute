@@ -145,8 +145,9 @@ namespace {
 struct qt_meta_stringdata_CLASSDragWidgetENDCLASS_t {};
 constexpr auto qt_meta_stringdata_CLASSDragWidgetENDCLASS = QtMocHelpers::stringData(
     "DragWidget",
-    "onNextButtonClicked",
+    "ARG",
     "",
+    "onNextButtonClicked",
     "restore_all_ship",
     "rotateShips"
 );
@@ -161,17 +162,23 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSDragWidgetENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       3,   14, // methods
+       4,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       0,       // signalCount
+       1,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags, initial metatype offsets
+       1,    0,   38,    2, 0x06,    1 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   32,    2, 0x0a,    1 /* Public */,
-       3,    0,   33,    2, 0x0a,    2 /* Public */,
-       4,    0,   34,    2, 0x0a,    3 /* Public */,
+       3,    0,   39,    2, 0x0a,    2 /* Public */,
+       4,    0,   40,    2, 0x0a,    3 /* Public */,
+       5,    0,   41,    2, 0x0a,    4 /* Public */,
+
+ // signals: parameters
+    QMetaType::Void,
 
  // slots: parameters
     QMetaType::Void,
@@ -190,6 +197,8 @@ Q_CONSTINIT const QMetaObject DragWidget::staticMetaObject = { {
     qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSDragWidgetENDCLASS_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<DragWidget, std::true_type>,
+        // method 'ARG'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onNextButtonClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'restore_all_ship'
@@ -206,10 +215,20 @@ void DragWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         auto *_t = static_cast<DragWidget *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->onNextButtonClicked(); break;
-        case 1: _t->restore_all_ship(); break;
-        case 2: _t->rotateShips(); break;
+        case 0: _t->ARG(); break;
+        case 1: _t->onNextButtonClicked(); break;
+        case 2: _t->restore_all_ship(); break;
+        case 3: _t->rotateShips(); break;
         default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        {
+            using _t = void (DragWidget::*)();
+            if (_t _q_method = &DragWidget::ARG; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 0;
+                return;
+            }
         }
     }
     (void)_a;
@@ -234,14 +253,20 @@ int DragWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 3)
+        if (_id < 4)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 4;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 3)
+        if (_id < 4)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 3;
+        _id -= 4;
     }
     return _id;
+}
+
+// SIGNAL 0
+void DragWidget::ARG()
+{
+    QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
 }
 QT_WARNING_POP
